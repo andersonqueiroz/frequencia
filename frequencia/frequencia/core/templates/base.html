@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Frequência BCZM</title>
+</head>
+<body>
+<!-- navbar -->
+{% if user.is_authenticated %}
+	{{user}}
+	<a href="{% url 'accounts:logout' %}">Sair</a>
+{% else %}
+	<a href="{% url 'accounts:login' %}">Entrar</a>
+{% endif %}
+<!-- endnavbar -->
+
+<!-- alert de mensagens do sistema (não notícias) -->
+<div>
+{% if messages %}
+    {% for message in messages %}        
+        <p>{{message|safe}}</p>
+    {% endfor %}
+{% endif %}
+</div>
+<!-- endalert -->
+
+{% block content %}
+
+{% endblock %}
+<!-- footer -->
+</body>
+</html>

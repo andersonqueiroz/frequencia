@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#Database
+db.frequencia
+
+# database
+db.sqlite3

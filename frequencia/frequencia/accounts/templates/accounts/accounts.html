@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<h1>Página de usuários</h1>
+
+<a href="{% url 'accounts:accounts_create' %}">Novo usuário</a>    
+
+<table>
+    <thead>
+        <tr>
+            <th>Código</th>                            
+            <th>Nome</th>                          
+            <th>Login</th>
+            <th>CPF</th>
+            <th>Status</th>
+            <th>E-mail</th>
+            <th>Alterar</th> 
+        </tr>
+    </thead>
+    <tbody>
+        {% for account in object_list %}
+        <tr>
+            <td>{{ account.pk }}</td>
+            <td>{{ account.name }}</td>                       
+            <td>{{ account.username }}</td>
+            <td>{{ account.cpf }}</td>
+            {% if account.is_active %}                    
+            <td>Ativo</td>
+            {% else %}
+            <td>Inativo</td>
+            {% endif %}
+            <td>{{ account.email }}</td>
+            <td><a href="{% url 'accounts:accounts_edit' account.pk %}">Editar</a></td>
+        </tr>
+        {% endfor %}        
+    </tbody>
+</table>
+
+{% endblock %}

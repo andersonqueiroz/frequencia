@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Novo usuário</h1>
+<!-- é interessante ter um breadcrumb -->
+         
+<form method="post">
+{% csrf_token %}
+    {{ form.nom_field_errors }}
+    
+    {% for field in form %}
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+                <br>
+    {% endfor %}
+    <button type="submit">Salvar</button>
+    <a href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
+</form>          
+
+{% endblock %}
