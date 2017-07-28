@@ -38,4 +38,3 @@ class User(basemodel, AbstractBaseUser, PermissionsMixin):
 		verbose_name_plural='Usuários'
 
 
-

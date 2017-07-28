@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h1>Registro de frequência</h1>
+
+	<form href="#" method="POST">
+		{{ csrf_token }}
+		CPF: <input type="text" name="cpf">
+		Senha: <input type="password" name="password">
+	</form>
+{% endblock %}

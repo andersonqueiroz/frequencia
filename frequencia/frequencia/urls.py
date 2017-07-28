@@ -17,7 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-	url(r'^', include('frequencia.core.urls', namespace='core')),
+    url(r'^', include('frequencia.core.urls', namespace='core')),
+	url(r'^registro/', include('frequencia.registro.urls', namespace='registro')),
 
     url(r'^admin/', admin.site.urls),
     url(r'^conta/', include('frequencia.accounts.urls', namespace='accounts')),    
