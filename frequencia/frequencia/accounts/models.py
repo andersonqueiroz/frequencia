@@ -1,8 +1,10 @@
 import re
+
 from django.db import models
 from django.core import validators
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.conf import settings
+from django.utils import timezone
 
 from frequencia.core.basemodel import basemodel
 
@@ -37,4 +39,7 @@ class User(basemodel, AbstractBaseUser, PermissionsMixin):
 		verbose_name='Usuário'
 		verbose_name_plural='Usuários'
 
-
+	@property
+	def ultima_frequencia_dia(self):
+		ultimo = self.frequencias.filter(created_at__date=timezone.now().date()).last()
+		return ultimo

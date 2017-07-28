@@ -6,11 +6,11 @@ from frequencia.accounts.models import User
 class Maquina(basemodel):
 	
 	nome = models.CharField('Nome', max_length=30)
-	descricao = models.CharField('Nome', max_length=100, blank=True)
-	ip = models.GenericIPAddressField('Endereço IP', unpack_ipv4=True)
+	descricao = models.CharField('Descricao', max_length=100, blank=True)
+	ip = models.GenericIPAddressField('Endereço IP', unpack_ipv4=True, unique=True)
 
 	def __str__(self):
-		return nome
+		return self.nome
 
 	class Meta:
 		verbose_name = 'Máquina'  
@@ -26,14 +26,12 @@ class Frequencia(basemodel):
 	user = models.ForeignKey(User, verbose_name='Usuário', related_name='frequencias')
 	maquina = models.ForeignKey(Maquina, verbose_name='Máquina', related_name='frequencias')
 
-	observacao = models.TextField('Observação')
+	observacao = models.TextField('Observação', blank=True)
 	tipo = models.IntegerField('Tipo', choices=TIPO_CHOICES, default=0)
 
-	#def __str__(self):
-	#	return None
+	def __str__(self):
+		return "{0} em {1}".format(self.user, self.created_at)
 
 	class Meta:
 		verbose_name = 'Frequência'  
 		verbose_name_plural = 'Frequências'
-
-

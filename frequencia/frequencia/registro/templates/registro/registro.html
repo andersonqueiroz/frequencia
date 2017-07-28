@@ -3,9 +3,17 @@
 {% block content %}
 	<h1>Registro de frequência</h1>
 
-	<form href="#" method="POST">
-		{{ csrf_token }}
-		CPF: <input type="text" name="cpf">
-		Senha: <input type="password" name="password">
+	<form action="{% url 'registro:registrar_frequencia' %}" method="POST">
+		{% csrf_token %}
+
+		{{ form.non_field_errors }}
+
+		{% for field in form %}
+			{{ field.label_tag }}
+			{{ field }}
+			{{ field.errors }}
+		{% endfor %}
+		
+		<input type="submit" value="Enviar">
 	</form>
 {% endblock %}

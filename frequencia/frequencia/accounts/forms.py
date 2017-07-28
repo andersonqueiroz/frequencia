@@ -28,7 +28,7 @@ class RegisterForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ['username', 'email', 'is_active']
+		fields = ['name', 'username', 'email', 'cpf', 'is_active']
 
 
 class EditAccountForm(forms.ModelForm):

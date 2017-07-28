@@ -9,7 +9,7 @@ urlpatterns = [
 	url(r'^sair/$', logout, {'next_page': settings.LOGIN_URL}, name='logout'),
 	
 	url(r'^usuarios/$', views.accounts, name='accounts'),
-	url(r'^usuarios/novo/$', views.accounts_create, name='accounts_create'),
+	url(r'^usuario/novo/$', views.accounts_create, name='accounts_create'),
 	url(r'^usuario/editar/(?P<pk>\d+)/$', views.accounts_edit, name='accounts_edit'),
 	url(r'^usuario/editar_senha/$', views.edit_password, name='edit_password'),
 ]
