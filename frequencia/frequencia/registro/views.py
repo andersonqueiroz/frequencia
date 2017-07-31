@@ -6,7 +6,11 @@ from frequencia.accounts.models import User
 from .forms import FrequenciaForm
 from .models import Frequencia, Maquina
 
+import datetime
+
 def registro(request):
+
+	now = datetime.datetime.now()
 	maquina = Maquina.objects.filter(ip=request.META.get('REMOTE_ADDR')).first()
 
 	if not maquina:
@@ -19,7 +23,13 @@ def registro(request):
 		frequencia = Frequencia(user=user, maquina=maquina, tipo=tipo)
 		frequencia.save()
 			
-	context = {'form':form}
+	context = {
+		'form': FrequenciaForm(),
+		'registro': True,
+		'now':now,
+	}
 	return render(request, 'registro/registro.html', context)
+
+	
 
 	
