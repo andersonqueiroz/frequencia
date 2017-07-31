@@ -24,7 +24,7 @@ def registro(request):
 		frequencia.save()
 			
 	context = {
-		'form': FrequenciaForm(),
+		'form': form,
 		'registro': True,
 		'now':now,
 	}

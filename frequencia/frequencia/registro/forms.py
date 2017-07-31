@@ -11,12 +11,15 @@ class FrequenciaForm(forms.ModelForm):
         }
 
     def clean(self):
-    	cleaned_data = super(FrequenciaForm, self).clean()
+        cleaned_data = super(FrequenciaForm, self).clean()
 
-    	user = User.objects.filter(cpf=self.cleaned_data['cpf']).first()
+        if not cleaned_data.get('cpf') or not cleaned_data.get('password'):
+            raise forms.ValidationError("Dados de login inválidos")
 
-    	if not user or not user.is_active or not user.check_password(self.cleaned_data['password']):
-    		raise forms.ValidationError("Credenciais inválidas ou usuário inativo")
-    	
-    	cleaned_data['user'] = user
-    	return cleaned_data
+        user = User.objects.filter(cpf=self.cleaned_data['cpf']).first()
+
+        if not user or not user.is_active or not user.check_password(self.cleaned_data['password']):
+           raise forms.ValidationError("Credenciais inválidas ou usuário inativo")
+    
+        cleaned_data['user'] = user
+        return cleaned_data
