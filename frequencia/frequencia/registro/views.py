@@ -6,9 +6,14 @@ from frequencia.accounts.models import User
 from .forms import FrequenciaForm
 from .models import Frequencia, Maquina
 
+import datetime
+
 def registro(request):
+	now = datetime.datetime.now()
 	context = {
 		'form': FrequenciaForm(),
+		'registro': True,
+		'now':now,
 	}
 	return render(request, 'registro/registro.html', context)
 

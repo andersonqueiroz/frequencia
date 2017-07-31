@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'frequencia.core',
     'frequencia.accounts',
     'frequencia.registro',
+
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

@@ -1,19 +1,89 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
-	<h1>Registro de frequência</h1>
 
-	<form action="{% url 'registro:registrar_frequencia' %}" method="POST">
-		{% csrf_token %}
+	{% load widget_tweaks %}
 
-		{{ form.non_field_errors }}
 
-		{% for field in form %}
-			{{ field.label_tag }}
-			{{ field }}
-			{{ field.errors }}
-		{% endfor %}
-		
-		<input type="submit" value="Enviar">
-	</form>
+	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %}); background-size: cover; background-position: top center;">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+						<div class="card card-signup">
+							<form class="form" method="" action="">
+								<div class="header header-primary text-center">
+									<h1><span class="h">{{now.hour}}</span>:<span class="h m">{{now.minute}}</span>:<span class="h s">{{now.second}}</span></h1>
+									<h5>{{now|date:"D, d M Y"}}</h5>
+								
+								</div>
+								<p class="text-divider">Registro de frequência</p>
+								<div class="content">
+
+									<form action="{% url 'registro:registrar_frequencia' %}" method="POST">
+										{% csrf_token %}
+
+										{{ form.non_field_errors }}
+
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="material-icons">face</i>
+											</span>
+											{% render_field form.cpf class="form-control" placeholder=form.cpf.label autofocus="" %}
+											{{ form.cpf.errors }}
+										</div>
+
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="material-icons">lock</i>
+											</span>
+											{% render_field form.password class="form-control" placeholder=form.password.label %}
+											{{ form.password.errors }}
+										</div>
+
+										<div class="footer text-center">
+											<input class="btn btn-simple btn-primary btn-lg" type="submit" value="Enviar">
+										</div>
+										
+									</form>
+
+									<!-- If you want to add a checkbox to this form, uncomment this code
+
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="optionsCheckboxes" checked>
+											Subscribe to newsletter
+										</label>
+									</div> -->
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<footer class="footer">
+		        <div class="container">
+		            <nav class="pull-left">
+						<ul>
+							<li>
+								<img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
+							</li>
+						</ul>
+		            </nav>
+		            <div class="copyright pull-right">
+		                &copy; 2017, SST</a>
+		            </div>
+		        </div>
+		    </footer>
+
+
+
+		</div>
+
+{% endblock %}
+
+{% block script %}
+	{{ block.super }}
+	<script src="{% static 'js/relogio.js' %}"></script>
 {% endblock %}
