@@ -17,8 +17,8 @@ class FrequenciaForm(forms.Form):
     def clean(self):
         cleaned_data = super(FrequenciaForm, self).clean()
 
-        if not cleaned_data.get('cpf') or not cleaned_data.get('password') or not cleaned_data.get('observacao'):
-            raise forms.ValidationError("Dados de resgistro inválidos")
+        if not cleaned_data.get('cpf') or not cleaned_data.get('password'):
+            raise forms.ValidationError("Dados de resgistro de frequência inválidos")
 
         user = User.objects.filter(cpf=self.cleaned_data['cpf']).first()
 
