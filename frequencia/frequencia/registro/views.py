@@ -25,7 +25,7 @@ def registro(request):
 			
 	context = {
 		'form': form,
-		'registro': True,
+		'landing_page': True,
 		'now':now,
 	}
 	return render(request, 'registro/registro.html', context)

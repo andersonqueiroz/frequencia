@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -85,5 +86,15 @@ def edit_password(request):
 	context['form'] = form
 	return render(request, template_name, context)
 
+class Login(LoginView):
+	template_name = 'accounts/login.html'
+	
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['landing_page'] = True
+		return context
+	
+
 accounts = AccountListView.as_view()
 accounts_edit = AccountUpdateView.as_view()
+login = Login.as_view()
