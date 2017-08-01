@@ -1917,9 +1917,13 @@ select.form-control[multiple], .form-group.is-focused select.form-control[multip
 
 footer {
   padding: 15px 0;
+}
+
+.landing-page {
   position: absolute;
   bottom: 0;
   width: 100%;
+  color:white;
 }
 footer ul {
   margin-bottom: 0;
@@ -3701,9 +3705,7 @@ h2.title {
 .signup-page .wrapper > .header {
   min-height: 100vh;
 }
-.signup-page .wrapper .card-signup {
-  margin: 160px 0 40px;
-}
+
 .signup-page .footer .copyright,
 .signup-page .footer a {
   color: #FFFFFF;
@@ -3747,3 +3749,10 @@ h2.title {
 }
 
 /*# sourceMappingURL=material-kit.css.map */
+
+.vertical-align {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one 🙂       */
+  display: flex;
+  align-items: center;
+}

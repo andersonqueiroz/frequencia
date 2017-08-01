@@ -6,21 +6,20 @@
 	{% load widget_tweaks %}
 
 
-	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %}); background-size: cover; background-position: top center;">
+	<div class="header header-filter vertical-align" style="background-image: url({% static 'images/bg.jpg' %}); background-size: cover; background-position: top center;">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
 						<div class="card card-signup">
-							<form class="form" method="" action="">
 								<div class="header header-primary text-center">
-									<h1><span class="h">{{now.hour}}</span>:<span class="h m">{{now.minute|stringformat:"02d"}}</span>:<span class="h s">{{now.second|stringformat:"02d"}}</span></h1>
+									<h1><span class="h">{{now|date:"H"}}</span>:<span class="h m">{{now|date:"i"}}</span>:<span class="h s">{{now|date:"s"}}</span></h1>
 									<h5>{{now|date:"D, d M Y"}}</h5>
 								
 								</div>
 								<p class="text-divider">Registro de frequência</p>
 								<div class="content">
 
-									<form action="{% url 'registro:registrar_frequencia' %}" method="POST">
+									<form action="{% url 'registro:registro' %}" method="POST">
 										{% csrf_token %}
 
 										{{ form.non_field_errors }}
@@ -46,23 +45,13 @@
 										</div>
 										
 									</form>
-
-									<!-- If you want to add a checkbox to this form, uncomment this code
-
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="optionsCheckboxes" checked>
-											Subscribe to newsletter
-										</label>
-									</div> -->
 								</div>
-							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<footer class="footer">
+			<footer class="landing-page">
 		        <div class="container">
 		            <nav class="pull-left">
 						<ul>
@@ -94,3 +83,4 @@
 	    });
 	</script>
 {% endblock %}
+

@@ -30,8 +30,8 @@ class Frequencia(basemodel):
 	tipo = models.IntegerField('Tipo', choices=TIPO_CHOICES, default=0)
 
 	def __str__(self):
-		return "{0} em {1}".format(self.user, self.created_at)
+		return "{0}/{1} em {2}".format(self.user, self.tipo,self.created_at)
 
 	class Meta:
 		verbose_name = 'Frequência'  
-		verbose_name_plural = 'Frequências'
+		verbose_name_plural = 'Frequências'	
