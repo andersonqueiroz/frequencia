@@ -20,7 +20,7 @@ def registro(request):
 	if form.is_valid():	
 		user = form.cleaned_data['user']
 		tipo = 0 if user.ultima_frequencia_dia == None else not user.ultima_frequencia_dia.tipo
-		frequencia = Frequencia(user=user, maquina=maquina, tipo=tipo)
+		frequencia = Frequencia(user=user, maquina=maquina, tipo=tipo, observacao=form.cleaned_data['observacao'])
 		frequencia.save()
 			
 	context = {

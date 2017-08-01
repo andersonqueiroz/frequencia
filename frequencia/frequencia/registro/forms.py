@@ -1,20 +1,24 @@
 from django import forms
+from django.core.validators import MaxLengthValidator
+
 from frequencia.accounts.models import User
 
-class FrequenciaForm(forms.ModelForm):
-    class Meta:
-        password = forms.CharField(widget=forms.PasswordInput)
-        model = User
-        fields = ['cpf', 'password']
-        widgets = {
+class FrequenciaForm(forms.Form):
+
+    cpf = forms.CharField(label='CPF', max_length=15)
+    observacao = forms.CharField(widget=forms.Textarea, validators=[MaxLengthValidator(200)], max_length=200, required=False)
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    widgets = {
             'password': forms.PasswordInput(),
-        }
+            'observacao': forms.Textarea(),
+    }
 
     def clean(self):
         cleaned_data = super(FrequenciaForm, self).clean()
 
-        if not cleaned_data.get('cpf') or not cleaned_data.get('password'):
-            raise forms.ValidationError("Dados de login inválidos")
+        if not cleaned_data.get('cpf') or not cleaned_data.get('password') or not cleaned_data.get('observacao'):
+            raise forms.ValidationError("Dados de resgistro inválidos")
 
         user = User.objects.filter(cpf=self.cleaned_data['cpf']).first()
 
