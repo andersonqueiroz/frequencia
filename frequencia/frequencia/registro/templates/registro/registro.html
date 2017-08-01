@@ -13,7 +13,7 @@
 						<div class="card card-signup">
 							<form class="form" method="" action="">
 								<div class="header header-primary text-center">
-									<h1><span class="h">{{now.hour}}</span>:<span class="h m">{{now.minute}}</span>:<span class="h s">{{now.second}}</span></h1>
+									<h1><span class="h">{{now.hour}}</span>:<span class="h m">{{now.minute|stringformat:"02d"}}</span>:<span class="h s">{{now.second|stringformat:"02d"}}</span></h1>
 									<h5>{{now|date:"D, d M Y"}}</h5>
 								
 								</div>
@@ -86,4 +86,11 @@
 {% block script %}
 	{{ block.super }}
 	<script src="{% static 'js/relogio.js' %}"></script>
+	<script src="{% static 'js/jquery.mask.js' %}"></script>
+	<script type="text/javascript">
+		$(document).ready(function () { 
+	        var $seuCampoCpf = $("#id_cpf");
+	        $seuCampoCpf.mask('000.000.000-00', {reverse: true});
+	    });
+	</script>
 {% endblock %}

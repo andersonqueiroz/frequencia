@@ -1917,6 +1917,9 @@ select.form-control[multiple], .form-group.is-focused select.form-control[multip
 
 footer {
   padding: 15px 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 footer ul {
   margin-bottom: 0;
