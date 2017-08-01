@@ -43,6 +43,14 @@
 										<div class="footer text-center">
 											<input class="btn btn-simple btn-primary btn-lg" type="submit" value="Enviar">
 										</div>
+
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="material-icons">edit</i>
+											</span>
+											{% render_field form.observacao class="form-control" placeholder=form.observacao.label rows="3" %}
+											{{ form.observacao.errors }}
+										</div>
 										
 									</form>
 								</div>
