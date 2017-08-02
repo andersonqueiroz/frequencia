@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+
+from frequencia.vinculos.models import Setor
 
 User = get_user_model()
 
@@ -10,6 +13,11 @@ class RegisterForm(forms.ModelForm):
 	password2 = forms.CharField(
 		label='Confirmação de Senha', widget=forms.PasswordInput
 	)
+
+	groups = forms.ModelChoiceField(
+			label='Papéis do usuário',
+            queryset=Group.objects.all(),
+            )
 
 	def clean_password2(self):
 		password1 = self.cleaned_data.get("password1")
@@ -33,8 +41,13 @@ class RegisterForm(forms.ModelForm):
 
 class EditAccountForm(forms.ModelForm):
 
+	groups = forms.ModelChoiceField(
+			label='Papéis do usuário',
+            queryset=Group.objects.all(),
+            )
+
 	class Meta:
 		model = User
-		fields = ['username','email','name', 'cpf', 'is_active']
+		fields = ['username','email','name', 'cpf', 'is_active', 'groups']
 
 

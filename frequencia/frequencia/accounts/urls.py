@@ -6,7 +6,7 @@ from frequencia.accounts import views
 
 urlpatterns = [
 	url(r'^entrar/$', views.login, name='login'),
-	url(r'^sair/$', logout, {'next_page': settings.LOGIN_URL}, name='logout'),
+	url(r'^sair/$', logout, {'next_page': settings.LOGOUT_URL}, name='logout'),
 	
 	url(r'^usuarios/$', views.accounts, name='accounts'),
 	url(r'^usuario/novo/$', views.accounts_create, name='accounts_create'),

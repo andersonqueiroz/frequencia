@@ -2,6 +2,7 @@ from django import forms
 from django.core.validators import MaxLengthValidator
 
 from frequencia.accounts.models import User
+from frequencia.vinculos.models import Bolsista
 
 class FrequenciaForm(forms.Form):
 
@@ -20,10 +21,10 @@ class FrequenciaForm(forms.Form):
         if not cleaned_data.get('cpf') or not cleaned_data.get('password'):
             raise forms.ValidationError("Dados de resgistro de frequência inválidos")
 
-        user = User.objects.filter(cpf=self.cleaned_data['cpf']).first()
+        bolsista = Bolsista.objects.filter(user__cpf=self.cleaned_data['cpf']).first()
 
-        if not user or not user.is_active or not user.check_password(self.cleaned_data['password']):
+        if not bolsista or not bolsista.user.is_active or not bolsista.user.check_password(self.cleaned_data['password']):
            raise forms.ValidationError("Credenciais inválidas ou usuário inativo")
     
-        cleaned_data['user'] = user
+        cleaned_data['bolsista'] = bolsista
         return cleaned_data

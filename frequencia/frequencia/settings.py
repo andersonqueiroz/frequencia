@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'frequencia.core',
     'frequencia.accounts',
     'frequencia.registro',
+    'frequencia.vinculos',
 
     'widget_tweaks',
 ]
@@ -128,5 +129,5 @@ STATIC_URL = '/static/'
 #Auth
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'core:home'
-LOGOUT_URL = 'accounts:logout'
+LOGOUT_URL = 'registro:registro'
 AUTH_USER_MODEL = 'accounts.User'

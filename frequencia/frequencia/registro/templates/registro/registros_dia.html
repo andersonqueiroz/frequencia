@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+<!-- essa opagina deve redirecionar para a anterior em 10 segundos -->
+<!-- providenciar meta -->
+
+{% block content %}
+	{% if bolsista %}
+		<h2>{{bolsista}}</h2>
+		<h2>Registros do dia {% now "d/m/y"%}</h2>
+		<table>
+		<thead><tr>
+			<th>Tipo</th>
+			<th>Hora</th>
+			<th>Observações</th>
+		</tr></thead>
+		<tbody>
+		{% for registro in bolsista.registros_dia %}
+			<tr>
+				<td>{{registro.get_tipo_display}}</td>
+				<td>{{registro.created_at|time:'H:i'}}</td>
+				<td>{{registro.observacao}}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+		</table>
+	{% else %}
+		<h3>Sem registros para esse dia</h3>
+	{% endif %}
+	<a href="{% url 'registro:registro' %}">Voltar</a>
+{% endblock %}

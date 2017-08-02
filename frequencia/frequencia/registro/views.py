@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import PermissionDenied
+from django.views.generic import ListView
 
-from frequencia.accounts.models import User
+from frequencia.vinculos.models import Bolsista
 
 from .forms import FrequenciaForm
 from .models import Frequencia, Maquina
@@ -18,10 +19,11 @@ def registro(request):
 
 	form = FrequenciaForm(request.POST or None)
 	if form.is_valid():	
-		user = form.cleaned_data['user']
-		tipo = 0 if user.ultima_frequencia_dia == None else not user.ultima_frequencia_dia.tipo
-		frequencia = Frequencia(user=user, maquina=maquina, tipo=tipo, observacao=form.cleaned_data['observacao'])
+		bolsista = form.cleaned_data['bolsista']
+		tipo = 0 if not bolsista.registros_dia else not bolsista.registros_dia.last().tipo
+		frequencia = Frequencia(bolsista=bolsista, maquina=maquina, tipo=tipo, observacao=form.cleaned_data['observacao'])
 		frequencia.save()
+		return render(request, 'registro/registros_dia.html', {'bolsista': bolsista})
 			
 	context = {
 		'form': form,
@@ -29,7 +31,3 @@ def registro(request):
 		'now':now,
 	}
 	return render(request, 'registro/registro.html', context)
-
-	
-
-	
