@@ -2,23 +2,39 @@
 {% load staticfiles %}
 
 {% block content %}
-	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %});height: 50px;"></div>
+	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="brand">
+						<h1>Dashboard</h1>
+					</div>
+				</div>
+			</div>
 
-		<div class="main main-raised">
-			<div class="profile-content">
-	            <div class="container">
-	                <div class="row">
+		</div>
+	</div>
+
+	<div class="main main-raised col-md-10 col-md-offset-1">
+		<div class="profile-content">
+            <div class="container">
+            	<div class="section">
+            	
+	            	<div class="row">
 	                        <div class="name">
 	                            <h3 class="title">Christian Louboutin</h3>
 								<h6>Designer</h6>
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="description text-center">
-                        <p>An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. </p>
-	                </div>
 
-	            </div>
-	        </div>
-		</div>
+
+	                <div class="description text-center">
+	                    <p>An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. </p>
+	                </div>
+            		
+            	</div>
+            </div>
+        </div>
+	</div>
 {% endblock %}

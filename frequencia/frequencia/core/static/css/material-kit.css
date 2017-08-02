@@ -3558,7 +3558,8 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 }
 
 .main-raised {
-  margin: -60px 30px 0px;
+  margin-top: -60px;
+  margin-bottom: 10px;
   border-radius: 6px;
   box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
 }
@@ -3628,10 +3629,10 @@ h2.title {
 }
 
 .index-page .wrapper > .header {
-  height: 90vh;
+  height: 20vh;
 }
 .index-page .brand {
-  margin-top: 30vh;
+  margin-top: 10vh;
   color: #FFFFFF;
   text-align: center;
 }
@@ -3648,12 +3649,12 @@ h2.title {
 .index-page .section-basic {
   padding-top: 15px;
 }
-.index-page .header-filter:after {
+/*.index-page .header-filter:after {
   background: rgba(101, 47, 142, 0.64);
   background: linear-gradient(45deg, rgba(101, 47, 142, 0.88) 0%, rgba(125, 46, 185, 0.45) 100%);
   background: -moz-linear-gradient(135deg, rgba(101, 47, 142, 0.88) 0%, rgba(125, 46, 185, 0.45) 100%);
   background: -webkit-linear-gradient(135deg, rgba(101, 47, 142, 0.88) 0%, rgba(125, 46, 185, 0.45) 100%);
-}
+}*/
 
 .landing-page .header {
   height: 100vh;

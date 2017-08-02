@@ -1,22 +1,41 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
+	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="brand">
+						<h1>Criar usuário</h1>
+					</div>
+				</div>
+			</div>
 
-<h1>Novo usuário</h1>
-<!-- é interessante ter um breadcrumb -->
-         
-<form method="post">
-{% csrf_token %}
-    {{ form.nom_field_errors }}
-    
-    {% for field in form %}
-                {{ field.label_tag }}
-                {{ field }}
-                {{ field.errors }}
-                <br>
-    {% endfor %}
-    <button type="submit">Salvar</button>
-    <a href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
-</form>          
+		</div>
+	</div>
 
+	<div class="main main-raised col-md-10 col-md-offset-1">
+		<div class="profile-content">
+            <div class="container">
+            	<div class="section">
+            	
+					<form method="post">
+					{% csrf_token %}
+					    {{ form.nom_field_errors }}
+					    
+					    {% for field in form %}
+					                {{ field.label_tag }}
+					                {{ field }}
+					                {{ field.errors }}
+					                <br>
+					    {% endfor %}
+					    <button type="submit">Salvar</button>
+					    <a href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
+					</form> 
+            		
+            	</div>
+            </div>
+        </div>
+	</div>
 {% endblock %}

@@ -1,41 +1,78 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
+    <div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="brand">
+                        <h1>Usuários</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="main main-raised col-md-10 col-md-offset-1">
+        <div class="profile-content">
+            <div class="container">
+                <div class="section">
+                
+                    <ul class="nav nav-tabs">
+                      <li class="active"><a data-toggle="tab" href="#home">Bolsistas</a></li>
+                      <li><a data-toggle="tab" href="#menu1">Chefes</a></li>
+                      <li><a data-toggle="tab" href="#menu2">Coordenadores</a></li>
+                      <li><a data-toggle="tab" href="#menu2">Gestores</a></li>
+                      <li class="pull-right"><a href="{% url 'accounts:accounts_create' %}">Novo usuário</a></li>
+                    </ul>
 
-<h1>Página de usuários</h1>
+                    <div class="tab-content">
+                      <div id="home" class="tab-pane fade in active">
+                        <h3>Bolsistas</h3>
+                        <p>Listagem de bolsistas ativos.</p>
+                        <table class="table">
+                            <thead>
+                                <tr>                          
+                                    <th>Nome</th>                          
+                                    <th>Login</th>
+                                    <th>CPF</th>
+                                    <th>Status</th>
+                                    <th>E-mail</th>
+                                    <th></th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for account in object_list %}
+                                <tr>
+                                    <td>{{ account.name }}</td>                       
+                                    <td>{{ account.username }}</td>
+                                    <td>{{ account.cpf }}</td>
+                                    {% if account.is_active %}                    
+                                    <td>Ativo</td>
+                                    {% else %}
+                                    <td>Inativo</td>
+                                    {% endif %}
+                                    <td>{{ account.email }}</td>
+                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="material-icons">create</i></a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                      </div>
+                      <div id="menu1" class="tab-pane fade">
+                        <h3>Menu 1</h3>
+                        <p>Some content in menu 1.</p>
+                      </div>
+                      <div id="menu2" class="tab-pane fade">
+                        <h3>Menu 2</h3>
+                        <p>Some content in menu 2.</p>
+                      </div>
+                    </div>
 
-<a href="{% url 'accounts:accounts_create' %}">Novo usuário</a>    
+                </div>   
 
-<table>
-    <thead>
-        <tr>
-            <th>Código</th>                            
-            <th>Nome</th>                          
-            <th>Login</th>
-            <th>CPF</th>
-            <th>Status</th>
-            <th>E-mail</th>
-            <th>Alterar</th> 
-        </tr>
-    </thead>
-    <tbody>
-        {% for account in object_list %}
-        <tr>
-            <td>{{ account.pk }}</td>
-            <td>{{ account.name }}</td>                       
-            <td>{{ account.username }}</td>
-            <td>{{ account.cpf }}</td>
-            {% if account.is_active %}                    
-            <td>Ativo</td>
-            {% else %}
-            <td>Inativo</td>
-            {% endif %}
-            <td>{{ account.email }}</td>
-            <td><a href="{% url 'accounts:accounts_edit' account.pk %}">Editar</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+            </div>
+        </div>
+    </div>
 {% endblock %}
