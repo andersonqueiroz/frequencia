@@ -3757,3 +3757,18 @@ h2.title {
   display: flex;
   align-items: center;
 }
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.log {
+  margin-left: 15px;
+  margin-bottom: 15px;
+}
+
+.log h5,p {
+  margin: 0;
+}

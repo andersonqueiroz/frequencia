@@ -1,29 +1,95 @@
 {% extends 'base.html' %}
-<!-- essa opagina deve redirecionar para a anterior em 10 segundos -->
-<!-- providenciar meta -->
+{% load staticfiles %}
 
 {% block content %}
-	{% if bolsista %}
-		<h2>{{bolsista}}</h2>
-		<h2>Registros do dia {% now "d/m/y"%}</h2>
-		<table>
-		<thead><tr>
-			<th>Tipo</th>
-			<th>Hora</th>
-			<th>Observações</th>
-		</tr></thead>
-		<tbody>
-		{% for registro in bolsista.registros_dia %}
-			<tr>
-				<td>{{registro.get_tipo_display}}</td>
-				<td>{{registro.created_at|time:'H:i'}}</td>
-				<td>{{registro.observacao}}</td>
-			</tr>
-		{% endfor %}
-		</tbody>
-		</table>
-	{% else %}
-		<h3>Sem registros para esse dia</h3>
-	{% endif %}
-	<a href="{% url 'registro:registro' %}">Voltar</a>
+
+	{% load widget_tweaks %}
+
+
+	<div class="header header-filter vertical-align" style="background-image: url({% static 'images/bg.jpg' %}); background-size: cover; background-position: top center;">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+						<div class="card card-signup">
+							<div class="header header-primary text-center">
+								<h3>Registros do dia</h3>
+								<h5>{{now|date:"D, d M Y"}}</h5>							
+							</div>
+
+															<div class="content">
+									<h3 class="text-center truncate">{{bolsista}}</h3>
+								</div>
+
+						</div>
+
+						
+							
+								{% if bolsista %}
+									{% for registro in bolsista.registros_dia %}
+									<div class="card">
+									<div class="content">
+										{% if registro.get_tipo_display == "Entrada" %}
+											<button class="btn btn-success btn-fab btn-fab-mini btn-round pull-left">
+												<i class="material-icons">arrow_forward</i>
+											</button>
+										{% else %}
+											<button class="btn btn-danger btn-fab btn-fab-mini btn-round pull-left">
+												<i class="material-icons">arrow_back</i>
+											</button>
+										{% endif %}
+											<div class="log pull-left">
+												<h5 class=""><strong>{{registro.created_at|time:'H:i'}}</strong></h5>
+												<p class="text-muted">{{registro.get_tipo_display}}</p>	
+											</div>
+										{% if registro.observacao != "" %}
+											<button class="btn btn-white btn-fab btn-fab-mini btn-round pull-right"
+											data-toggle="popover" data-placement="right" title="Observação" data-content="{{registro.observacao}}">
+												<i class="material-icons">chat_bubble</i>
+											</button>
+										{% endif %}
+									</div>
+									</div>
+
+								{% endfor %}
+							{% else %}
+								<h3>Sem registros para esse dia</h3>
+							{% endif %}
+
+							<div class="footer text-center">
+								<a class="btn btn-simple btn-white btn-lg" href="{% url 'registro:registro' %}">Voltar</a>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<footer class="landing-page">
+		        <div class="container">
+		            <nav class="pull-left">
+						<ul>
+							<li>
+								<img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
+							</li>
+						</ul>
+		            </nav>
+		            <div class="copyright pull-right">
+		                &copy; 2017, SST</a>
+		            </div>
+		        </div>
+		    </footer>
+
+
+
+		</div>
+
 {% endblock %}
+
+{% block script %}
+	{{ block.super }}
+	<script src="{% static 'js/relogio.js' %}"></script>
+	<script type="text/javascript">
+	    $('[data-toggle="tooltip"]').popover();
+	</script>
+{% endblock %}
+

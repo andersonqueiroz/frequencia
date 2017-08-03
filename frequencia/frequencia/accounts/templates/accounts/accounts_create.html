@@ -2,6 +2,9 @@
 {% load staticfiles %}
 
 {% block content %}
+
+	{% load widget_tweaks %}
+
 	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
 		<div class="container">
 			<div class="row">
@@ -17,21 +20,84 @@
 
 	<div class="main main-raised col-md-10 col-md-offset-1">
 		<div class="profile-content">
-            <div class="container">
-            	<div class="section">
+            <div class="section">
+            	<div class="container">
             	
 					<form method="post">
-					{% csrf_token %}
-					    {{ form.nom_field_errors }}
+
+	            		<h2>Formulário</h2>
+		                <legend></legend>
+		                <h4>Dados gerais</h4>
+		                <p>Preencha os dados do usuário</p>
+
+						{% csrf_token %}
+						    {{ form.nom_field_errors }}
 					    
-					    {% for field in form %}
-					                {{ field.label_tag }}
-					                {{ field }}
-					                {{ field.errors }}
-					                <br>
-					    {% endfor %}
-					    <button type="submit">Salvar</button>
-					    <a href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
+
+						<div class="col-md-6">
+							<div class="form-group label-floating">
+								<label class="control-label">{{form.name.label}}</label>
+								{% render_field form.name class="form-control" %}
+								{{ form.name.errors }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group label-floating">
+								<label class="control-label">{{form.username.label}}</label>
+								{% render_field form.username class="form-control" %}
+								{{ form.username.errors }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group label-floating">
+								<label class="control-label">{{form.email.label}}</label>
+								{% render_field form.email class="form-control" %}
+								{{ form.email.errors }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group label-floating">
+								<label class="control-label">{{form.cpf.label}}</label>
+								{% render_field form.cpf class="form-control" %}
+								{{ form.cpf.errors }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group label-floating">
+								<label class="control-label">{{form.password1.label}}</label>
+								{% render_field form.password1 class="form-control" %}
+								{{ form.password1.errors }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group label-floating">
+								<label class="control-label">{{form.password2.label}}</label>
+								{% render_field form.password2 class="form-control" %}
+								{{ form.password2.errors }}
+							</div>
+						</div>
+
+						<legend></legend>
+		                <h4>Permissões</h4>
+		                <p>Determine a função do usuário no sistema e dados contextuais.</p>
+
+						<div class="col-md-6 form-group">
+							<label>{{form.groups.label}}</label>
+							{% render_field form.groups class="form-control" %}
+							{{ form.groups.errors }}
+
+							<div class="togglebutton">
+								<label>
+									{% render_field form.is_active type="togglebutton" checked="" %}
+									{{form.is_active.label}}
+								</label>
+							</div>
+						</div>
+
+						<div class="col-md-12 text-center">
+						    <button class="btn btn-primary" type="submit">Salvar</button>
+					    	<a class="btn btn-primary btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
+						</div>
 					</form> 
             		
             	</div>
