@@ -18,16 +18,19 @@ def registro(request):
 		raise PermissionDenied
 
 	form = FrequenciaForm(request.POST or None)
-	if form.is_valid():	
-		bolsista = form.cleaned_data['bolsista']
-		tipo = 0 if not bolsista.registros_dia else not bolsista.registros_dia.last().tipo
-		frequencia = Frequencia(bolsista=bolsista, maquina=maquina, tipo=tipo, observacao=form.cleaned_data['observacao'])
-		frequencia.save()
-		return render(request, 'registro/registros_dia.html', {'bolsista': bolsista})
-			
+
 	context = {
 		'form': form,
 		'landing_page': True,
 		'now':now,
 	}
+
+	if form.is_valid():	
+		bolsista = form.cleaned_data['bolsista']
+		tipo = 0 if not bolsista.registros_dia else not bolsista.registros_dia.last().tipo
+		frequencia = Frequencia(bolsista=bolsista, maquina=maquina, tipo=tipo, observacao=form.cleaned_data['observacao'])
+		frequencia.save()
+		context['bolsista'] = bolsista
+		return render(request, 'registro/registros_dia.html', context)
+			
 	return render(request, 'registro/registro.html', context)

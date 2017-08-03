@@ -48,6 +48,6 @@ class EditAccountForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ['username','email','name', 'cpf', 'is_active', 'groups']
+		fields = ['username','email','name', 'cpf', 'is_active']
 
 
