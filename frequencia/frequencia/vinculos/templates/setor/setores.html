@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Setor</h1>
+<a href="{% url 'vinculos:setor_create' %}">Novo setor</a>
+<table>
+    <thead>
+        <tr>                          
+            <th>Nome</th>
+            <th></th> 
+        </tr>
+    </thead>
+    <tbody>
+        {% for setor in object_list %}
+        <tr>
+            <td>{{ setor }}</td>
+            <td><a href="{% url "vinculos:setor_edit" setor.pk %}">Editar</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

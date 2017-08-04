@@ -1,5 +1,7 @@
 from django import forms
 
+from .models import Setor, Coordenadoria
+
 class VinculoForm(forms.ModelForm):
 
 	groups = forms.ModelMultipleChoiceField(
@@ -19,3 +21,16 @@ class VinculoForm(forms.ModelForm):
 	class Meta:
 		model = User
 		fields = ['name', 'username', 'email', 'cpf', 'is_active']
+
+
+class EditSetorForm(forms.ModelForm):
+
+	class Meta:
+		model = Setor
+		fields = ['nome', 'chefes', 'coordenadoria',]
+
+class EditCoordenadoriaForm(forms.ModelForm):
+
+	class Meta:
+		model = Coordenadoria
+		fields = ['nome', 'coordenadores',]
