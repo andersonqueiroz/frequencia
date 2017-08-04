@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Coordenadorias</h1>
+<a href="{% url 'vinculos:coordenadoria_create' %}">Nova coordenadoria</a>
+<table>
+    <thead>
+        <tr>                          
+            <th>Nome</th>
+            <th></th> 
+        </tr>
+    </thead>
+    <tbody>
+        {% for coordenadoria in object_list %}
+        <tr>
+            <td>{{ coordenadoria }}</td>
+            <td><a href="{% url "vinculos:coordenadoria_edit" coordenadoria.pk %}">Editar</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
