@@ -36,12 +36,6 @@ class RegisterForm(forms.ModelForm):
 
 class EditAccountForm(forms.ModelForm):
 
-	groups = forms.ModelMultipleChoiceField(
-			label='Papéis do usuário',
-            widget=forms.CheckboxSelectMultiple,
-            queryset=Group.objects.all(),
-            )
-
 	class Meta:
 		model = User
 		fields = ['username','email','name', 'cpf', 'is_active']

@@ -1,11 +1,12 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import Group
 
 from frequencia.core.basemodel import basemodel
 from frequencia.accounts.models import User
 
+
 class Coordenadoria(basemodel):
-	coordenadores = models.ManyToManyField(User, blank=True)
 	
 	nome = models.CharField('Nome', max_length=50)
 
@@ -17,8 +18,7 @@ class Coordenadoria(basemodel):
 		verbose_name_plural = 'Coordenadorias'
 
 class Setor(basemodel):
-
-	chefes = models.ManyToManyField(User, blank=True)
+	
 	coordenadoria = models.ForeignKey(Coordenadoria, verbose_name='Coordenadoria', related_name='setores')
 
 	nome = models.CharField('Nome', max_length=50)
@@ -30,7 +30,7 @@ class Setor(basemodel):
 		verbose_name = 'Setor'  
 		verbose_name_plural = 'Setores'
 
-class Bolsista(basemodel):
+class Vinculo(basemodel):
 
 	TURNO_CHOICES = (
 		(0, 'Matutino'),
@@ -38,19 +38,21 @@ class Bolsista(basemodel):
 		(2, 'Noturno')
 	)
 
-	user = models.ForeignKey(User, verbose_name='Usuário', related_name='bolsistas')
-	setor = models.ForeignKey(Setor, verbose_name='Setor', related_name='bolsistas')
+	group = models.ForeignKey(Group, verbose_name='Papel', related_name='vinculos')
+	user = models.ForeignKey(User, verbose_name='Usuário', related_name='vinculos')
+	setor = models.ForeignKey(Setor, verbose_name='Setor', related_name='vinculos', null=True, blank=True)
+	coordenadoria = models.ForeignKey(Coordenadoria, verbose_name='Coordenadoria', related_name='vinculos', null=True, blank=True)
 
-	carga_horaria_diaria = models.IntegerField()
+	carga_horaria_diaria = models.IntegerField(null=True, blank=True)
 	turno = models.IntegerField('Turno', choices=TURNO_CHOICES, default=0)
-	vinculo_ativado = models.BooleanField(default=True)
+	ativo = models.BooleanField(default=True)
 
 	def __str__(self):
-		return self.user.name
+		return self.user
 
 	class Meta:
-		verbose_name = 'Bolsista'  
-		verbose_name_plural = 'Bolsistas'
+		verbose_name = 'Vínculo'  
+		verbose_name_plural = 'Vínculos'
 
 	@property
 	def registros_dia(self):

@@ -26,19 +26,19 @@ class AccountCreateView(SuccessMessageMixin, CreateView):
 
 	model = User
 	form_class = RegisterForm
-	template_name = 'accounts/accounts_create.html'	
+	template_name = 'accounts/accounts_create_edit.html'	
 	
 	success_message = 'Conta criada com sucesso!'
 
 	def get_success_url(self):
 		return reverse('accounts:accounts_edit', kwargs={'pk':self.object.id})
-		
+
 
 class AccountUpdateView(SuccessMessageMixin, UpdateView):
 
 	model = User
 	form_class = EditAccountForm
-	template_name = 'accounts/accounts_edit.html'	
+	template_name = 'accounts/accounts_create_edit.html'	
 	
 	success_message = 'Conta <b>%(username)s</b> atualizado com sucesso!'
 

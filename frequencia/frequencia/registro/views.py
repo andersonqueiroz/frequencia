@@ -2,8 +2,6 @@ from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView
 
-from frequencia.vinculos.models import Bolsista
-
 from .forms import FrequenciaForm
 from .models import Frequencia, Maquina
 
