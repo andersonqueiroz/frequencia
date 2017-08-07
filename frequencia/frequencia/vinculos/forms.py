@@ -1,36 +1,24 @@
 from django import forms
+from django.contrib.auth.models import Group
 
-from .models import Setor, Coordenadoria
+from frequencia.accounts.models import User
 
-class VinculoForm(forms.ModelForm):
+from .models import Setor, Coordenadoria, Vinculo
 
-	groups = forms.ModelMultipleChoiceField(
-			label='Papéis do usuário',
-            widget=forms.CheckboxSelectMultiple,
-            queryset=Group.objects.all(),
-            )
-
-	def save(self, commit=True):
-		user = super(RegisterForm, self).save(commit=False)
-		user.set_password(self.cleaned_data['password1'])
-
-		if commit:
-			user.save()
-		return user
+class AdicionarVinculoForm(forms.ModelForm):
 
 	class Meta:
-		model = User
-		fields = ['name', 'username', 'email', 'cpf', 'is_active']
-
+		model = Vinculo
+		fields = ['group', 'setor', 'coordenadoria', 'carga_horaria_diaria', 'turno']
 
 class EditSetorForm(forms.ModelForm):
 
 	class Meta:
 		model = Setor
-		fields = ['nome', 'chefes', 'coordenadoria',]
+		fields = ['nome', 'coordenadoria']
 
 class EditCoordenadoriaForm(forms.ModelForm):
 
 	class Meta:
 		model = Coordenadoria
-		fields = ['nome', 'coordenadores',]
+		fields = ['nome']

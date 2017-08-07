@@ -48,7 +48,7 @@ class Vinculo(basemodel):
 	ativo = models.BooleanField(default=True)
 
 	def __str__(self):
-		return self.user
+		return self.user.name or self.user.username
 
 	class Meta:
 		verbose_name = 'Vínculo'  

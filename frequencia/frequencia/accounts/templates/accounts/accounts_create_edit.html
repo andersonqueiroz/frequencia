@@ -94,6 +94,16 @@
 							</div>
 						</div>
 
+						<!-- Parte de vínculos para gabriel dica: https://stackoverflow.com/questions/2353710/how-would-you-make-a-dynamic-formset-in-django -->
+												
+						{{ vinculos_formset.errors }}
+						<table>
+						    {% for form in vinculos_formset %}
+						    {{ form }}
+						    {% endfor %}
+						</table>
+						<!-- fim a parte de vínculos -->
+
 						<div class="col-md-12 text-center">
 						    <button class="btn btn-primary" type="submit">Salvar</button>
 					    	<a class="btn btn-primary btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
