@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView
@@ -9,9 +9,10 @@ from django.contrib import messages
 from django.views.generic.edit import UpdateView, CreateView
 from django.urls import reverse
 from django.contrib.auth.models import Group
-from django.forms import formset_factory
+from django.forms import formset_factory, inlineformset_factory
 
 from frequencia.vinculos.forms import AdicionarVinculoForm
+from frequencia.vinculos.models import Vinculo
 
 from .models import User
 from .forms import RegisterForm, EditAccountForm
@@ -43,15 +44,17 @@ def accounts_create(request):
 	template_name = 'accounts/accounts_create_edit.html'
 
 	VinculosFormset = formset_factory(AdicionarVinculoForm)
-
 	
 	form = RegisterForm(request.POST or None)
-	vinculos_form = AdicionarVinculoForm(request.POST or None)
 
-	if form.is_valid() and vinculos_form.is_valid():		
+	vinculos_form = VinculosFormset(prefix='vinculos')
+	if request.method == 'POST':
+		vinculos_form = VinculosFormset(request.POST, prefix='vinculos')	
+
+	if form.is_valid() and vinculos_form.is_valid():
 		user = form.save()
-		#Falta cadastrar o vínculo no banco de dados
-		#print(vinculos_form.cleaned_data)
+		for vinculo_form in vinculos_form:			
+			vinculo_form.save(user)
 		return redirect('accounts:accounts')
 	
 	context = {
@@ -61,23 +64,51 @@ def accounts_create(request):
 	return render(request, template_name, context)
 
 
-class AccountUpdateView(SuccessMessageMixin, UpdateView):
+# class AccountUpdateView(SuccessMessageMixin, UpdateView):
 
-	model = User
-	form_class = EditAccountForm
-	template_name = 'accounts/accounts_create_edit.html'	
+# 	model = User
+# 	form_class = EditAccountForm
+# 	template_name = 'accounts/accounts_create_edit.html'
 	
-	success_message = 'Conta <b>%(username)s</b> atualizado com sucesso!'
+# 	success_message = 'Conta <b>%(username)s</b> atualizado com sucesso!'
 
-	def get_success_url(self):
-		return reverse('accounts:accounts_edit', kwargs={'pk':self.object.id})
+# 	def get_success_url(self):
+# 		return reverse('accounts:accounts_edit', kwargs={'pk':self.object.id})
+
+# 	def get_context_data(self, **kwargs):
+# 		context = super(AccountUpdateView, self).get_context_data(**kwargs)
+# 		#VinculosFormset = formset_factory(AdicionarVinculoForm)
+# 		VinculosFormset = inlineformset_factory(User, Vinculo, exclude=('user', 'ativo',), extra=1, can_delete=False)
+# 		context['vinculos_formset'] = VinculosFormset(prefix='vinculos', instance=self.object)
+# 		if self.request.method == 'POST':
+# 			context['vinculos_formset'] = VinculosFormset(prefix='vinculos', data=self.request.POST)			
+# 		return context
+
+def accounts_edit(request, pk): 
+	template_name = 'accounts/accounts_create_edit.html'
+
+	instance = get_object_or_404(User, pk=pk)
+	form = EditAccountForm(request.POST or None, instance=instance)
+
+	VinculosFormset = inlineformset_factory(User, Vinculo, exclude=('user', 'ativo',), extra=1, can_delete=False)
+	vinculos_formset = VinculosFormset(request.POST or None, instance=instance, prefix='vinculos')
+
+	if form.is_valid() and vinculos_formset.is_valid():
+		form.save()
+		vinculos_formset.save()
+		return redirect('accounts:accounts')
+	context = {
+		'form': form,
+		'vinculos_formset': vinculos_formset,
+	}
+	return render(request, template_name, context)
 
 
 class Login(LoginView):
 	template_name = 'accounts/login.html'
 	
 	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
+		context = super(Login, self).get_context_data(**kwargs)
 		context['landing_page'] = True
 		return context
 
@@ -101,5 +132,5 @@ def edit_password(request):
 
 accounts = AccountListView.as_view()
 # accounts_create = AccountCreateView.as_view()
-accounts_edit = AccountUpdateView.as_view()
+#accounts_edit = AccountUpdateView.as_view()
 login = Login.as_view()
