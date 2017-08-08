@@ -18,17 +18,30 @@
 		</div>
 	</div>
 
-	<div class="main main-raised col-md-10 col-md-offset-1">
-		<div class="profile-content">
-            <div class="section">
-            	<div class="container">
+	<div class="main main-raised">
+            <div class="container">
+            	<div class="section">
+
+            	
             	
 					<form method="post">
+						<div class="row vertical-align">
+							<div class="col-md-6">
+			            		<h2>Formulário</h2>
+				                <legend></legend>
+				                <h4>Dados gerais</h4>
+				                <p>Preencha os dados do usuário</p>
+			                </div>
 
-	            		<h2>Formulário</h2>
-		                <legend></legend>
-		                <h4>Dados gerais</h4>
-		                <p>Preencha os dados do usuário</p>
+			                <div class="col-md-6">
+				                <div class="togglebutton">
+										<label>
+											{% render_field form.is_active type="togglebutton" checked="" %}
+											{{form.is_active.label}}
+										</label>
+								</div>
+							</div>
+						</div>
 
 						{% csrf_token %}
 						    {{ form.nom_field_errors }}
@@ -81,20 +94,13 @@
 		                <h4>Permissões</h4>
 		                <p>Determine a função do usuário no sistema e dados contextuais.</p>
 
-						<div class="col-md-6 form-group">
+						<div class="col-md-12 form-group">
 							<label>{{form.groups.label}}</label>
 							{% render_field form.groups class="form-control" %}
 							{{ form.groups.errors }}
-
-							<div class="togglebutton">
-								<label>
-									{% render_field form.is_active type="togglebutton" checked="" %}
-									{{form.is_active.label}}
-								</label>
-							</div>
 						</div>
 
-						<div class="col-md-12 text-center">
+						<div class="text-center">
 						    <button class="btn btn-primary" type="submit">Salvar</button>
 					    	<a class="btn btn-primary btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
 						</div>
@@ -102,6 +108,5 @@
             		
             	</div>
             </div>
-        </div>
 	</div>
 {% endblock %}
