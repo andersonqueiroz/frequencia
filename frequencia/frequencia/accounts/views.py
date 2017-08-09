@@ -24,22 +24,6 @@ class AccountListView(ListView):
 	template_name = 'accounts/accounts.html'
 
 
-# class AccountCreateView(SuccessMessageMixin, CreateView):
-
-# 	model = User
-# 	form_class = RegisterForm
-# 	template_name = 'accounts/accounts_create_edit.html'	
-	
-# 	success_message = 'Conta criada com sucesso!'
-
-# 	def get_success_url(self):
-# 		return reverse('accounts:accounts_edit', kwargs={'pk':self.object.id})
-
-# 	def get_context_data(self, **kwargs):
-# 		context = super(AccountCreateView, self).get_context_data(**kwargs)
-# 		context['vinculos_formset'] = formset_factory(AdicionarVinculoForm)
-# 		return context
-
 def accounts_create(request):
 	template_name = 'accounts/accounts_create_edit.html'
 
@@ -47,9 +31,7 @@ def accounts_create(request):
 	
 	form = RegisterForm(request.POST or None)
 
-	vinculos_form = VinculosFormset(prefix='vinculos')
-	if request.method == 'POST':
-		vinculos_form = VinculosFormset(request.POST, prefix='vinculos')	
+	vinculos_form = VinculosFormset(request.POST or None, prefix='vinculos')	
 
 	if form.is_valid() and vinculos_form.is_valid():
 		user = form.save()
@@ -64,33 +46,13 @@ def accounts_create(request):
 	return render(request, template_name, context)
 
 
-# class AccountUpdateView(SuccessMessageMixin, UpdateView):
-
-# 	model = User
-# 	form_class = EditAccountForm
-# 	template_name = 'accounts/accounts_create_edit.html'
-	
-# 	success_message = 'Conta <b>%(username)s</b> atualizado com sucesso!'
-
-# 	def get_success_url(self):
-# 		return reverse('accounts:accounts_edit', kwargs={'pk':self.object.id})
-
-# 	def get_context_data(self, **kwargs):
-# 		context = super(AccountUpdateView, self).get_context_data(**kwargs)
-# 		#VinculosFormset = formset_factory(AdicionarVinculoForm)
-# 		VinculosFormset = inlineformset_factory(User, Vinculo, exclude=('user', 'ativo',), extra=1, can_delete=False)
-# 		context['vinculos_formset'] = VinculosFormset(prefix='vinculos', instance=self.object)
-# 		if self.request.method == 'POST':
-# 			context['vinculos_formset'] = VinculosFormset(prefix='vinculos', data=self.request.POST)			
-# 		return context
-
 def accounts_edit(request, pk): 
 	template_name = 'accounts/accounts_create_edit.html'
 
 	instance = get_object_or_404(User, pk=pk)
 	form = EditAccountForm(request.POST or None, instance=instance)
 
-	VinculosFormset = inlineformset_factory(User, Vinculo, exclude=('user', 'ativo',), extra=1, can_delete=False)
+	VinculosFormset = inlineformset_factory(User, Vinculo, exclude=('user',), extra=1, can_delete=False)
 	vinculos_formset = VinculosFormset(request.POST or None, instance=instance, prefix='vinculos')
 
 	if form.is_valid() and vinculos_formset.is_valid():
