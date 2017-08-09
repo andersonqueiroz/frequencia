@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.contrib.auth.models import Group
 from django.forms import formset_factory, inlineformset_factory
 
-from frequencia.vinculos.forms import AdicionarVinculoForm
+from frequencia.vinculos.forms import AdicionarVinculoForm, EditarVinculoForm
 from frequencia.vinculos.models import Vinculo
 
 from .models import User
@@ -52,7 +52,7 @@ def accounts_edit(request, pk):
 	instance = get_object_or_404(User, pk=pk)
 	form = EditAccountForm(request.POST or None, instance=instance)
 
-	VinculosFormset = inlineformset_factory(User, Vinculo, exclude=('user',), extra=1, can_delete=False)
+	VinculosFormset = inlineformset_factory(User, Vinculo, exclude=('user',), extra=1, can_delete=False, form=EditarVinculoForm)
 	vinculos_formset = VinculosFormset(request.POST or None, instance=instance, prefix='vinculos')
 
 	if form.is_valid() and vinculos_formset.is_valid():
