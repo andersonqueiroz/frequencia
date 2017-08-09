@@ -110,6 +110,21 @@
 						</table> -->
 						<!-- fim a parte de vínculos -->
 
+						<div class="col-md-6">
+							<div class="form-group label-floating">
+								<label class="control-label">{{form.group.label}}</label>
+								{% render_field form.group class="form-control" %}
+								{{ form.group.errors }}
+							</div>
+						</div>
+
+
+						{{ vinculos_formset.non_field_errors }}
+						<table>							
+					        {{ vinculos_formset }}
+					    </table>
+						<!-- fim da parte de vínculos -->
+
 						<div class="col-md-12 text-center">
 						    <button class="btn btn-primary" type="submit">Salvar</button>
 					    	<a class="btn btn-primary btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>

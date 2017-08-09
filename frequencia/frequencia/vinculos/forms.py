@@ -11,6 +11,14 @@ class AdicionarVinculoForm(forms.ModelForm):
 		model = Vinculo
 		fields = ['group', 'setor', 'coordenadoria', 'carga_horaria_diaria', 'turno']
 
+	def save(self, user, commit=True):
+		vinculo = super(AdicionarVinculoForm, self).save(commit=False)
+		vinculo.user = user
+
+		if commit:
+			vinculo.save()
+		return vinculo
+
 class EditSetorForm(forms.ModelForm):
 
 	class Meta:
