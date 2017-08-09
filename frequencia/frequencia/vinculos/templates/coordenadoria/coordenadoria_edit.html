@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Editar coordenadoria</h1>
+
+
+<form role="form" method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+{{ form.nom_field_errors }}
+    
+{% for field in form %}
+    {{ field.label_tag }}
+    {{ field }}
+    {{ field.errors }}
+    <br>
+{% endfor %}
+    <button type="submit">Salvar</button>
+    <a href="{% url 'vinculos:coordenadorias' %}" type="button">Voltar</a>
+</form>
+
+{% endblock %}

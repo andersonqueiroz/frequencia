@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from django.contrib.auth import authenticate
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
-from django.views.generic.edit import UpdateView
-from django.conf import settings
+from django.views.generic.edit import UpdateView, CreateView
 from django.urls import reverse
 from django.contrib.auth.models import Group
+from django.forms import formset_factory
+
+from frequencia.vinculos.forms import AdicionarVinculoForm
 
 from .models import User
 from .forms import RegisterForm, EditAccountForm
@@ -21,29 +22,41 @@ class AccountListView(ListView):
 	model = User
 	template_name = 'accounts/accounts.html'
 
-	def get_context_data(self, **kwargs):
-		
-		context = super(AccountListView, self).get_context_data(**kwargs)
-		self.paginate_by = self.request.GET.get('items') or self.paginate_by
-		
-		breadcrumb = [
-			{'name':'Funcionários'},
-		]
-		context['breadcrumb'] = breadcrumb
-		return context
 
+# class AccountCreateView(SuccessMessageMixin, CreateView):
+
+# 	model = User
+# 	form_class = RegisterForm
+# 	template_name = 'accounts/accounts_create_edit.html'	
+	
+# 	success_message = 'Conta criada com sucesso!'
+
+# 	def get_success_url(self):
+# 		return reverse('accounts:accounts_edit', kwargs={'pk':self.object.id})
+
+# 	def get_context_data(self, **kwargs):
+# 		context = super(AccountCreateView, self).get_context_data(**kwargs)
+# 		context['vinculos_formset'] = formset_factory(AdicionarVinculoForm)
+# 		return context
 
 def accounts_create(request):
-	template_name = 'accounts/accounts_create.html'
-	if request.method == 'POST':
-		form = RegisterForm(request.POST)
-		if form.is_valid():
-			user = form.save()
-			return redirect('accounts:accounts')
-	else:
-		form = RegisterForm()
+	template_name = 'accounts/accounts_create_edit.html'
+
+	VinculosFormset = formset_factory(AdicionarVinculoForm)
+
+	
+	form = RegisterForm(request.POST or None)
+	vinculos_form = AdicionarVinculoForm(request.POST or None)
+
+	if form.is_valid() and vinculos_form.is_valid():		
+		user = form.save()
+		#Falta cadastrar o vínculo no banco de dados
+		#print(vinculos_form.cleaned_data)
+		return redirect('accounts:accounts')
+	
 	context = {
 		'form': form,
+		'vinculos_formset': vinculos_form,
 	}
 	return render(request, template_name, context)
 
@@ -52,22 +65,20 @@ class AccountUpdateView(SuccessMessageMixin, UpdateView):
 
 	model = User
 	form_class = EditAccountForm
-	template_name = 'accounts/accounts_edit.html'	
+	template_name = 'accounts/accounts_create_edit.html'	
 	
 	success_message = 'Conta <b>%(username)s</b> atualizado com sucesso!'
 
 	def get_success_url(self):
-		return reverse('accounts:accounts_edit', kwargs={'pk': self.object.id})
+		return reverse('accounts:accounts_edit', kwargs={'pk':self.object.id})
 
+
+class Login(LoginView):
+	template_name = 'accounts/login.html'
+	
 	def get_context_data(self, **kwargs):
-		context = super(AccountUpdateView, self).get_context_data(**kwargs)
-
-		breadcrumb = [
-			{'name':'Funcionários', 'url':'accounts:accounts'},
-			{'name': context['object']}
-		]
-		context['breadcrumb'] = breadcrumb
-		
+		context = super().get_context_data(**kwargs)
+		context['landing_page'] = True
 		return context
 
 
@@ -86,15 +97,9 @@ def edit_password(request):
 	context['form'] = form
 	return render(request, template_name, context)
 
-class Login(LoginView):
-	template_name = 'accounts/login.html'
-	
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
-		context['landing_page'] = True
-		return context
 	
 
 accounts = AccountListView.as_view()
+# accounts_create = AccountCreateView.as_view()
 accounts_edit = AccountUpdateView.as_view()
 login = Login.as_view()

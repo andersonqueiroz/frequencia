@@ -14,11 +14,6 @@ class RegisterForm(forms.ModelForm):
 		label='Confirmação de Senha', widget=forms.PasswordInput
 	)
 
-	groups = forms.ModelChoiceField(
-			label='Papéis do usuário',
-            queryset=Group.objects.all(),
-            )
-
 	def clean_password2(self):
 		password1 = self.cleaned_data.get("password1")
 		password2 = self.cleaned_data.get("password2")
@@ -41,13 +36,9 @@ class RegisterForm(forms.ModelForm):
 
 class EditAccountForm(forms.ModelForm):
 
-	groups = forms.ModelChoiceField(
-			label='Papéis do usuário',
-            queryset=Group.objects.all(),
-            )
-
 	class Meta:
 		model = User
 		fields = ['username','email','name', 'cpf', 'is_active']
+
 
 

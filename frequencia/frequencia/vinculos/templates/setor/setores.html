@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="brand">
+                        <h1>Setores e Coordenadorias</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main main-raised">
+        <div class="profile-content">
+            <div class="container">
+                <div class="section">
+                
+                    <ul class="nav nav-tabs">
+                      <li id="setores" class="active" onclick="show('comment')"><a data-toggle="tab" href="#home">Setores</a></li>
+                      <li id="coords" ><a data-toggle="tab" href="#menu1">Coordenadorias</a></li>
+                      <li id="criar_setor" class="pull-right"><a href="{% url 'vinculos:setor_create' %}">Novo setor</a></li>
+                      <li id="criar_coord" class="pull-right" style="display: none;"><a href="{% url 'accounts:accounts_create' %}">Nova coordernadoria</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                      <div id="home" class="tab-pane fade in active">
+                        <h3>Setores</h3>
+                        <p>Veja os setores que compõe esta unidade.</p>
+                        <legend></legend>
+                        <table class="table">
+                            <thead>
+                                <tr>                          
+                                    <th>Nome</th>                          
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for setor in object_list %}
+                                    <tr>
+                                        <td>{{ setor }}</td>
+                                        <td><a href="{% url 'vinculos:setor_create' %}"><i class="material-icons">create</i></a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                      </div>
+                      <div id="menu1" class="tab-pane fade">
+                        <h3>Coordernadorias</h3>
+                        <p>Veja as coordenadorias que compõe esta unidade.</p>
+                      </div>
+                    </div>
+
+                </div>   
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#setores").click(function(){
+                $("#criar_coord").hide();
+                $("#criar_setor").show();
+            });
+            $("#coords").click(function(){
+                $("#criar_coord").show();
+                $("#criar_setor").hide();
+            });
+        });
+    </script>
+{% endblock %}

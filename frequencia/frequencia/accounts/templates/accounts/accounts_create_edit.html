@@ -20,11 +20,11 @@
 
 	<div class="main main-raised">
             <div class="container">
-            	<div class="section">
-
-            	
-            	
+            	<div class="row section">
 					<form method="post">
+
+						{% csrf_token %}
+
 						<div class="row vertical-align">
 							<div class="col-md-6">
 			            		<h2>Formulário</h2>
@@ -34,7 +34,7 @@
 			                </div>
 
 			                <div class="col-md-6">
-				                <div class="togglebutton">
+				                <div class="togglebutton pull-right">
 										<label>
 											{% render_field form.is_active type="togglebutton" checked="" %}
 											{{form.is_active.label}}
@@ -43,8 +43,7 @@
 							</div>
 						</div>
 
-						{% csrf_token %}
-						    {{ form.nom_field_errors }}
+						{{ form.nom_field_errors }}
 					    
 
 						<div class="col-md-6">
@@ -91,16 +90,27 @@
 						</div>
 
 						<legend></legend>
-		                <h4>Permissões</h4>
+		                <h4>Vínculos</h4>
 		                <p>Determine a função do usuário no sistema e dados contextuais.</p>
 
 						<div class="col-md-12 form-group">
 							<label>{{form.groups.label}}</label>
-							{% render_field form.groups class="form-control" %}
+							{% render_field form.groups %}
 							{{ form.groups.errors }}
 						</div>
 
-						<div class="text-center">
+
+						<!-- Parte de vínculos para gabriel dica: https://stackoverflow.com/questions/2353710/how-would-you-make-a-dynamic-formset-in-django -->
+												
+<!-- 						{{ vinculos_formset.errors }}
+						<table>
+						    {% for form in vinculos_formset %}
+						    {{ form }}
+						    {% endfor %}
+						</table> -->
+						<!-- fim a parte de vínculos -->
+
+						<div class="col-md-12 text-center">
 						    <button class="btn btn-primary" type="submit">Salvar</button>
 					    	<a class="btn btn-primary btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
 						</div>
