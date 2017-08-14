@@ -93,37 +93,62 @@
 		                <h4>Vínculos</h4>
 		                <p>Determine a função do usuário no sistema e dados contextuais.</p>
 
-						<div class="col-md-12 form-group">
-							<label>{{form.groups.label}}</label>
-							{% render_field form.groups %}
-							{{ form.groups.errors }}
+		                <legend></legend>
+
+		                <div class="container">
+    						<div id="vinculos" class="row">
+								<ul id="vinculo-tabs" class="nav nav-tabs">
+			                      <li id="vinculo-tab" class="active"><a data-toggle="tab" href="#vinculo">Vínculo</a></li>
+			                      <li class="pull-right"><a id="add-vinculo" href="#a">Novo vínculo</a></li>
+			                    </ul>
+
+			                    <div id="tab-content" class="tab-content">
+			                      	<div id="vinculo" class="tab-pane fade in active">
+
+										<div id="collapseOne" class="panel-collapse collapse in">
+					                        <div class="panel-body">
+												{% for form in vinculos_formset %}
+												     {% for field in form %}
+														{% if field.name == "ativo" %} 
+															<div class="row vertical-align">
+																<div class="col-md-6">
+											                        <h3>Bolsistas</h3>
+		            												<p>Listagem de bolsistas ativos.</p>
+		            											</div>
+										                        <div class="col-md-6">
+													                <div class="togglebutton pull-right">
+																		<label>
+																			{% render_field field type="togglebutton" checked="" %}
+																			{{field.label}}
+																		</label>
+																	</div>
+																</div>
+															</div>
+														{% elif field.name == "id" or field.name == "user" %}
+															{% render_field field %}
+														{% elif field.name == "group" %}
+							         						<div class="col-md-6">
+																<div class="form-group">
+																	<label class="control-label">{{field.label}}</label>
+																	{% render_field field class="form-control" onchange="getOption(this)" %}
+																</div>
+															</div>
+														{% else %}
+							         						<div class="col-md-6">
+																<div class="form-group">
+																	<label class="control-label">{{field.label}}</label>
+																	{% render_field field class="form-control" %}
+																</div>
+															</div>
+														{% endif %}
+												     {% endfor %} 
+												{% endfor %} 
+					                        </div>
+				                    	</div>
+			                      	</div>
+			                    </div>
+						    </div>
 						</div>
-
-
-						<!-- Parte de vínculos para gabriel dica: https://stackoverflow.com/questions/2353710/how-would-you-make-a-dynamic-formset-in-django -->
-												
-<!-- 						{{ vinculos_formset.errors }}
-						<table>
-						    {% for form in vinculos_formset %}
-						    {{ form }}
-						    {% endfor %}
-						</table> -->
-						<!-- fim a parte de vínculos -->
-
-						<div class="col-md-6">
-							<div class="form-group label-floating">
-								<label class="control-label">{{form.group.label}}</label>
-								{% render_field form.group class="form-control" %}
-								{{ form.group.errors }}
-							</div>
-						</div>
-
-
-						{{ vinculos_formset.non_field_errors }}
-						<table>							
-					        {{ vinculos_formset }}
-					    </table>
-						<!-- fim da parte de vínculos -->
 
 						<div class="col-md-12 text-center">
 						    <button class="btn btn-primary" type="submit">Salvar</button>
@@ -134,4 +159,51 @@
             	</div>
             </div>
 	</div>
+{% endblock %}
+
+{% block script %}
+	{{ block.super }}
+	<script src="{% static 'js/jquery.mask.js' %}"></script>
+	<script type="text/javascript">
+	    $(document).ready(function(){
+		    var tab = $('#vinculo').clone();
+
+		    $("#add-vinculo").click(function(){
+		    	var num_tabs = $("div#vinculos ul li").length - 1;
+
+			    $(tab).find(':input').each(function() {
+			        var name = $(this).attr('name', $(this).attr('name').replace('-' + (num_tabs - 1) + '-','-' + num_tabs + '-'));
+			        var id = $(this).attr('id', 'id_' + $(this).attr('name'));
+			    });
+
+		    	$('div#vinculos ul').append('<li><a data-toggle="tab" href="#vinculo'+num_tabs+'">Vínculo</a></li>');
+				$('#tab-content').append('<div class="tab-pane fade" id="vinculo'+num_tabs+'">'+tab.html()+'</div>');
+
+		    });
+
+		    var $seuCampoCpf = $("#id_cpf");
+	        $seuCampoCpf.mask('000.000.000-00', {reverse: true});
+		});
+
+		function getOption(form) {
+			var id = $(form).attr("name").split('-')[1];
+		    if ($(form).find("option:selected").text() == "Bolsista") {
+		        $('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true);
+		    } else if ($(form).find("option:selected").text() == "Chefe de Setor") {
+		    	$('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true);
+		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true);
+		    	$('input#id_vinculos-'+id+'-turno').prop('disabled', true);
+		    } else if ($(form).find("option:selected").text() == "Coordernador") {
+		    	$('select#id_vinculos-'+id+'-setor').prop('disabled', true);
+		    	$('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', false);
+		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true);
+		    	$('input#id_vinculos-'+id+'-turno').prop('disabled', true);
+		    } else {
+		    	$('select#id_vinculos-'+id+'-setor').prop('disabled', true);
+		    	$('input#id_vinculos-'+id+'-coordenadoria').prop('disabled', true);
+		    	$('input#id_vinculos-'+id+'-turno').prop('disabled', true);
+		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true);
+		    }
+		};
+	</script>
 {% endblock %}
