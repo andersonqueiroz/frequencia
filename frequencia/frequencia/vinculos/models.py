@@ -35,6 +35,7 @@ class Setor(basemodel):
 class Vinculo(basemodel):
 
 	TURNO_CHOICES = (
+		('', ''),
 		(0, 'Matutino'),
 		(1, 'Verpertino'),
 		(2, 'Noturno')
@@ -46,7 +47,7 @@ class Vinculo(basemodel):
 	coordenadoria = models.ForeignKey(Coordenadoria, verbose_name='Coordenadoria', related_name='vinculos', null=True, blank=True)
 
 	carga_horaria_diaria = models.IntegerField(null=True, verbose_name='Carga horária diária', blank=True)
-	turno = models.IntegerField('Turno', choices=TURNO_CHOICES, default=0)
+	turno = models.IntegerField('Turno', choices=TURNO_CHOICES, default='')
 	ativo = models.BooleanField(verbose_name='Vínculo ativo', default=True)
 
 	def __str__(self):

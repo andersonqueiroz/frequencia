@@ -96,19 +96,22 @@
 		                <legend></legend>
 
 		                <div class="container">
-    						<div id="vinculos" class="row">
-								<ul id="vinculo-tabs" class="nav nav-tabs">
-			                      <li id="vinculo-tab" class="active"><a data-toggle="tab" href="#vinculo">Vínculo</a></li>
-			                      <li class="pull-right"><a id="add-vinculo" href="#a">Novo vínculo</a></li>
-			                    </ul>
+    						<div class="row">
+								<ul class="nav nav-tabs">
+								{% for form in vinculos_formset %}
+			                      <li id="{{form.prefix}}-tab" class="{% if form.prefix == 'vinculos-0' %}active{% endif %}"><a data-toggle="tab" href="#{{form.prefix}}">Novo vínculo</a></li>
+			                    {% endfor %}
+			                    </ul>		
 
-			                    <div id="tab-content" class="tab-content">
-			                      	<div id="vinculo" class="tab-pane fade in active">
+	                        	{{vinculos_formset.management_form}}
+								
+								<div id="tab-content" class="tab-content">
+											{% for form in vinculos_formset %}
+						                      	<div id="{{form.prefix}}" class="tab-pane fade {% if form.prefix == 'vinculos-0' %}in active{% endif %}">
 
-										<div id="collapseOne" class="panel-collapse collapse in">
-					                        <div class="panel-body">
-												{% for form in vinculos_formset %}
-												     {% for field in form %}
+													<div id="collapseOne" class="panel-collapse collapse in">
+								                    <div class="panel-body">
+													{% for field in form %}
 														{% if field.name == "ativo" %} 
 															<div class="row vertical-align">
 																<div class="col-md-6">
@@ -118,7 +121,7 @@
 										                        <div class="col-md-6">
 													                <div class="togglebutton pull-right">
 																		<label>
-																			{% render_field field type="togglebutton" checked="" %}
+																			{% render_field field type="togglebutton" %}
 																			{{field.label}}
 																		</label>
 																	</div>
@@ -141,11 +144,11 @@
 																</div>
 															</div>
 														{% endif %}
-												     {% endfor %} 
-												{% endfor %} 
-					                        </div>
-				                    	</div>
-			                      	</div>
+												    {% endfor %} 
+		    					                        </div>
+							                    	</div>
+						                      	</div>
+											{% endfor %} 
 			                    </div>
 						    </div>
 						</div>
@@ -166,44 +169,49 @@
 	<script src="{% static 'js/jquery.mask.js' %}"></script>
 	<script type="text/javascript">
 	    $(document).ready(function(){
-		    var tab = $('#vinculo').clone();
-
-		    $("#add-vinculo").click(function(){
-		    	var num_tabs = $("div#vinculos ul li").length - 1;
-
-			    $(tab).find(':input').each(function() {
-			        var name = $(this).attr('name', $(this).attr('name').replace('-' + (num_tabs - 1) + '-','-' + num_tabs + '-'));
-			        var id = $(this).attr('id', 'id_' + $(this).attr('name'));
-			    });
-
-		    	$('div#vinculos ul').append('<li><a data-toggle="tab" href="#vinculo'+num_tabs+'">Vínculo</a></li>');
-				$('#tab-content').append('<div class="tab-pane fade" id="vinculo'+num_tabs+'">'+tab.html()+'</div>');
-
-		    });
+		    $("div ul li a").val('name');
 
 		    var $seuCampoCpf = $("#id_cpf");
 	        $seuCampoCpf.mask('000.000.000-00', {reverse: true});
+
+	        $('[id*=-group]').each(function() { //foreach element with a class of item. 
+				getOption($(this));        //pass in the current element into your function. 
+			});
 		});
 
 		function getOption(form) {
+
 			var id = $(form).attr("name").split('-')[1];
-		    if ($(form).find("option:selected").text() == "Bolsista") {
-		        $('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true);
-		    } else if ($(form).find("option:selected").text() == "Chefe de Setor") {
-		    	$('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true);
-		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true);
-		    	$('input#id_vinculos-'+id+'-turno').prop('disabled', true);
-		    } else if ($(form).find("option:selected").text() == "Coordernador") {
-		    	$('select#id_vinculos-'+id+'-setor').prop('disabled', true);
-		    	$('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', false);
-		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true);
-		    	$('input#id_vinculos-'+id+'-turno').prop('disabled', true);
-		    } else {
-		    	$('select#id_vinculos-'+id+'-setor').prop('disabled', true);
-		    	$('input#id_vinculos-'+id+'-coordenadoria').prop('disabled', true);
-		    	$('input#id_vinculos-'+id+'-turno').prop('disabled', true);
-		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true);
-		    }
+			var option = $(form).find("option:selected").text()
+
+			if (option == '') {
+			    option = "Novo vínculo"
+			}
+
+			$("li#vinculos-" + id + "-tab a").text(option);
+
+	    	$('select#id_vinculos-'+id+'-setor').prop('disabled', false);
+	    	$('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', false);
+	    	$('select#id_vinculos-'+id+'-turno').prop('disabled', false);
+	    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', false);
+
+		    if (option == "Bolsista") {
+
+		        $('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true).val('');
+
+		    } else if (option == "Chefe de Setor") {
+
+		    	$('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true).val('');
+		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true).val('');
+		    	$('select#id_vinculos-'+id+'-turno').prop('disabled', true).val('');
+
+		    } else if (option == "Coordenador") {
+
+		    	$('select#id_vinculos-'+id+'-setor').prop('disabled', true).val('');
+		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true).val('');
+		    	$('select#id_vinculos-'+id+'-turno').prop('disabled', true).val('');
+
+		    };
 		};
 	</script>
 {% endblock %}
