@@ -29,7 +29,7 @@ class EditarVinculoForm(forms.ModelForm):
 
 	class Meta:
 		model = Vinculo
-		fields = ['group', 'setor', 'coordenadoria', 'carga_horaria_diaria', 'turno', 'ativo']
+		fields = ['ativo', 'group', 'setor', 'coordenadoria', 'carga_horaria_diaria', 'turno']
 
 	def __init__(self, *args, **kwargs):
 		super(EditarVinculoForm, self).__init__(*args, **kwargs)

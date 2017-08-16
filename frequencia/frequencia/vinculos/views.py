@@ -11,8 +11,8 @@ from .forms import EditSetorForm, EditCoordenadoriaForm
 #Views de setores
 class SetoresListView(ListView):
 
-	model = Setor
-	template_name = 'setor/setores.html'
+ 	model = Setor
+ 	template_name = 'setor/setores.html'
 
 
 class SetorCreateView(SuccessMessageMixin, CreateView):
@@ -68,10 +68,6 @@ class coordenadoriaUpdateView(SuccessMessageMixin, UpdateView):
 
 	def get_success_url(self):
 		return reverse('vinculos:coordenadorias')
-
-# Create your views here.
-def atribuir_vinculo(self, pk):
-	pass
 
 setores = SetoresListView.as_view()
 setor_create = SetorCreateView.as_view()

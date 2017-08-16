@@ -58,7 +58,7 @@ def accounts_edit(request, pk):
 	if form.is_valid() and vinculos_formset.is_valid():
 		form.save()
 		vinculos_formset.save()
-		return redirect('accounts:accounts')
+		return redirect(reverse('accounts:accounts_edit', kwargs={'pk':pk}))
 	context = {
 		'form': form,
 		'vinculos_formset': vinculos_formset,

@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import Group
 
+from django import template
+
 from frequencia.core.basemodel import basemodel
 from frequencia.accounts.models import User
 
@@ -33,6 +35,7 @@ class Setor(basemodel):
 class Vinculo(basemodel):
 
 	TURNO_CHOICES = (
+		('', ''),
 		(0, 'Matutino'),
 		(1, 'Verpertino'),
 		(2, 'Noturno')
@@ -43,9 +46,9 @@ class Vinculo(basemodel):
 	setor = models.ForeignKey(Setor, verbose_name='Setor', related_name='vinculos', null=True, blank=True)
 	coordenadoria = models.ForeignKey(Coordenadoria, verbose_name='Coordenadoria', related_name='vinculos', null=True, blank=True)
 
-	carga_horaria_diaria = models.IntegerField(null=True, blank=True)
-	turno = models.IntegerField('Turno', choices=TURNO_CHOICES, default=0)
-	ativo = models.BooleanField(default=True)
+	carga_horaria_diaria = models.IntegerField(null=True, verbose_name='Carga horária diária', blank=True)
+	turno = models.IntegerField('Turno', choices=TURNO_CHOICES, default='')
+	ativo = models.BooleanField(verbose_name='Vínculo ativo', default=True)
 
 	def __str__(self):
 		return self.user.name or self.user.username
