@@ -31,7 +31,7 @@ class Frequencia(basemodel):
 	tipo = models.IntegerField('Tipo', choices=TIPO_CHOICES, default=0)
 
 	def __str__(self):
-		return "{0}/{1} em {2}".format(self.bolsista, self.get_tipo_choice, self.created_at)
+		return "{0}/{1} em {2}".format(self.bolsista, self.get_tipo_display(), self.created_at)
 
 	class Meta:
 		verbose_name = 'Frequência'  

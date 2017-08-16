@@ -1,8 +1,18 @@
 from django.contrib import admin
 
-# Register your models here.
+from frequencia.vinculos.models import Vinculo
 
 from .models import User
 
-admin.site.register(User)
+class VinculosInline(admin.TabularInline):
+    model = Vinculo
+
+class UsuarioAdmin(admin.ModelAdmin):
+    inlines = [
+        VinculosInline,
+    ]
+
+admin.site.register(User, UsuarioAdmin)
+
+
 

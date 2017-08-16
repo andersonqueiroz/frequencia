@@ -21,9 +21,9 @@ class FrequenciaForm(forms.Form):
         if not cleaned_data.get('cpf') or not cleaned_data.get('password'):
             raise forms.ValidationError("Dados de resgistro de frequência inválidos")
 
-        bolsista = Vinculo.objects.filter(user__cpf=self.cleaned_data['cpf']).first()
+        bolsista = Vinculo.objects.filter(user__cpf=self.cleaned_data['cpf'], ativo=True, user__is_active=True).first()
 
-        if not bolsista or not bolsista.user.is_active or not bolsista.user.check_password(self.cleaned_data['password']):
+        if not bolsista or not bolsista.user.check_password(self.cleaned_data['password']):
            raise forms.ValidationError("Credenciais inválidas ou usuário inativo")
     
         cleaned_data['bolsista'] = bolsista

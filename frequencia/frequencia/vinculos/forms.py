@@ -12,7 +12,7 @@ class AdicionarVinculoForm(forms.ModelForm):
 		fields = ['group', 'setor', 'coordenadoria', 'carga_horaria_diaria', 'turno']
 
 	def __init__(self, *args, **kwargs):
-		super(EditarVinculoForm, self).__init__(*args, **kwargs)
+		super(AdicionarVinculoForm, self).__init__(*args, **kwargs)
 		self.fields['setor'].empty_label = ""
 		self.fields['group'].empty_label = ""
 		self.fields['coordenadoria'].empty_label = ""
