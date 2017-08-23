@@ -1,23 +1,60 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
 
-<h1>Editar coordenadoria</h1>
+	{% load widget_tweaks %}
 
+	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="brand">
+						<h1>Editar coordenadoria</h1>
+					</div>
+				</div>
+			</div>
 
-<form role="form" method="POST" enctype="multipart/form-data">
-{% csrf_token %}
+		</div>
+	</div>
 
-{{ form.nom_field_errors }}
-    
-{% for field in form %}
-    {{ field.label_tag }}
-    {{ field }}
-    {{ field.errors }}
-    <br>
-{% endfor %}
-    <button type="submit">Salvar</button>
-    <a href="{% url 'vinculos:coordenadorias' %}" type="button">Voltar</a>
-</form>
+	<div class="main main-raised">
+            <div class="container">
+            	<div class="row section">
+					<form method="post">
 
+						{% csrf_token %}
+
+						<div class="row vertical-align">
+							<div class="col-md-6">
+			            		<h2>Formulário</h2>
+				                <legend></legend>
+				                <h4>Dados gerais</h4>
+				                <p>Preencha os dados da coordenadoria</p>
+			                </div>
+						</div>
+
+						{{ form.nom_field_errors }}
+					    
+
+						<div class="col-md-6">
+							<div class="form-group label-floating">
+								<label class="control-label">{{form.nome.label}}</label>
+								{% render_field form.nome class="form-control" %}
+								{{ form.nome.errors }}
+							</div>
+						</div>
+						
+						<div class="col-md-12 text-center">
+						    <button class="btn btn-primary" type="submit">Salvar</button>
+					    	<a class="btn btn-primary btn-simple" href="{% url 'vinculos:setores_coords' %}" type="button">Voltar</a>
+						</div>
+					</form> 
+            		
+            	</div>
+            </div>
+	</div>
+{% endblock %}
+
+{% block script %}
 {% endblock %}
