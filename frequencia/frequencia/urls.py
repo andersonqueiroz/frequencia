@@ -19,8 +19,9 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('frequencia.core.urls', namespace='core')),
     url(r'^registro/', include('frequencia.registro.urls', namespace='registro')),
-	url(r'^vinculos/', include('frequencia.vinculos.urls', namespace='vinculos')),
+    url(r'^vinculos/', include('frequencia.vinculos.urls', namespace='vinculos')),
+	url(r'^calendario/', include('frequencia.calendario.urls', namespace='calendario')),
 
     url(r'^admin/', admin.site.urls),
-    url(r'^conta/', include('frequencia.accounts.urls', namespace='accounts')),    
+    url(r'^conta/', include('frequencia.accounts.urls', namespace='accounts')),
 ]

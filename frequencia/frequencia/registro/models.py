@@ -35,4 +35,4 @@ class Frequencia(basemodel):
 
 	class Meta:
 		verbose_name = 'Frequência'  
-		verbose_name_plural = 'Frequências'	
+		verbose_name_plural = 'Frequências'

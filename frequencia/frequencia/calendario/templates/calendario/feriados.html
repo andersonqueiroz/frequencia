@@ -1,0 +1,11 @@
+<h1>Feriados do ano</h1>
+
+<table>
+	<tr><th>Data</th><th>Descrição</th></tr>
+{% for feriado in  object_list %}
+	<tr>
+		<td>{{ feriado.0 }}</td>
+		<td>{{ feriado.1 }}</td>
+	</tr>
+{% endfor %}
+</table>

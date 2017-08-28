@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,6 +41,7 @@ INSTALLED_APPS = [
     'frequencia.accounts',
     'frequencia.registro',
     'frequencia.vinculos',
+    'frequencia.calendario',
 
     'widget_tweaks',
 ]
