@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Tipos de justificativa</h1>
+
+<table>
+<tr><th>Tipo de justificativa</th></tr>
+{% for tipo in object_list %}
+	<tr>
+		<td>{{tipo.nome}}</td>
+		<td><a href="{% url 'justificativas:tipo_justificativa_edit' tipo.pk %}">Editar</a></td>
+	</tr>
+{% endfor %}
+</table>
+
+<br>
+<a href="{% url 'justificativas:tipo_justificativa_create' %}">Novo tipo de justificativa</a>
+{% endblock %}

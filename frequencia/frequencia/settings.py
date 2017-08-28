@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'frequencia.registro',
     'frequencia.vinculos',
     'frequencia.calendario',
+    'frequencia.justificativas',
 
     'widget_tweaks',
 ]

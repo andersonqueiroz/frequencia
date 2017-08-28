@@ -1,4 +1,8 @@
-<h1>Feriados do ano</h1>
+{% extends "base.html" %}
+
+
+{% block content %}
+<h1>Calendário de  {{ano}}</h1>
 
 <table>
 	<tr><th>Data</th><th>Descrição</th></tr>
@@ -6,6 +10,17 @@
 	<tr>
 		<td>{{ feriado.0 }}</td>
 		<td>{{ feriado.1 }}</td>
+		{% if feriado.2 and user.is_superuser %}
+			<td><a href="{% url 'calendario:feriado_remove' feriado.2 %}">Excluir</a></td>
+		{% endif %}
 	</tr>
 {% endfor %}
 </table>
+
+<h2>Cadastrar feriado</h2>
+<form action="{{ request.META.HTTP_REFERER }}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Adicionar" />
+</form>
+{% endblock %}

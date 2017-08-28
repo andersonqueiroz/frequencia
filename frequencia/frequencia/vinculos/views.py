@@ -12,19 +12,13 @@ from .forms import EditSetorForm, EditCoordenadoriaForm
 class SetoresCoordenadoriasListView(ListView):
 
  	model = Setor
- 	template_name = 'setorCoord/setores-coords.html'
+ 	template_name = 'setor_coord/setores-coords.html'
 
  	def get_context_data(self, **kwargs):
  		context = super(SetoresCoordenadoriasListView, self).get_context_data(**kwargs)
  		context['coordenadorias'] = Coordenadoria.objects.all()
 
  		return context
-
-# #Views de setores
-# class SetoresListView(ListView):
-
-#  	model = Setor
-#  	template_name = 'setor/setores.html'
 
 
 class SetorCreateView(SuccessMessageMixin, CreateView):
@@ -49,13 +43,6 @@ class SetorUpdateView(SuccessMessageMixin, UpdateView):
 
 	def get_success_url(self):
 		return reverse('vinculos:setores_coords')
-
-
-# #Views de Coordenadorias
-# class CoordenadoriasListView(ListView):
-
-# 	model = Coordenadoria
-# 	template_name = 'coordenadoria/coordenadorias.html'
 
 
 class CoordenadoriaCreateView(SuccessMessageMixin, CreateView):

@@ -51,7 +51,7 @@ class Vinculo(basemodel):
 	ativo = models.BooleanField(verbose_name='Vínculo ativo', default=True)
 
 	def __str__(self):
-		return self.user.name or self.user.username
+		return '{0} - {1}'.format((self.user.name or self.user.username), (self.setor or self.coordenadoria))
 
 	class Meta:
 		verbose_name = 'Vínculo'  

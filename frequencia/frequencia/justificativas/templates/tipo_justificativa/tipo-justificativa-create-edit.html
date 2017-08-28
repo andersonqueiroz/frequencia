@@ -1,0 +1,11 @@
+<h1>Tipo de justificativa</h1>
+
+<form action="" method="post">
+	{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Salvar" />
+</form>
+
+{% if object %}
+<a href="{% url 'justificativas:tipo_justificativa_remove' object.pk %}">Excluir {{object.nome}}</a>
+{% endif %}

@@ -13,3 +13,4 @@ class FeriadoCalendarioAcademico(basemodel):
 	class Meta:
 		verbose_name = 'Feriado'  
 		verbose_name_plural = 'Feriados'
+

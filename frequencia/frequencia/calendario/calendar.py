@@ -9,6 +9,7 @@ class FeriadosRioGrandeDoNorte(Brazil):
 	
 	include_servidor_publico = True
 	include_christmas = False
+	include_sao_joao = True
 	
 	FIXED_HOLIDAYS = (
 		(1, 1, "Confraternização universal"),
@@ -41,7 +42,7 @@ class FeriadosRioGrandeDoNorte(Brazil):
 		holidays.append((self.get_easter_saturday(year), "Sábado de Aleluia"))
 		holidays.append((self.get_easter_sunday(year), "Páscoa"))
 
-		for holiday in FeriadoCalendarioAcademico.objects.filter(data__year=year).values_list('data', 'nome'):
+		for holiday in FeriadoCalendarioAcademico.objects.filter(data__year=year).values_list('data', 'nome', 'id'):
 			holidays.append(holiday)
 
 		return sorted(holidays, key=lambda x: x[0])
