@@ -1,10 +1,13 @@
+from django.db.models import Q, F
 from django.urls import reverse
-from django.http import HttpResponseRedirect 
+from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.views.generic import ListView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import CreateView, UpdateView
+
+from frequencia.vinculos.models import Coordenadoria, Setor
 
 from .models import TipoJustificativaFalta, JustificativaFalta
 from .forms import EditTipoJustificativaForm, EditJustificativaForm
@@ -62,12 +65,19 @@ class JustificativaListView(ListView):
 
 		if(user.is_superuser or user.is_gestor):			
 			context['object_list'] = justificativas.all()
-		if(user.is_coordenador):						
-			#vinculos = user.vinculos.filter(ativo=True, group__name='Coordenador')
-			#setores = vinculos.filter(setor__pk__in=vinculos.values('pk'))
-			context['object_list'] = justificativas.filter()
+
+		if(user.is_coordenador or user.is_chefe):
+			vinculos = user.vinculos.filter(ativo=True)		
+			vinculos = vinculos.filter(Q(group__name='Coordenador') | Q(group__name='Chefe de setor'))
+
+			coordenadorias = Coordenadoria.objects.filter(vinculos__in=vinculos)
+			setores = Setor.objects.filter(Q(coordenadoria__in=coordenadorias) | Q(vinculos__in=vinculos))
+
+			context['object_list'] = justificativas.filter(vinculo__setor__in=setores)
 		else:		
 			context['object_list'] = justificativas.filter(vinculo__user=user)
+
+		context['setores'] = context['object_list'].annotate(nome=F('vinculo__setor__nome')).values('nome').distinct()
 		return context
 
 

@@ -1,5 +1,15 @@
 <h1>Justificativas de falta</h1>
 
-{% for justificativa in object_list %}
-	<p>{{ justificativa }}</p>
+{% regroup object_list by vinculo.setor as justificativas_setores %}
+
+<ul>
+{% for setor in justificativas_setores %}
+    <li>{{ setor.grouper }}
+    <ul>
+        {% for justificativa in setor.list %}
+          <li>{{ justificativa }} | {{ justificativa.get_status_display }}</li>
+        {% endfor %}
+    </ul>
+    </li>
 {% endfor %}
+</ul>
