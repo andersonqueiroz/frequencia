@@ -10,7 +10,7 @@
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
 					<div class="brand">
-						<h1>Editar coordenadoria</h1>
+						<h1>Gerenciar setor</h1>
 					</div>
 				</div>
 			</div>
@@ -30,24 +30,25 @@
 			            		<h2>Formulário</h2>
 				                <legend></legend>
 				                <h4>Dados gerais</h4>
-				                <p>Preencha os dados da coordenadoria</p>
+				                <p>Preencha os dados do setor</p>
 			                </div>
 						</div>
 
 						{{ form.nom_field_errors }}
-					    
+					   
 
-						<div class="col-md-6">
-							<div class="form-group label-floating">
-								<label class="control-label">{{form.nome.label}}</label>
-								{% render_field form.nome class="form-control" %}
-								{{ form.nome.errors }}
+						{% for field in form %}
+     						<div class="col-md-6">
+								<div class="form-group">
+									<label class="control-label">{{field.label}}</label>
+									{% render_field field class="form-control" %}
+								</div>
 							</div>
-						</div>
+						{% endfor %} 
 						
 						<div class="col-md-12 text-center">
 						    <button class="btn btn-primary" type="submit">Salvar</button>
-					    	<a class="btn btn-primary btn-simple" href="{% url 'vinculos:setores_coords' %}" type="button">Voltar</a>
+					    	<a class="btn btn-primary btn-simple" href="{% url 'vinculos:setores_coordenadorias' %}" type="button">Voltar</a>
 						</div>
 					</form> 
             		

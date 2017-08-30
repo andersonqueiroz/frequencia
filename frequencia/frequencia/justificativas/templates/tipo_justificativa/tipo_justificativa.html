@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="brand">
+                    <h1>Tipos de justificativa</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main main-raised">
+    <div class="profile-content">
+        <div class="container">
+            <div class="section"> 
+                <h3>Tipos de justificativa</h3>
+                <p>Veja os tipos de justificativa cadastrados.</p>
+                <legend></legend>
+                <table class="table">
+                    <thead>
+                        <tr>                          
+                            <th>Nome</th>                          
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tipo in object_list %}
+                            <tr>
+                                <td>{{ tipo }}</td>
+                                <td><a href="{% url 'justificativas:tipo_justificativa_edit' tipo.pk %}"><i class="material-icons">edit</i></a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>                      
+            </div>   
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -20,6 +20,18 @@ class User(basemodel, AbstractBaseUser, PermissionsMixin):
 	is_active = models.BooleanField('Está ativo', blank=True, default=True)
 	is_staff = models.BooleanField('Acesso ao admin do projeto', blank=True, default=False)
 
+	@property
+	def is_gestor(self):		
+		return self.vinculos.filter(ativo=True, group__name='Gestor de unidade').exists()
+
+	@property
+	def is_coordenador(self):		
+		return self.vinculos.filter(ativo=True, group__name='Coordenador').exists()
+
+	@property
+	def is_chefe(self):		
+		return self.vinculos.filter(ativo=True, group__name='Chefe de setor').exists()
+
 	objects = UserManager()
 
 	USERNAME_FIELD = 'username'

@@ -12,7 +12,7 @@ from .forms import EditSetorForm, EditCoordenadoriaForm
 class SetoresCoordenadoriasListView(ListView):
 
  	model = Setor
- 	template_name = 'setor_coord/setores-coords.html'
+ 	template_name = 'setor_coordenadoria/setores_coordenadorias.html'
 
  	def get_context_data(self, **kwargs):
  		context = super(SetoresCoordenadoriasListView, self).get_context_data(**kwargs)
@@ -25,48 +25,48 @@ class SetorCreateView(SuccessMessageMixin, CreateView):
 
 	model = Setor
 	form_class = EditSetorForm
-	template_name = 'setor/setor_create.html'
+	template_name = 'setor_coordenadoria/setor_create_edit.html'
 
 	success_message = 'Setor <b>%(nome)s</b> cadastrada com sucesso!'
 
 	def get_success_url(self):
-		return reverse('vinculos:setores_coords')
+		return reverse('vinculos:setores_coordenadorias')
 
 
 class SetorUpdateView(SuccessMessageMixin, UpdateView):
 
 	model = Setor
 	form_class = EditSetorForm
-	template_name = 'setor/setor_edit.html'	
+	template_name = 'setor_coordenadoria/setor_create_edit.html'	
 	
 	success_message = 'Setor <b>%(nome)s</b> atualizada com sucesso!'
 
 	def get_success_url(self):
-		return reverse('vinculos:setores_coords')
+		return reverse('vinculos:setores_coordenadorias')
 
 
 class CoordenadoriaCreateView(SuccessMessageMixin, CreateView):
 
 	model = Coordenadoria
 	form_class = EditCoordenadoriaForm
-	template_name = 'coordenadoria/coordenadoria_create.html'
+	template_name = 'setor_coordenadoria/coordenadoria_create_edit.html'
 
 	success_message = 'Coordenadoria <b>%(nome)s</b> cadastrada com sucesso!'
 
 	def get_success_url(self):
-		return reverse('vinculos:setores_coords')
+		return reverse('vinculos:setores_coordenadorias')
 
 
-class coordenadoriaUpdateView(SuccessMessageMixin, UpdateView):
+class CoordenadoriaUpdateView(SuccessMessageMixin, UpdateView):
 
 	model = Coordenadoria
 	form_class = EditCoordenadoriaForm
-	template_name = 'coordenadoria/coordenadoria_edit.html'	
+	template_name = 'setor_coordenadoria/coordenadoria_create_edit.html'
 	
 	success_message = 'Coordenadoria <b>%(nome)s</b> atualizada com sucesso!'
 
 	def get_success_url(self):
-		return reverse('vinculos:setores_coords')
+		return reverse('vinculos:setores_coordenadorias')
 
 # setores = SetoresListView.as_view()
 setor_create = SetorCreateView.as_view()
@@ -74,6 +74,6 @@ setor_edit = SetorUpdateView.as_view()
 
 # coordenadorias = CoordenadoriasListView.as_view()
 coordenadoria_create = CoordenadoriaCreateView.as_view()
-coordenadoria_edit = coordenadoriaUpdateView.as_view()
+coordenadoria_edit = CoordenadoriaUpdateView.as_view()
 
-setoresCoords = SetoresCoordenadoriasListView.as_view()
+setores_coordenadorias = SetoresCoordenadoriasListView.as_view()
