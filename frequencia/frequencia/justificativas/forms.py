@@ -10,7 +10,7 @@ class EditTipoJustificativaForm(forms.ModelForm):
 		fields = ['nome']
 
 
-class EditJustificativaForm(forms.ModelForm):
+class CreateJustificativaForm(forms.ModelForm):
 
 	class Meta:
 		model = JustificativaFalta
@@ -28,3 +28,9 @@ class EditJustificativaForm(forms.ModelForm):
 			justificativa.save()
 
 		return justificativa
+
+class EditJustificativaForm(forms.ModelForm):
+
+	class Meta:
+		model = JustificativaFalta
+		fields = ['status', 'parecer', 'horas_abonadas']

@@ -12,4 +12,6 @@ urlpatterns = [
 	#Justificativa de falta
 	url(r'^$', views.justificativas, name='justificativas'),	
 	url(r'^novo/$', views.justificativa_create, name='justificativa_create'),
+	url(r'^detalhes/(?P<pk>\d+)/$', views.justificativa_details, name='justificativa_details'),
+	url(r'^analise/(?P<pk>\d+)/$', views.justificativa_edit, name='justificativa_edit'),
 ]

@@ -1,0 +1,21 @@
+<h1>Detalhes da justificativa</h1>
+
+<p>Bolsista: {{object.vinculo.user}}</p>
+<p>Setor: {{object.vinculo.setor}}</p>
+<p>Status: {{object.get_status_display}}</p>
+<p>Data inicial: {{object.inicio}}</p>
+<p>Data final: {{object.termino}}</p>
+<p>Descrição: {{object.descricao}}</p>
+
+{% if user.is_chefe %}
+	{% if not object.status %}
+		<form method="POST">
+			{% csrf_token %}
+			{{form.as_p}}
+			<input type="submit" value="Salvar">
+		</form>
+	{% else %}
+		<p>Parecer: {{object.parecer}}</p>
+		<p>Horas homologadas: {{object.horas_abonadas}}</p>
+	{% endif %}
+{% endif %}

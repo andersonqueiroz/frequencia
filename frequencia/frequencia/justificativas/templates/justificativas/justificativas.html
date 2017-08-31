@@ -1,5 +1,7 @@
 <h1>Justificativas de falta</h1>
 
+<a href="{% url 'justificativas:justificativa_create' %}">Cadastrar nova</a>
+
 {% regroup object_list by vinculo.setor as justificativas_setores %}
 
 <ul>
@@ -7,7 +9,7 @@
     <li>{{ setor.grouper }}
     <ul>
         {% for justificativa in setor.list %}
-          <li>{{ justificativa }} | {{ justificativa.get_status_display }}</li>
+          <li><a href="{% url 'justificativas:justificativa_details' justificativa.pk %}">{{ justificativa }}</a></li>
         {% endfor %}
     </ul>
     </li>
