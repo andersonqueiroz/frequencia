@@ -9,7 +9,7 @@
     <li>{{ setor.grouper }}
     <ul>
         {% for justificativa in setor.list %}
-          <li><a href="{% url 'justificativas:justificativa_details' justificativa.pk %}">{{ justificativa }}</a></li>
+          <li><a href="{% url 'justificativas:justificativa_edit' justificativa.pk %}">{{ justificativa }}</a></li>
         {% endfor %}
     </ul>
     </li>

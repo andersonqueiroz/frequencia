@@ -1,3 +1,5 @@
+{% load rules %}
+
 <h1>Detalhes da justificativa</h1>
 
 <p>Bolsista: {{object.vinculo.user}}</p>
@@ -7,15 +9,17 @@
 <p>Data final: {{object.termino}}</p>
 <p>Descrição: {{object.descricao}}</p>
 
-{% if user.is_chefe %}
-	{% if not object.status %}
+{% if not object.status %}
+	{% has_perm 'justificativa.can_analise' user object as can_analyse %}
+	{% if can_analyse %}
 		<form method="POST">
 			{% csrf_token %}
 			{{form.as_p}}
 			<input type="submit" value="Salvar">
 		</form>
-	{% else %}
-		<p>Parecer: {{object.parecer}}</p>
-		<p>Horas homologadas: {{object.horas_abonadas}}</p>
 	{% endif %}
+{% else %}
+	<p>Parecer da chefia: {{object.parecer}}</p>
+	<p>Horas abonadas: {{object.horas_abonadas}}</p>
+	<p>Avaliado por: {{object.usuario_analise.user.name}}</p>
 {% endif %}
