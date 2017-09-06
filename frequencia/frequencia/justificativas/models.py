@@ -15,7 +15,13 @@ class TipoJustificativaFalta(basemodel):
 		verbose_name_plural = 'Tipos de justificativa'
 
 
+class JustificativaFaltaManager(models.Manager):
+	def buscar(self, query):
+		return self.filter(vinculo__user__name__contains=query)
+
 class JustificativaFalta(basemodel):
+
+	objects = JustificativaFaltaManager()
 
 	JUSTIFICATIVA_STATUS_CHOICES = (
 		(0, 'Pendente'),
@@ -32,8 +38,8 @@ class JustificativaFalta(basemodel):
 	inicio = models.DateField('Data de início')
 	termino = models.DateField('Data de término')
 
-	parecer = models.TextField('Descrição', blank=True)
-	horas_abonadas = models.DurationField('Horas abonadas', blank=True, null=True)
+	parecer = models.TextField('Parecer da chefia', blank=True)
+	horas_abonadas = models.DurationField('Tempo abonado', blank=True, null=True)
 
 	def __str__(self):
 		return '{0} - {1}'.format(self.vinculo.user.name, self.descricao)
@@ -41,4 +47,5 @@ class JustificativaFalta(basemodel):
 	class Meta:
 		verbose_name = 'Justificativa de falta'  
 		verbose_name_plural = 'Justificativas de falta'
+
 

@@ -1,4 +1,4 @@
-from rules.contrib.views import PermissionRequiredMixin
+from rules.contrib.views import PermissionRequiredMixin, permission_required, objectgetter
 
 from django.urls import reverse
 from django.db.models import Q, F
@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic.edit import UpdateView
 from django.views.generic.detail import DetailView
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import CreateView, UpdateView
@@ -18,17 +19,19 @@ from .models import TipoJustificativaFalta, JustificativaFalta
 from .forms import EditTipoJustificativaForm, CreateJustificativaForm, EditJustificativaForm
 
 #Tipos de justificativa
-class TipoJustificativaListView(ListView):
+class TipoJustificativaListView(PermissionRequiredMixin, ListView):
 
 	model = TipoJustificativaFalta
 	template_name = 'tipo_justificativa/tipo_justificativa.html'
+	permission_required = 'tipo_justificativa.can_manage'
 
 
-class TipoJustificativaCreateView(SuccessMessageMixin, CreateView):
+class TipoJustificativaCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
 
 	model = TipoJustificativaFalta
 	form_class = EditTipoJustificativaForm
 	template_name = 'tipo_justificativa/tipo_justificativa_create_edit.html'
+	permission_required = 'tipo_justificativa.can_manage'
 
 	success_message = 'Tipo de justificativa cadastrado com sucesso!'
 
@@ -36,11 +39,12 @@ class TipoJustificativaCreateView(SuccessMessageMixin, CreateView):
 		return reverse('justificativas:tipo_justificativa')
 
 
-class TipoJustificativaUpdateView(SuccessMessageMixin, UpdateView):
+class TipoJustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
 
 	model = TipoJustificativaFalta
 	form_class = EditTipoJustificativaForm
 	template_name = 'tipo_justificativa/tipo_justificativa_create_edit.html'
+	permission_required = 'tipo_justificativa.can_manage'
 	
 	success_message = 'Tipo de justificativa atualizado com sucesso!'
 
@@ -48,6 +52,7 @@ class TipoJustificativaUpdateView(SuccessMessageMixin, UpdateView):
 		return reverse('justificativas:tipo_justificativa')
 
 
+@permission_required('tipo_justificativa.can_manage', fn=objectgetter(TipoJustificativaFalta, 'pk'))
 def tipo_justificativa_remove(request, pk):
 
 	tipo_justificativa = get_object_or_404(TipoJustificativaFalta, pk=pk)
@@ -57,16 +62,18 @@ def tipo_justificativa_remove(request, pk):
 
 
 #Justificativa de falta
-class JustificativaListView(ListView):
+class JustificativaListView(LoginRequiredMixin, ListView):
 
 	model = JustificativaFalta
 	template_name = 'justificativas/justificativas.html'
 
 	def get_context_data(self, **kwargs):
 		context = super(JustificativaListView, self).get_context_data(**kwargs)
-		justificativas = JustificativaFalta.objects
-
+		
 		user = self.request.user
+
+		busca = self.request.GET.get('busca', '') if user.has_perm('accounts.is_servidor') else None
+		justificativas = JustificativaFalta.objects.buscar(busca) if busca else JustificativaFalta.objects
 
 		if user.is_superuser or user.has_perm('accounts.is_gestor'):
 			context['object_list'] = justificativas.all()
@@ -120,7 +127,7 @@ class JustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, Upda
 			raise PermissionDenied()
 
 	def get_success_url(self):
-		return reverse('justificativas:justificativas')
+		return reverse('justificativas:justificativa_edit', kwargs={'pk' : self.object.pk})
 
 #Tipos de justificativa
 tipo_justificativa = TipoJustificativaListView.as_view()

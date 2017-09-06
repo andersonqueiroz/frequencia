@@ -1,25 +1,104 @@
-{% load rules %}
+{% extends 'base.html' %}
+{% load staticfiles %}
 
-<h1>Detalhes da justificativa</h1>
+{% block content %}
 
-<p>Bolsista: {{object.vinculo.user}}</p>
-<p>Setor: {{object.vinculo.setor}}</p>
-<p>Status: {{object.get_status_display}}</p>
-<p>Data inicial: {{object.inicio}}</p>
-<p>Data final: {{object.termino}}</p>
-<p>Descrição: {{object.descricao}}</p>
+	{% load widget_tweaks %}
+	{% load rules %}
 
-{% if not object.status %}
-	{% has_perm 'justificativa.can_analise' user object as can_analyse %}
-	{% if can_analyse %}
-		<form method="POST">
-			{% csrf_token %}
-			{{form.as_p}}
-			<input type="submit" value="Salvar">
-		</form>
-	{% endif %}
-{% else %}
-	<p>Parecer da chefia: {{object.parecer}}</p>
-	<p>Horas abonadas: {{object.horas_abonadas}}</p>
-	<p>Avaliado por: {{object.usuario_analise.user.name}}</p>
-{% endif %}
+	{% has_perm 'justificativa.can_analyse' user object as can_analyse %}
+
+	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="brand">
+						<h1>Justificativa de falta</h1>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="main main-raised">
+            <div class="container">
+            	<div class="row section">			
+
+						<div class="row vertical-align">
+							<div class="col-md-6">
+			            		<h2>Justificativa de falta</h2>
+				                <legend></legend>
+				                <h4>Dados gerais</h4>
+			                </div>		               
+						</div>
+					    
+					    <div class="row vertical-align">
+					    	<div class="col-md-6">
+								<h6><strong>Bolsista:</strong> {{object.vinculo.user}}</h6>
+								<h6><strong>Setor:</strong> {{object.vinculo.setor}}</h6>
+								<h6><strong>Descrição:</strong> {{object.descricao}}</h6>								
+							</div>
+							<div class="col-md-6">
+								<h6><strong>Data inicial:</strong> {{object.inicio}}</h6>
+								<h6><strong>Data final:</strong> {{object.termino}}</h6>
+								<h6><strong>Status:</strong> {{object.get_status_display}}</h6>
+							</div>
+						</div>
+
+						<legend></legend>
+
+						<h4>Análise da justificativa de falta</h4>
+						{% if not object.status %}
+							{% if can_analyse %}
+								<form action="#" method="POST">
+									{% csrf_token %}									
+
+									{{ form.non_field_errors.0 }}
+									
+									<div class="col-md-6">
+										<div class="form-group label-floating">
+											<label class="control-label">{{ form.status.label }}</label>
+											{% render_field form.status class="form-control" %}
+											{{ form.status.errors }}
+										</div>										
+									</div>
+									<div class="col-md-6">
+										<div class="form-group label-floating">
+											<label class="control-label">{{ form.horas_abonadas.label }}</label>
+											{% render_field form.horas_abonadas class="form-control" %}
+											{{ form.horas_abonadas.errors }}
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group label-floating">
+											<label class="control-label">{{ form.parecer.label }}</label>
+											{% render_field form.parecer class="form-control" %}
+											{{ form.parecer.errors }}
+										</div>
+									</div>
+
+									<div class="col-md-12 text-center">
+									    <button class="btn btn-primary" type="submit">Salvar</button>
+								    	<a class="btn btn-primary btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
+									</div>
+								</form>
+							{% else %}
+								<p>Aguardando avaliação da chefia</p>
+							{% endif %}
+						{% else %}
+							<h6><strong>Parecer da chefia:</strong> {{object.parecer}}</h6>
+							<h6><strong>Horas abonadas:</strong> {{object.horas_abonadas}}</h6>
+							<h6><strong>Avaliado por:</strong> {{object.usuario_analise.user.name}}</h6>
+
+							<div class="col-md-12 text-center">
+						    	<a class="btn btn-primary btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
+							</div>
+						{% endif %}							                
+						            		
+            	</div>
+            </div>
+	</div>
+{% endblock %}
+
+
