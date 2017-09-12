@@ -29,12 +29,27 @@
 		                <legend></legend>
 		                <h4>Dados gerais</h4>
 		                <p>Preencha os dados da justificativa de falta</p>
-	                </div>		                
+	                </div>
 				</div>
 
 				<form action="#" method="POST">
-				    {% csrf_token %}				    
-				    
+				    {% csrf_token %}
+						{% if form.errors %}
+							<div class="alert alert-danger" style="margin: 30px 10px;">
+									{% for error in form.non_field_errors %}
+									<div class="container-fluid">
+									<div class="alert-icon">
+										<i class="material-icons">error_outline</i>
+									</div>
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true"><i class="material-icons">clear</i></span>
+									</button>
+										{{ error }}
+									</div>
+									{% endfor %}
+							</div>
+						{% endif %}
+
 				    <div class="col-md-12">
 						<div class="form-group label-floating">
 							<label class="control-label">{{form.tipo.label}}</label>
@@ -52,19 +67,17 @@
 
 					<div class="col-md-6">
 						<div class="form-group label-floating">
-							<label class="control-label">{{form.inicio.label}}</label>
-							{% render_field form.inicio class="form-control" %}
+							{% render_field form.inicio class="form-control" id="datainicio" placeholder=form.inicio.label %}
 							{{ form.inicio.errors }}
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group label-floating">
-							<label class="control-label">{{form.termino.label}}</label>
-							{% render_field form.termino class="form-control" %}
+							{% render_field form.termino class="form-control" id="datafim" placeholder=form.termino.label %}
 							{{ form.termino.errors }}
 						</div>
 					</div>
-				   
+
 				    <div class="col-md-12 text-center">
 					    <button class="btn btn-primary" type="submit">Salvar</button>
 				    	<a class="btn btn-primary btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
@@ -75,6 +88,15 @@
 	</div>
 
 {% endblock %}
-	
 
-	
+{% block script %}
+	{{ block.super }}
+
+	<script type="text/javascript">
+	    $(document).ready(function(){
+				$('#datainicio').datepicker({format : 'dd/mm/yyyy', weekStart: 0});
+				$('#datafim').datepicker({format : 'dd/mm/yyyy', weekStart: 0});
+		});
+	</script>
+
+{% endblock %}

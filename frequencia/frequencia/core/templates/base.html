@@ -46,19 +46,20 @@
 		        		<li class="dropdown">
 		        			<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ request.user }} <b class="caret"></b></a>
 		        			<ul class="dropdown-menu">
-							  <li><a href="/home">Dashboard</a></li>
+							  <li><a href="{% url 'core:home' %}">Dashboard</a></li>
 							  <li class="divider"></li>
-							  <li><a href="/conta/usuarios">Usuários</a></li>
+							  <li><a href="{% url 'accounts:accounts' %}">Usuários</a></li>
 							  <li><a href="{% url 'vinculos:setores_coordenadorias' %}">Setores & Coordenadorias</a></li>
+							  <li><a href="{% url 'justificativas:justificativas' %}">Justificativas de falta</a></li>
 							  <li class="divider"></li>
 							  <li><a href="{% url 'accounts:logout' %}">Sair</a></li>
 		        			</ul>
 		        		</li>
-					{% else %}
-	    				<li>	
-							<a href="{% url 'accounts:login' %}"><i class="material-icons">account_circle</i> Entrar</a>
-	    				</li>
-    				{% endif %}
+							{% else %}
+		    				<li>
+								<a href="{% url 'accounts:login' %}"><i class="material-icons">account_circle</i> Entrar</a>
+		    				</li>
+	    				{% endif %}
         		</ul>
         	</div>
     	</div>
@@ -82,7 +83,7 @@
 							</ul>
 			            </nav>
 			            <div class="copyright pull-right">
-			                &copy; 2017, SST</a>
+			                &copy; {% now "Y" %}, SST</a>
 			            </div>
 			        </div>
 			    </footer>
@@ -94,7 +95,7 @@
 <!-- alert de mensagens do sistema (não notícias) -->
 <div>
 {% if messages %}
-    {% for message in messages %}        
+    {% for message in messages %}
         <p>{{message|safe}}</p>
     {% endfor %}
 {% endif %}

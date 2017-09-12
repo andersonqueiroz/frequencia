@@ -23,21 +23,21 @@
 
 	<div class="main main-raised">
             <div class="container">
-            	<div class="row section">			
+            	<div class="row section">
 
 						<div class="row vertical-align">
 							<div class="col-md-6">
 			            		<h2>Justificativa de falta</h2>
 				                <legend></legend>
 				                <h4>Dados gerais</h4>
-			                </div>		               
+			                </div>
 						</div>
-					    
+
 					    <div class="row vertical-align">
 					    	<div class="col-md-6">
 								<h6><strong>Bolsista:</strong> {{object.vinculo.user}}</h6>
 								<h6><strong>Setor:</strong> {{object.vinculo.setor}}</h6>
-								<h6><strong>Descrição:</strong> {{object.descricao}}</h6>								
+								<h6><strong>Descrição:</strong> {{object.descricao}}</h6>
 							</div>
 							<div class="col-md-6">
 								<h6><strong>Data inicial:</strong> {{object.inicio}}</h6>
@@ -49,24 +49,25 @@
 						<legend></legend>
 
 						<h4>Análise da justificativa de falta</h4>
-						{% if not object.status %}
+
+						{% if not object.usuario_analise %}
 							{% if can_analyse %}
 								<form action="#" method="POST">
-									{% csrf_token %}									
+									{% csrf_token %}
 
 									{{ form.non_field_errors.0 }}
-									
+
 									<div class="col-md-6">
 										<div class="form-group label-floating">
 											<label class="control-label">{{ form.status.label }}</label>
 											{% render_field form.status class="form-control" %}
 											{{ form.status.errors }}
-										</div>										
+										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group label-floating">
 											<label class="control-label">{{ form.horas_abonadas.label }}</label>
-											{% render_field form.horas_abonadas class="form-control" %}
+											{% render_field form.horas_abonadas class="form-control" id="horas_abonadas" value=object.horas_sugeridas %}
 											{{ form.horas_abonadas.errors }}
 										</div>
 									</div>
@@ -87,18 +88,28 @@
 								<p>Aguardando avaliação da chefia</p>
 							{% endif %}
 						{% else %}
-							<h6><strong>Parecer da chefia:</strong> {{object.parecer}}</h6>
+							{% if object.parecer %}
+								<h6><strong>Parecer da chefia:</strong> {{object.parecer}}</h6>
+							{% endif %}
 							<h6><strong>Horas abonadas:</strong> {{object.horas_abonadas}}</h6>
 							<h6><strong>Avaliado por:</strong> {{object.usuario_analise.user.name}}</h6>
 
 							<div class="col-md-12 text-center">
 						    	<a class="btn btn-primary btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
 							</div>
-						{% endif %}							                
-						            		
+						{% endif %}
+
             	</div>
             </div>
 	</div>
 {% endblock %}
 
-
+{% block script %}
+	{{ block.super }}
+	<script src="{% static 'js/jquery.mask.js' %}"></script>
+	<script type="text/javascript">
+	  $(document).ready(function(){
+			$('#horas_abonadas').mask('00:00:00', {reverse: true});
+		});
+	</script>
+{% endblock %}

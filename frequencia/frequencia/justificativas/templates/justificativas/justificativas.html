@@ -16,71 +16,77 @@
 	            </div>
 	        </div>
 	    </div>
-	</div>	
+	</div>
 
 	<div class="main main-raised">
 	    <div class="profile-content">
 	        <div class="container">
-	            <div class="section"> 
-	                <h3>Justificativas de falta</h3>
-	                <p>Veja as justificativas de falta cadastradas.</p>
-	                <legend></legend>
-	                {% if is_servidor %}
-						<form url="#" method="GET">							
-							<div class="row vertical-align">
-						    	<div class="col-md-11">
-						    		<div class="form-group label-floating">
-							    		<label class="control-label">Buscar por justificativa de falta</label>
-							    		<input type="text" name="busca" class="form-control">
-						    		</div>
+	            <div class="section">
+									<div class="row">
+										<div class="col-md-8">
+		                <h3>Justificativas de falta</h3>
+		                <p>Veja as justificativas de falta cadastradas.</p>
+		                <legend></legend>
+									</div>
+
+									<div class="col-md-4">
+						       	{% if is_servidor %}
+											<form url="#" method="GET">
+												<div class="row vertical-align">
+											    	<div class="col-md-9">
+											    		<div class="form-group label-floating">
+												    		<label class="control-label">Buscar</label>
+												    		<input type="text" name="busca" class="form-control">
+											    		</div>
+													</div>
+													<div class="col-md-3">
+														<button class="btn btn-primary btn-just-icon" type="submit"><i class="material-icons">search</i></button>
+													</div>
+												</div>
+											</form>
+										{% else %}
+											<a class="btn btn-primary pull-right" href="{% url 'justificativas:justificativa_create' %}">Cadastrar nova</a>
+										{% endif %}
+									</div>
 								</div>
-								<div class="col-md-1">
-									<button class="btn btn-primary btn-just-icon btn-block" type="submit"><i class="material-icons">search</i></button>
-								</div>
-							</div>
-						</form>
-					{% else %}
-						<a href="{% url 'justificativas:justificativa_create' %}">Cadastrar nova</a>	
-					{% endif %}
 
+										{% if not object_list %}
+											<h3>Não foram encontradas justificativas de falta.</h3>
+										{% else %}
+											{% regroup object_list by vinculo.setor as justificativas_setores %}
 
-					{% if not object_list %}
-						<h3>Não foram encontradas justificativas de falta.</h3>
-					{% else %}
-						{% regroup object_list by vinculo.setor as justificativas_setores %}
-						
-						{% for setor in justificativas_setores %}
-						    <h4>{{ setor.grouper }}</h4>
-						    
-						    <table class="table">
-			                    <thead>
-			                        <tr>                          
-			                            <th>Ocorrência</th>                        
-			                            <th>Status</th>                     
-			                            <th>Inicio</th>
-			                            <th>Final</th>
-			                            <th>Bolsista</th>
-			                            <th></th>
-			                        </tr>
-			                    </thead>
-			                    <tbody>
-			                        {% for justificativa in setor.list %}
-			                            <tr>
-			                                <td>{{ justificativa.descricao|truncatechars:50 }}</td>
-			                                <td width="5%">{{ justificativa.get_status_display }}</td>
-			                                <td width="20%">{{ justificativa.inicio }}</td>
-			                                <td width="20%">{{ justificativa.termino }}</td>
-			                                <td width="20%">{{ justificativa.vinculo.user.name }}</td>
-			                                <td width="2%"><a href="{% url 'justificativas:justificativa_edit' justificativa.pk %}"><i class="material-icons">navigate_next</i></a></td>
-			                            </tr>
-			                        {% endfor %}
-			                    </tbody>
-			                </table>
-						{% endfor %}
-						
-					{% endif %}
+											{% for setor in justificativas_setores %}
+											    <h4>{{ setor.grouper }}</h4>
 
-	            </div>   
+											    <table class="table">
+								                    <thead>
+								                        <tr>
+								                            <th>Ocorrência</th>
+								                            <th>Status</th>
+								                            <th>Inicio</th>
+								                            <th>Final</th>
+								                            <th>Bolsista</th>
+								                            <th></th>
+								                        </tr>
+								                    </thead>
+								                    <tbody>
+								                        {% for justificativa in setor.list %}
+								                            <tr>
+								                                <td>{{ justificativa.descricao|truncatechars:50 }}</td>
+								                                <td width="5%">{{ justificativa.get_status_display }}</td>
+								                                <td width="20%">{{ justificativa.inicio }}</td>
+								                                <td width="20%">{{ justificativa.termino }}</td>
+								                                <td width="20%">{{ justificativa.vinculo.user.name }}</td>
+								                                <td width="2%"><a href="{% url 'justificativas:justificativa_edit' justificativa.pk %}"><i class="material-icons">navigate_next</i></a></td>
+								                            </tr>
+								                        {% endfor %}
+								                    </tbody>
+								                </table>
+											{% endfor %}
+
+										{% endif %}
+
+	            </div>
 	        </div>
 	    </div>
 	</div>

@@ -1,7 +1,7 @@
 from rules.contrib.views import PermissionRequiredMixin, permission_required, objectgetter
 
 from django.urls import reverse
-from django.db.models import Q, F
+from django.db.models import Q
 from django.contrib import messages
 from django.views.generic import ListView
 from django.http import HttpResponseRedirect
@@ -45,7 +45,7 @@ class TipoJustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, 
 	form_class = EditTipoJustificativaForm
 	template_name = 'tipo_justificativa/tipo_justificativa_create_edit.html'
 	permission_required = 'tipo_justificativa.can_manage'
-	
+
 	success_message = 'Tipo de justificativa atualizado com sucesso!'
 
 	def get_success_url(self):
@@ -69,7 +69,7 @@ class JustificativaListView(LoginRequiredMixin, ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super(JustificativaListView, self).get_context_data(**kwargs)
-		
+
 		user = self.request.user
 
 		busca = self.request.GET.get('busca', '') if user.has_perm('accounts.is_servidor') else None
@@ -80,16 +80,16 @@ class JustificativaListView(LoginRequiredMixin, ListView):
 			return context
 
 		if user.has_perm('accounts.is_coordenador_chefe'):
-			vinculos = user.vinculos.filter(ativo=True)		
+			vinculos = user.vinculos.filter(ativo=True)
 			vinculos = vinculos.filter(Q(group__name='Coordenador') | Q(group__name='Chefe de setor'))
 
 			coordenadorias = Coordenadoria.objects.filter(vinculos__in=vinculos)
 			setores = Setor.objects.filter(Q(coordenadoria__in=coordenadorias) | Q(vinculos__in=vinculos))
 
 			context['object_list'] = justificativas.filter(vinculo__setor__in=setores)
-		else:		
+		else:
 			context['object_list'] = justificativas.filter(vinculo__user=user)
-		
+
 		return context
 
 class JustificativaCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
@@ -103,14 +103,15 @@ class JustificativaCreateView(PermissionRequiredMixin, SuccessMessageMixin, Crea
 
 	def form_valid(self, form):
 		form.save(self.request.user)
+		messages.success(self.request, self.success_message)		
 		return HttpResponseRedirect(self.get_success_url())
 
 	def get_success_url(self):
 		return reverse('justificativas:justificativas')
-	
+
 
 class JustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
-	
+
 	model = JustificativaFalta
 	form_class = EditJustificativaForm
 	template_name = 'justificativas/justificativa_detail.html'
@@ -122,6 +123,7 @@ class JustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, Upda
 		user = self.request.user
 		if user.has_perm('justificativa.can_analyse', self.object):
 			form.save(self.request.user)
+			messages.success(self.request, self.success_message)
 			return HttpResponseRedirect(self.get_success_url())
 		else:
 			raise PermissionDenied()
