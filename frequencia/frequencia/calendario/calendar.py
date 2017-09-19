@@ -50,6 +50,4 @@ class FeriadosRioGrandeDoNorte(Brazil):
 
 	def is_working_day(self, day, extra_working_days=None, extra_holidays=None):
 		not_holiday = super(FeriadosRioGrandeDoNorte, self).is_working_day(day, extra_working_days=None, extra_holidays=None)
-		return not_holiday and not FeriadoCalendarioAcademico.objects.filter(data=day).exists()
-
-		
+		return not_holiday and not FeriadoCalendarioAcademico.objects.filter(data=day).exists()	

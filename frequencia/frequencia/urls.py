@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^vinculos/', include('frequencia.vinculos.urls', namespace='vinculos')),
     url(r'^calendario/', include('frequencia.calendario.urls', namespace='calendario')),
 	url(r'^justificativas/', include('frequencia.justificativas.urls', namespace='justificativas')),
+	url(r'^relatorios/', include('frequencia.relatorios.urls', namespace='relatorios')),
 
     url(r'^admin/', admin.site.urls),
     url(r'^conta/', include('frequencia.accounts.urls', namespace='accounts')),
