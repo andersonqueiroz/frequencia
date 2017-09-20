@@ -2,28 +2,85 @@
 
 {% block content %}
 
+{% load widget_tweaks %}
+{% load static %}
+
 {% load rules %}
 {% has_perm 'accounts.is_gestor' user as can_remove_feriado %}
 
-<h1>Calendário de  {{ano}}</h1>
+<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="brand">
+                    <h1>Calendário de  {{ano}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<table>
-	<tr><th>Data</th><th>Descrição</th></tr>
-{% for feriado in  object_list %}
-	<tr>
-		<td>{{ feriado.0 }}</td>
-		<td>{{ feriado.1 }}</td>
-		{% if feriado.2 and can_remove_feriado %}
-			<td><a href="{% url 'calendario:feriado_remove' feriado.2 %}">Excluir</a></td>
-		{% endif %}
-	</tr>
-{% endfor %}
-</table>
+<div class="main main-raised">
+    <div class="profile-content">
+        <div class="container">
+            <div class="section"> 
+                <h3>Tipos de justificativa</h3>
+                <p>Veja os tipos de justificativa cadastrados.</p>
+                <legend></legend>
+                <div class="col-md-12">  
+                    <table class="table">
+                        <tr><th>Data</th><th>Descrição</th></tr>
+                            {% for feriado in  object_list %}
+                        <tr>
+                            <td>{{ feriado.0 }}</td>
+                            <td>{{ feriado.1 }}</td>
+                            {% if feriado.2 and can_remove_feriado %}
+                                <td><a href="{% url 'calendario:feriado_remove' feriado.2 %}">Excluir</a></td>
+                            {% endif %}
+                        </tr>
+                            {% endfor %}
+                    </table>
+                </div>
 
-<h2>Cadastrar feriado</h2>
-<form action="{{ request.META.HTTP_REFERER }}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Adicionar" />
-</form>
+                <h4>Cadastrar feriado</h4>
+                
+                 {{ form.nom_field_errors }}
+                 <form action="{{ request.META.HTTP_REFERER }}" method="post">
+                     {% csrf_token %}
+                     <div class="col-md-9">
+                         <div class="form-group label-floating">
+                             <label class="control-label">{{form.nome.label}}</label>
+                             {% render_field form.nome class="form-control" %}
+                             {{ form.nome.errors }}
+                         </div>
+                     </div>
+                     <div class="col-md-3">
+                         <div class="form-group label-floating">                           
+                             {% render_field form.data class="form-control" id="data" placeholder=form.data.label%}
+                             
+                             {{ form.data.errors }}
+                         </div>
+                     </div>
+                     <div class="col-md-1 col-md-offset-5">
+                         <button class="btn btn-primary " type="submit">Adicionar</button>
+                     </div>     
+                     <br>             
+                 </form>
+                 <br>
+            </div>   
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{{ block.super }}
+
+<script src="{% static 'js/jquery.mask.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+            //$('#data').datepicker({format : 'dd/mm/yyyy', weekStart: 0}); 
+            $('#data').mask('00/00/0000', {reverse: true});
+    });
+</script>
 {% endblock %}
