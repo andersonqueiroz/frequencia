@@ -57,6 +57,6 @@ class Vinculo(basemodel):
 		verbose_name = 'Vínculo'  
 		verbose_name_plural = 'Vínculos'
 
-	@property
-	def registros_dia(self):
-		return self.registros.filter(created_at__date=timezone.now().date())
+	def registros_dia(self, dia=None):
+		dia = dia or timezone.now().date()
+		return self.registros.filter(created_at__date=dia)

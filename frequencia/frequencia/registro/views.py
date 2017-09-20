@@ -25,7 +25,7 @@ def registro(request):
 
 	if form.is_valid():	
 		bolsista = form.cleaned_data['bolsista']
-		tipo = 0 if not bolsista.registros_dia else not bolsista.registros_dia.last().tipo
+		tipo = 0 if not bolsista.registros_dia() else not bolsista.registros_dia().last().tipo
 		frequencia = Frequencia(bolsista=bolsista, maquina=maquina, tipo=tipo, observacao=form.cleaned_data['observacao'])
 		frequencia.save()
 		context['bolsista'] = bolsista
