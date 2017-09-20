@@ -12,7 +12,7 @@ def get_registros_bolsista(user, data_inicio, data_fim):
 
 def get_ausencias_bolsista(user, data_inicio, data_fim):
 	justificativas = JustificativaFalta.objects.filter(vinculo__user=user, status=2)
-	return justificativas.filter(Q(inicio__month=data_inicio.month, 
+	return justificativas.filter(Q(inicio__month=data_inicio.month,
 											 inicio__year=data_inicio.year)	|
 										   Q(termino__month=data_fim.month,
 										   	 termino__year=data_fim.year))
@@ -27,7 +27,7 @@ def get_total_horas_trabalhadas(registros):
 		horas_trabalhadas += saida.created_at - entradas[i].created_at
 	return horas_trabalhadas
 
-def get_relatorio_mes(user, mes, ano):	
+def get_relatorio_mes(user, mes, ano):
 
 	registros = []
 	horas_trabalhadas_mes = timedelta()
@@ -61,17 +61,17 @@ def get_relatorio_mes(user, mes, ano):
 		registros.append(relatorio_dia)
 
 	#Calculando horas abonadas no mês
-	horas_abonadas_mes = timedelta()
+	horas_abonadas_periodo = timedelta()
 	for ausencia in ausencias:
 		total_dias_ausencia = calendario.count_working_days(ausencia.inicio, ausencia.termino)
-		total_dias_ausencia_mes = calendario.count_working_days(ausencia.inicio, ausencia.termino if ausencia.termino <= data_fim else data_fim)		
-		horas_abonadas_mes +=  (ausencia.horas_abonadas / total_dias_ausencia) * total_dias_ausencia	
-		
+		total_dias_ausencia_periodo = calendario.count_working_days(ausencia.inicio if ausencia.inicio >= data_inicio else data_inicio,
+																ausencia.termino if ausencia.termino <= data_fim else data_fim)
+		horas_abonadas_periodo += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo
 
 	relatorio = {'registros': registros,
 				 'dias_uteis': calendario.count_working_days(data_inicio, data_fim),
 				 'horas_trabalhadas_mes': horas_trabalhadas_mes,
-				 'horas_abonadas_mes': horas_abonadas_mes,
+				 'horas_abonadas_mes': horas_abonadas_periodo,
 				}
 
 	return relatorio
