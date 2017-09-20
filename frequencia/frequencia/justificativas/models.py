@@ -47,7 +47,7 @@ class JustificativaFalta(basemodel):
 	@property
 	def horas_sugeridas(self):
 		horas_sugeridas = abs((self.inicio - self.termino).days) + 1
-		horas_sugeridas *= 4
+		horas_sugeridas *= self.vinculo.carga_horaria_diaria
 		return timedelta(hours=horas_sugeridas)
 
 	def __str__(self):

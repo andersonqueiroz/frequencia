@@ -21,9 +21,13 @@ class RelatorioMensalTemplateView(TemplateView):
 		return super(RelatorioMensalTemplateView, self).dispatch(*args, **kwargs)
 
 	def get_context_data(self, **kwargs):
-		context = super(RelatorioMensalTemplateView, self).get_context_data(**kwargs)						
+		context = super(RelatorioMensalTemplateView, self).get_context_data(**kwargs)
 
-		context['object_list'] = get_relatorio_mes(self.user, self.mes, self.ano)
+		relatorio = get_relatorio_mes(self.user, self.mes, self.ano)
+		context['lista_dias'] = relatorio['registros']
+		context['total_horas_trabalhar'] = relatorio['dias_uteis'] * 4
+		context['horas_trabalhadas_mes'] = relatorio['horas_trabalhadas_mes']		
+		context['horas_abonadas_mes'] = relatorio['horas_abonadas_mes']		
 
 		return context
 

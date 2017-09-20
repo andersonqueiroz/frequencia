@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
-
 {% block content %}
+
+{% load rules %}
+{% has_perm 'accounts.is_gestor' user as can_remove_feriado %}
+
 <h1>Calendário de  {{ano}}</h1>
 
 <table>
@@ -10,7 +13,7 @@
 	<tr>
 		<td>{{ feriado.0 }}</td>
 		<td>{{ feriado.1 }}</td>
-		{% if feriado.2 and user.is_superuser %}
+		{% if feriado.2 and can_remove_feriado %}
 			<td><a href="{% url 'calendario:feriado_remove' feriado.2 %}">Excluir</a></td>
 		{% endif %}
 	</tr>

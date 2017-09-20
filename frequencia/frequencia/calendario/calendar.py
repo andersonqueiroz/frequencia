@@ -26,8 +26,8 @@ class FeriadosRioGrandeDoNorte(Brazil):
         (12, 31, "Ano Novo"),
 	)
 
-	def holidays(self, year=None):
-		holidays = super(FeriadosRioGrandeDoNorte, self).holidays(year)
+	def get_calendar_holidays(self, year, with_id=False):
+		holidays = super(FeriadosRioGrandeDoNorte, self).get_calendar_holidays(year)
 
 		carnaval_terca = self.get_carnaval(year)
 		carnaval_segunda = carnaval_terca - timedelta(days=1)
@@ -42,12 +42,25 @@ class FeriadosRioGrandeDoNorte(Brazil):
 		holidays.append((self.get_easter_saturday(year), "Sábado de Aleluia"))
 		holidays.append((self.get_easter_sunday(year), "Páscoa"))
 
-		for holiday in FeriadoCalendarioAcademico.objects.filter(data__year=year).values_list('data', 'nome', 'id'):
+		if with_id:
+			db_holidays = FeriadoCalendarioAcademico.objects.filter(data__year=year).values_list('data', 'nome', 'id')
+		else:
+			db_holidays = FeriadoCalendarioAcademico.objects.filter(data__year=year).values_list('data', 'nome')
+
+		for holiday in db_holidays:
 			holidays.append(holiday)
 
-		return sorted(holidays, key=lambda x: x[0])
-		
+		return sorted(holidays, key=lambda x: x[0])		
 
 	def is_working_day(self, day, extra_working_days=None, extra_holidays=None):
-		not_holiday = super(FeriadosRioGrandeDoNorte, self).is_working_day(day, extra_working_days=None, extra_holidays=None)
-		return not_holiday and not FeriadoCalendarioAcademico.objects.filter(data=day).exists()	
+		not_holiday = super(FeriadosRioGrandeDoNorte, self).is_working_day(day, extra_working_days, extra_holidays)
+		return not_holiday and not FeriadoCalendarioAcademico.objects.filter(data=day).exists()
+
+	def count_working_days(self, start_date, end_date):
+		workday_count = 0
+		feriados = FeriadoCalendarioAcademico.objects.filter(data__lte=start_date, data__gte=end_date)
+
+		day_count = (end_date - start_date).days + 1
+		for day in (start_date + timedelta(n) for n in range(day_count)):
+			workday_count += 1 if super(FeriadosRioGrandeDoNorte, self).is_working_day(day) and not feriados.filter(data=day).exists() else 0
+		return workday_count

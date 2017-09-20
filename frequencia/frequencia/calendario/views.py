@@ -23,7 +23,7 @@ class FeriadoCreateListView(SuccessMessageMixin, CreateView):
 	def get_queryset(self):
 		self.ano = self.kwargs.get('ano', self.ano)
 		calendario = FeriadosRioGrandeDoNorte()
-		return calendario.holidays(year=int(self.ano))
+		return calendario.get_calendar_holidays(year=int(self.ano), with_id=True)
 
 	def get_context_data(self, **kwargs):
 		context = super(FeriadoCreateListView, self).get_context_data(**kwargs)
