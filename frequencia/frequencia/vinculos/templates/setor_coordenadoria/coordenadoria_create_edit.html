@@ -5,56 +5,41 @@
 
 	{% load widget_tweaks %}
 
-	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<div class="brand">
-						<h1>Gerenciar coordenadoria</h1>
-					</div>
-				</div>
-			</div>
-
-		</div>
+	<div class="row">
+		<div class="col-md-12">
+            <div class="card">
+            	<div class="header">
+            	<h4 class="title">Gerenciar coordenadoria</h4>
+                
+                <p class="category">Preencha os dados da coordenadoria</p>
+                </div>
+                <div class="content">
+                    <form method="post">
+                         {% csrf_token %} 
+                         {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-group col-md-12">
+                        	<label class="control-label">{{form.nome.label}}</label>
+							{% render_field form.nome class="form-control" %}
+							{% if form.nome.errors %}
+                                <label class="error">{{ form.nome.errors.0 }}</label>
+                            {% endif %}                        
+                        </div>
+                        <div class="row">   						
+                            <div class="footer text-center">
+    					    	<a class="btn btn-info btn-simple" href="{% url 'vinculos:setores_coordenadorias' %}" type="button">Voltar</a>
+    						    <button class="btn btn-info btn-fill" type="submit">Salvar</button>
+    						</div>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+        </div>
 	</div>
 
-	<div class="main main-raised">
-            <div class="container">
-            	<div class="row section">
-					<form method="post">
-
-						{% csrf_token %}
-
-						<div class="row vertical-align">
-							<div class="col-md-6">
-			            		<h2>Formulário</h2>
-				                <legend></legend>
-				                <h4>Dados gerais</h4>
-				                <p>Preencha os dados da coordenadoria</p>
-			                </div>
-						</div>
-
-						{{ form.nom_field_errors }}
-					    
-
-						<div class="col-md-6">
-							<div class="form-group label-floating">
-								<label class="control-label">{{form.nome.label}}</label>
-								{% render_field form.nome class="form-control" %}
-								{{ form.nome.errors }}
-							</div>
-						</div>
-						
-						<div class="col-md-12 text-center">
-						    <button class="btn btn-primary" type="submit">Salvar</button>
-					    	<a class="btn btn-primary btn-simple" href="{% url 'vinculos:setores_coordenadorias' %}" type="button">Voltar</a>
-						</div>
-					</form> 
-            		
-            	</div>
-            </div>
-	</div>
-{% endblock %}
-
-{% block script %}
 {% endblock %}

@@ -6,71 +6,75 @@
 {% load static %}
 
 {% load rules %}
-{% has_perm 'accounts.is_gestor' user as can_remove_feriado %}
+{% has_perm 'accounts.is_gestor' user as can_manage_feriado %}
 
-<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="brand">
-                    <h1>Calendário de  {{ano}}</h1>
-                </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Calendário de  {{ano}}</h4>
+                <p class="category">Listagem de todos os feriados do ano</p>
+            </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for feriado in  object_list %}
+                        <tr>
+                            <td>{{ feriado.0 }}</td>
+                            <td>
+                                {{ feriado.1 }}
+                                {% if feriado.2 and can_manage_feriado %}
+                                    <a href="{% url 'calendario:feriado_remove' feriado.2 %}"><i class="fa fa-trash text-danger"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-</div>
-
-<div class="main main-raised">
-    <div class="profile-content">
-        <div class="container">
-            <div class="section"> 
-                <h3>Tipos de justificativa</h3>
-                <p>Veja os tipos de justificativa cadastrados.</p>
-                <legend></legend>
-                <div class="col-md-12">  
-                    <table class="table">
-                        <tr><th>Data</th><th>Descrição</th></tr>
-                            {% for feriado in  object_list %}
-                        <tr>
-                            <td>{{ feriado.0 }}</td>
-                            <td>{{ feriado.1 }}</td>
-                            {% if feriado.2 and can_remove_feriado %}
-                                <td><a href="{% url 'calendario:feriado_remove' feriado.2 %}">Excluir</a></td>
+    {% if can_manage_feriado %}
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">Cadastrar feriado</div>
+                <div class="content">
+                {{ form.nom_field_errors }}
+                    <form action="{% url 'calendario:feriado_create' %}" method="post">
+                         {% csrf_token %}
+                        
+                        <div class="form-group col-md-8">
+                            <label>{{ form.nome.label }}</label>
+                            {% render_field form.nome class="form-control" %}
+                            {% if form.nome.errors %}
+                                <label class="error">{{ form.nome.errors.0 }}</label>
                             {% endif %}
-                        </tr>
-                            {% endfor %}
-                    </table>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>{{ form.data.label }}</label>
+                            {% render_field form.data class="form-control datepicker" %}
+                            {% if form.data.errors %}
+                                <label class="error">{{ form.data.errors.0 }}</label>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="footer text-center">
+                                <button type="submit" class="btn btn-fill btn-info">Adicionar</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-
-                <h4>Cadastrar feriado</h4>
-                
-                 {{ form.nom_field_errors }}
-                 <form action="{{ request.META.HTTP_REFERER }}" method="post">
-                     {% csrf_token %}
-                     <div class="col-md-9">
-                         <div class="form-group label-floating">
-                             <label class="control-label">{{form.nome.label}}</label>
-                             {% render_field form.nome class="form-control" %}
-                             {{ form.nome.errors }}
-                         </div>
-                     </div>
-                     <div class="col-md-3">
-                         <div class="form-group label-floating">                           
-                             {% render_field form.data class="form-control" id="data" placeholder=form.data.label%}
-                             
-                             {{ form.data.errors }}
-                         </div>
-                     </div>
-                     <div class="col-md-1 col-md-offset-5">
-                         <button class="btn btn-primary " type="submit">Adicionar</button>
-                     </div>     
-                     <br>             
-                 </form>
-                 <br>
-            </div>   
+            </div> 
         </div>
-    </div>
+    {% endif %}
 </div>
+
 {% endblock %}
 
 {% block script %}
@@ -79,8 +83,8 @@
 <script src="{% static 'js/jquery.mask.js' %}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-            //$('#data').datepicker({format : 'dd/mm/yyyy', weekStart: 0}); 
-            $('#data').mask('00/00/0000', {reverse: true});
+            $('#id_data').mask('00/00/0000', {reverse: true});
+            demo.initFormExtendedDatetimepickers();
     });
 </script>
 {% endblock %}

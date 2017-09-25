@@ -1,95 +1,127 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+{% include "head.html" %}
 
-{% block content %}
+{% load static %}
+<body> 
 
-	{% load widget_tweaks %}
+<nav class="navbar navbar-transparent navbar-absolute">
+    <div class="container">    
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url "registro:registro" %}">Frequência BCZM</a>
+        </div>
+        <div class="collapse navbar-collapse">       
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                   <a href="{% url "accounts:login" %}">
+                   <i class="fa fa-home"></i>
+                        Entrar
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 
-	<div class="header header-filter vertical-align" style="background-image: url({% static 'images/bg.jpg' %}); background-size: cover; background-position: top center;">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-						<div class="card card-signup">
-							<div class="header header-primary text-center">
-								<h3>Registros do dia</h3>
-								<h5>{{now|date:"D, d M Y"}}</h5>							
-							</div>
-
-															<div class="content">
-									<h3 class="text-center truncate">{{bolsista}}</h3>
-								</div>
-
-						</div>
-
-						
+<div class="wrapper wrapper-full-page">
+    <div class="full-page login-page" data-color="orange" data-image="{% static "images/bczm-acervo.jpg" %}"> 
+        
+    <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
+        <div class="content">
+            <div class="container">
+                <div class="row">                   
+                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                        <!--   if you want to have the card without animation please remove the ".card-hidden" class   -->
+                        <div class="card ">
+                            <div class="text-center">
+                            	<h3>Registros do dia</h3>
 							
-								{% if bolsista %}
+                            </div>
+                            <div class="text-center">
+                                <h5>{{now|date:"D, d M Y"}}</h5>
+                            
+                            </div>
+                            <div class="content">
+								<h4 class="text-center truncate">{{bolsista}}</h4>
+							</div>
+                            
+                            <div class="content">
+                                {% if bolsista %}
+								<table class="table">
+				                    <tbody>
 									{% for registro in bolsista.registros_dia %}
-									<div class="card">
-									<div class="content">
-										{% if registro.get_tipo_display == "Entrada" %}
-											<button class="btn btn-success btn-fab btn-fab-mini btn-round pull-left">
-												<i class="material-icons">arrow_forward</i>
-											</button>
-										{% else %}
-											<button class="btn btn-danger btn-fab btn-fab-mini btn-round pull-left">
-												<i class="material-icons">arrow_back</i>
-											</button>
-										{% endif %}
-											<div class="log pull-left">
-												<h5 class=""><strong>{{registro.created_at|time:'H:i'}}</strong></h5>
-												<p class="text-muted">{{registro.get_tipo_display}}</p>	
-											</div>
-										{% if registro.observacao != "" %}
-											<button class="btn btn-white btn-fab btn-fab-mini btn-round pull-right"
-											data-toggle="popover" data-placement="right" title="Observação" data-content="{{registro.observacao}}">
-												<i class="material-icons">chat_bubble</i>
-											</button>
-										{% endif %}
-									</div>
-									</div>
+			                            <tr>
+				                            <td>
+					                            {% if registro.get_tipo_display == "Entrada" %}
+													<a class="btn btn-success btn-fill btn-round pull-left">
+														{{registro.get_tipo_display}}
+													</a>
+												{% else %}
+													<a class="btn btn-danger btn-fill btn-round pull-left">
+														&nbsp;&nbsp;{{registro.get_tipo_display}}&nbsp;&nbsp;
+													</a>
+												{% endif %}
+											</td>
+											<td>
+												<div class="log pull-left">
+													<h5 class=""><strong>{{registro.created_at|time:'H:i'}}</strong></h5>
+												</div>
+											</td>
+			                            </tr>
+									{% endfor %}
+					                </tbody>
+								</table>
+								{% else %}
+									<h3>Sem registros para esse dia</h3>
+								{% endif %}
+								<div class="footer text-center">
+									<a class="btn btn-info btn-simple btn-lg" href="{% url 'registro:registro' %}">Voltar</a>
+								</div>                                   
+                            </div>
+                        </div>    
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer footer-transparent">
+            <div class="container">
+                <nav class="pull-left">
+                        <ul>
+                            <li>
+                                <img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
+                            </li>
+                        </ul>
+                    </nav>
+                    <!--div class="copyright pull-right"-->
+                    <div class="pull-right">
+                        &copy; 2017, SST</a>
+                    </div>
+            </div>
+        </footer>
 
-								{% endfor %}
-							{% else %}
-								<h3>Sem registros para esse dia</h3>
-							{% endif %}
+    </div>                             
+       
+</div>
 
-							<div class="footer text-center">
-								<a class="btn btn-simple btn-white btn-lg" href="{% url 'registro:registro' %}">Voltar</a>
-							</div>
-							
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<footer class="landing-page">
-		        <div class="container">
-		            <nav class="pull-left">
-						<ul>
-							<li>
-								<img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
-							</li>
-						</ul>
-		            </nav>
-		            <div class="copyright pull-right">
-		                &copy; 2017, SST</a>
-		            </div>
-		        </div>
-		    </footer>
+</body>
+        
+{% include "script.html" %}
+<script type="text/javascript">
+    $().ready(function(){
+        lbd.checkFullPageBackgroundImage();        
+        
+    });
+</script> 
 
 
 
-		</div>
-
-{% endblock %}
-
-{% block script %}
-	{{ block.super }}
-	<script src="{% static 'js/relogio.js' %}"></script>
-	<script type="text/javascript">
-	    $('[data-toggle="tooltip"]').popover();
-	</script>
-{% endblock %}
 

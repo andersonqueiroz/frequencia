@@ -19,9 +19,17 @@ from .forms import RegisterForm, EditAccountForm
 
 
 class AccountListView(ListView):
-	paginate_by = 10
 	model = User
 	template_name = 'accounts/accounts.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(AccountListView, self).get_context_data(**kwargs)
+		queryset = context['object_list']
+		context['bolsistas'] = queryset.filter(vinculos__ativo=True, vinculos__group__name='Bolsista')
+		context['chefes'] = queryset.filter(vinculos__ativo=True, vinculos__group__name='Chefe de setor')
+		context['coordenadores'] = queryset.filter(vinculos__ativo=True, vinculos__group__name='Coordenador')
+		context['gestores'] = queryset.filter(vinculos__ativo=True, vinculos__group__name='Gestor de unidade')
+		return context
 
 
 def accounts_create(request):
@@ -71,7 +79,7 @@ class Login(LoginView):
 	
 	def get_context_data(self, **kwargs):
 		context = super(Login, self).get_context_data(**kwargs)
-		context['landing_page'] = True
+		context['hide_nav'] = True
 		return context
 
 
