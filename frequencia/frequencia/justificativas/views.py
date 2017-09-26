@@ -72,8 +72,8 @@ class JustificativaListView(LoginRequiredMixin, ListView):
 
 		user = self.request.user
 
-		busca = self.request.GET.get('busca', '') if user.has_perm('accounts.is_servidor') else None
-		justificativas = JustificativaFalta.objects.buscar(busca) if busca else JustificativaFalta.objects.filter(status=0)
+		busca = self.request.GET.get('busca', '')
+		justificativas = JustificativaFalta.objects.buscar(busca).order_by('vinculo__setor__pk') if busca else JustificativaFalta.objects.filter(status=0)
 
 		if user.is_superuser or user.has_perm('accounts.is_gestor'):
 			context['object_list'] = justificativas.all()

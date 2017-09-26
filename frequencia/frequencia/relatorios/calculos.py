@@ -58,6 +58,12 @@ def get_relatorio_mes(user, mes, ano):
 		relatorio_dia['horas_trabalhadas'] = horas_trabalhadas
 		horas_trabalhadas_periodo += horas_trabalhadas
 
+		relatorio_dia['observacoes'] = registros_dia.values('observacao')
+
+		relatorio_dia['is_util'] = not relatorio_dia['feriado'] \
+								   and not relatorio_dia['ausencia'] \
+								   and super(FeriadosRioGrandeDoNorte, calendario).is_working_day(dia)
+
 		registros.append(relatorio_dia)
 
 	#Calculando horas abonadas no mês
@@ -68,8 +74,11 @@ def get_relatorio_mes(user, mes, ano):
 																ausencia.termino if ausencia.termino <= data_fim else data_fim)
 		horas_abonadas_periodo += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo
 
+	dias_uteis = calendario.count_working_days(data_inicio, data_fim)
+
 	return  {'registros': registros,
-			 'dias_uteis': calendario.count_working_days(data_inicio, data_fim),
+			 'dias_uteis': dias_uteis,
+			 'total_horas_trabalhar': timedelta(hours=4) * dias_uteis,
 			 'horas_trabalhadas_periodo': horas_trabalhadas_periodo,
 			 'horas_abonadas_periodo': horas_abonadas_periodo,
 		    }

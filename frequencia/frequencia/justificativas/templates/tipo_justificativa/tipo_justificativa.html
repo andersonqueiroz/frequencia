@@ -12,7 +12,7 @@
                     <p>Listagem dos tipos de justificativa cadastrados</p>
                 </div>
                 <div class="col-md-3">
-                <a class="btn btn-info btn-fill pull-right " href="{% url 'justificativas:tipo_justificativa_create' %}">Novo</a>
+                <a class="btn btn-warning btn-fill pull-right " href="{% url 'justificativas:tipo_justificativa_create' %}">Novo</a>
                 </div>
                 <legend></legend>
                 {% if object_list %}
@@ -27,7 +27,7 @@
                         {% for tipo in object_list %}
                             <tr>
                                 <td>{{ tipo }}</td>
-                                <td><a href="{% url 'justificativas:tipo_justificativa_edit' tipo.pk %}"><i class="fa fa-pencil"></i></a></td>
+                                <td><a href="{% url 'justificativas:tipo_justificativa_edit' tipo.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
                             </tr>
                         {% endfor %}
                     </tbody>

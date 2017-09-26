@@ -61,16 +61,19 @@
         	demo.initDashboardPageCharts();
         	demo.initVectorMap();
 
-        	/*$.notify({
-            	icon: 'pe-7s-bell',
-            	message: "<b>Light Bootstrap Dashboard PRO</b> - forget about boring dashboards."
-
-            },{
-                type: 'warning',
-                timer: 4000
-            });*/
-
     	});
 	</script>
       
-    </script>
+    {% if messages %}
+        <script type="text/javascript">
+            {% for message in messages %}
+            $.notify({
+                icon: 'pe-7s-bell',
+                message: '{{message|safe}}'
+            },{
+                type: 'info',
+                timer: 4000
+            });
+            {% endfor %}
+        </script>        
+    {% endif %}

@@ -9,24 +9,20 @@
 	<div class="row"> 
 		<div class="col-md-12">
             <div class="card">
-	                <div class="header">
-		                <div class="col-md-9">
-		                    <h4 class="title">Justificativas de falta</h4>
-		                    <p class="category">Listagem de justificativas</p>
-		                </div>
-		                {% if is_servidor %}
-							<form url="#" method="GET">
-								<div class="input-group col-md-3">
-						    		<input type="text" name="busca" placeholder="Buscar" class="form-control">
-						    		<span class="input-group-addon"><i class="fa fa-search"></i></span>
-					    		</div>
-							</form>
-						{% else %}
-							<div class="input-group col-md-3">
-								<a class="btn btn-info btn-fill pull-right" href="{% url 'justificativas:justificativa_create' %}">Cadastrar nova</a>
-							</div>
-						{% endif %}
-			        </div>
+                <div class="header">
+	                <div class="col-md-9">
+	                    <h4 class="title">Justificativas de falta</h4>
+	                    <p class="category">Listagem de justificativas</p>
+	                </div>
+	                
+					<form url="#" method="GET">
+						<div class="input-group col-md-3">
+				    		<input type="text" name="busca" placeholder="Buscar" class="form-control">
+				    		<span class="input-group-addon"><i class="fa fa-search"></i></span>
+			    		</div>
+					</form>
+					
+		        </div>
 
                 <div class="content">
     				{% regroup object_list by vinculo.setor as justificativas_setores %}
@@ -44,7 +40,7 @@
 	                                    </a>
 	                                </h4>
 	                            </div>
-	                            <div id="setor{{setor.grouper.pk}}" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+	                            <div id="setor{{setor.grouper.pk}}" class="peteca panel-collapse collapse" aria-expanded="true" style="height: 0px;">
 	                                <div class="panel-body">
 	                                    <table class="table">
 						                    <thead>
@@ -59,7 +55,11 @@
 						                    </thead>
 						                    <tbody>
 						                        {% for justificativa in setor.list %}
-						                            <tr>
+
+						                        	{% with st=justificativa.status %}						                        	
+						                            <tr {% if st == 1 %} class="text-danger" {% elif st == 2 %} class="text-success" {% endif %}>
+						                        	{% endwith %}
+
 						                                <td>{{ justificativa.descricao|truncatechars:50 }}</td>
 						                                <td width="5%">{{ justificativa.get_status_display }}</td>
 						                                <td width="20%">{{ justificativa.inicio }}</td>
@@ -87,8 +87,14 @@
             </div>
         </div>
     </div>
+    
+{% endblock %}
 
-
-
-
+{% block script %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.peteca').collapse("show");
+    });
+</script>
 {% endblock %}
