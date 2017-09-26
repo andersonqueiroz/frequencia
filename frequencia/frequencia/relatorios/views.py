@@ -26,8 +26,8 @@ class RelatorioMensalTemplateView(TemplateView):
 		relatorio = get_relatorio_mes(self.user, self.mes, self.ano)
 		context['lista_dias'] = relatorio['registros']
 		context['total_horas_trabalhar'] = relatorio['dias_uteis'] * 4
-		context['horas_trabalhadas_mes'] = relatorio['horas_trabalhadas_mes']		
-		context['horas_abonadas_mes'] = relatorio['horas_abonadas_mes']		
+		context['horas_trabalhadas_periodo'] = relatorio['horas_trabalhadas_periodo']		
+		context['horas_abonadas_periodo'] = relatorio['horas_abonadas_periodo']		
 
 		return context
 

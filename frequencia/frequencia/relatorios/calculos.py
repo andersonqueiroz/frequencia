@@ -30,7 +30,7 @@ def get_total_horas_trabalhadas(registros):
 def get_relatorio_mes(user, mes, ano):
 
 	registros = []
-	horas_trabalhadas_mes = timedelta()
+	horas_trabalhadas_periodo = timedelta()
 
 	calendario = FeriadosRioGrandeDoNorte()
 	feriados = calendario.holidays(ano)
@@ -56,7 +56,7 @@ def get_relatorio_mes(user, mes, ano):
 		relatorio_dia['registros'] = registros_dia
 		horas_trabalhadas = get_total_horas_trabalhadas(registros_dia)
 		relatorio_dia['horas_trabalhadas'] = horas_trabalhadas
-		horas_trabalhadas_mes += horas_trabalhadas
+		horas_trabalhadas_periodo += horas_trabalhadas
 
 		registros.append(relatorio_dia)
 
@@ -68,10 +68,8 @@ def get_relatorio_mes(user, mes, ano):
 																ausencia.termino if ausencia.termino <= data_fim else data_fim)
 		horas_abonadas_periodo += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo
 
-	relatorio = {'registros': registros,
-				 'dias_uteis': calendario.count_working_days(data_inicio, data_fim),
-				 'horas_trabalhadas_mes': horas_trabalhadas_mes,
-				 'horas_abonadas_mes': horas_abonadas_periodo,
-				}
-
-	return relatorio
+	return  {'registros': registros,
+			 'dias_uteis': calendario.count_working_days(data_inicio, data_fim),
+			 'horas_trabalhadas_periodo': horas_trabalhadas_periodo,
+			 'horas_abonadas_periodo': horas_abonadas_periodo,
+		    }
