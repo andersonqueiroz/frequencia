@@ -1,86 +1,122 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+{% include "head.html" %}
 
-{% block content %}
+{% load static %}
+{% load widget_tweaks %}
+<body> 
 
-	{% load widget_tweaks %}
-
-
-	<div class="header header-filter vertical-align" style="background-image: url({% static 'images/bg.jpg' %}); background-size: cover; background-position: top center;">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-						<div class="card card-signup">
-								<div class="header header-primary text-center">
-									<h1 style="margin: 10px 0">Login</h1>
-								
-								</div>
-								<p class="text-divider">Preencha seus dados</p>
-								<div class="content">
-
-									<form action="{% url 'accounts:login' %}" method="POST">
-										{% csrf_token %}
-
-										{{ form.non_field_errors }}
-
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="material-icons">face</i>
-											</span>
-											{% render_field form.username class="form-control" placeholder=form.username.label autofocus="" %}
-											{{ form.username.errors }}
-										</div>
-
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="material-icons">lock</i>
-											</span>
-											{% render_field form.password class="form-control" placeholder=form.password.label %}
-											{{ form.password.errors }}
-										</div>
-
-										<div class="footer text-center">
-											<input class="btn btn-simple btn-primary btn-lg" type="submit" value="Enviar">
-										</div>
-										
-									</form>
-
-									<!-- If you want to add a checkbox to this form, uncomment this code
-
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="optionsCheckboxes" checked>
-											Subscribe to newsletter
-										</label>
-									</div> -->
-								</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<footer class="landing-page">
-		        <div class="container">
-		            <nav class="pull-left">
-						<ul>
-							<li>
-								<img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
-							</li>
-						</ul>
-		            </nav>
-		            <div class="copyright pull-right">
-		                &copy; 2017, SST</a>
-		            </div>
-		        </div>
-		    </footer>
+<nav class="navbar navbar-transparent navbar-absolute">
+    <div class="container">    
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand " href="{% url "registro:registro" %}">Frequência BCZM</a>
+        </div>
+        <div class="collapse navbar-collapse">       
+            {% if not hide_nav %}
+            	
+	            <ul class="nav navbar-nav navbar-right">
+	                <li>
+	                   <a href="{% url "accounts:login" %}">
+                        <i class="fa fa-home"></i>
+	                        Entrar
+	                    </a>
+	                </li>
+	            </ul>
+            {% endif %}
+        </div>
+    </div>
+</nav>
 
 
+<div class="wrapper wrapper-full-page">
+    <div class="full-page login-page" data-color="peteca" data-image="{% static "images/bczm-acervo.jpg" %}">   
+        
+    <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
+        <div class="content">
+            <div class="container">
+                <div class="row">                   
+                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                        <form action="{% url 'accounts:login' %}" method="POST">
+                        {% csrf_token %}
+                            
+                        <!--   if you want to have the card without animation please remove the ".card-hidden" class   -->
+                            <div class="card card-hidden">
+                                <div class="text-center">Login</div>
+                                
+                                <div class="content">
+                                    {% if form.errors %}
+                                    <div class="alert alert-danger">
+                                        <button type="button" aria-hidden="true" class="close">×</button>
+                                        <span>{{ form.non_field_errors.0 }}</span>
+                                    </div>
+                                    {% endif %}
+                                    <div class="form-group">
+                                        <label>{{ form.username.label }}</label>
+                                        {% render_field form.username class="form-control" placeholder=form.username.label autofocus="" %}
+                                        {% if form.username.errors %}
+			                                <label class="error">{{ form.username.errors.0 }}</label>
+			                            {% endif %} 
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{ form.password.label }}</label>
+                                        {% render_field form.password class="form-control" placeholder=form.password.label %}
+                                        {% if form.password.errors %}
+			                                <label class="error">{{ form.password.errors.0 }}</label>
+			                            {% endif %} 
+                                    </div>                                 
+                                </div>
+                                <div class="footer text-center">
+                                    <button type="submit" class="btn btn-fill btn-warning btn-wd">Login</button>
+                                </div>
+                            </div>
+                                
+                        </form>
+                                
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer footer-transparent">
+            <div class="container">
+                <nav class="pull-left">
+                        <ul>
+                            <li>
+                                <img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
+                            </li>
+                        </ul>
+                    </nav>
+                    <!--div class="copyright pull-right"-->
+                    <div class="pull-right">
+                        &copy; 2017, SST</a>
+                    </div>
+            </div>
+        </footer>
 
-		</div>
+    </div>                             
+       
+</div>
 
-{% endblock %}
 
-{% block script %}
-	{{ block.super }}
-	<script src="{% static 'js/relogio.js' %}"></script>
-{% endblock %}
+
+
+
+</body>
+        
+{% include "script.html" %}
+<script type="text/javascript">
+        $().ready(function(){
+            lbd.checkFullPageBackgroundImage();
+            setTimeout(function(){
+                $('.card').removeClass('card-hidden');
+            }, 300);
+        });
+    </script>    
+</html>
+

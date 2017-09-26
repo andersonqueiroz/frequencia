@@ -1,107 +1,132 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+{% include "head.html" %}
 
-{% block content %}
+{% load static %}
+{% load widget_tweaks %}
+<body> 
 
-	{% load widget_tweaks %}
-
-
-	<div class="header header-filter vertical-align" style="background-image: url({% static 'images/bg.jpg' %}); background-size: cover; background-position: top center;">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-						<div class="card card-signup">
-								<div class="header header-primary text-center">
-									<h1><span class="h">{{now|date:"H"}}</span>:<span class="h m">{{now|date:"i"}}</span>:<span class="h s">{{now|date:"s"}}</span></h1>
-									<h5>{{now|date:"D, d M Y"}}</h5>
-								
-								</div>
-								<p class="text-divider">Registro de frequência</p>
-
-								{% if form.errors %}
-									<div class="alert alert-danger" style="margin: 30px 10px;">
-									    <div class="container-fluid">
-										  <div class="alert-icon">
-										    <i class="material-icons">error_outline</i>
-										  </div>
-										  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-											<span aria-hidden="true"><i class="material-icons">clear</i></span>
-										  </button>
-									      {{ form.non_field_errors.0 }}
-									    </div>
-									</div>
-								{% endif %}
-
-								<div class="content">
-
-									<form action="{% url 'registro:registro' %}" method="POST">
-										{% csrf_token %}
-
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="material-icons">face</i>
-											</span>
-											{% render_field form.cpf class="form-control" placeholder=form.cpf.label autofocus="" %}
-											{{ form.cpf.errors }}
-										</div>
-
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="material-icons">lock</i>
-											</span>
-											{% render_field form.password class="form-control" placeholder=form.password.label %}
-											{{ form.password.errors }}
-										</div>
-
-										<div class="input-group">
-											<span class="input-group-addon">
-												<i class="material-icons">edit</i>
-											</span>
-											{% render_field form.observacao class="form-control" placeholder=form.observacao.label rows="3" %}
-											{{ form.observacao.errors }}
-										</div>
-
-										<div class="footer text-center">
-											<input class="btn btn-simple btn-primary btn-lg" type="submit" value="Enviar">
-										</div>
-										
-									</form>
-								</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<footer class="landing-page">
-		        <div class="container">
-		            <nav class="pull-left">
-						<ul>
-							<li>
-								<img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
-							</li>
-						</ul>
-		            </nav>
-		            <div class="copyright pull-right">
-		                &copy; 2017, SST</a>
-		            </div>
-		        </div>
-		    </footer>
+<nav class="navbar navbar-transparent navbar-absolute">
+    <div class="container">    
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Frequência BCZM</a>
+        </div>
+        <div class="collapse navbar-collapse">       
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                   <a href="{% url "accounts:login" %}">
+                   <i class="fa fa-home"></i>
+                        Entrar
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 
+<div class="wrapper wrapper-full-page">
+    <div class="full-page login-page" data-color="orange" data-image="{% static "images/bczm-acervo.jpg" %}">   
+        
+    <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
+        <div class="content">
+            <div class="container">
+                <div class="row">                   
+                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                        <form action="{% url 'registro:registro' %}" method="POST">
+                        {% csrf_token %}
+                            
+                        <!--   if you want to have the card without animation please remove the ".card-hidden" class   -->
+                            <div class="card ">
+                                <div class="text-center">Registro de frequência</div>
+                                <div class="text-center">
+                                    <h1><span class="h">{{now|date:"H"}}</span>:<span class="h m">{{now|date:"i"}}</span>:<span class="h s">{{now|date:"s"}}</span></h1>
+                                    <h5>{{now|date:"D, d M Y"}}</h5>
+                                
+                                </div>
+                                
+                                <div class="content">
+                                    {% if form.errors %}
+                                    <div class="alert alert-danger">
+                                        <button type="button" aria-hidden="true" class="close">×</button>
+                                        <span>{{ form.non_field_errors.0 }}</span>
+                                    </div>
+                                    {% endif %}
+                                    <div class="form-group">
+                                        <label>{{ form.cpf.label }}</label>
 
-		</div>
+                                        {% render_field form.cpf class="form-control" placeholder=form.cpf.label autofocus="" %}
+                                            {{ form.cpf.errors }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{ form.password.label }}</label>
+                                        {% render_field form.password class="form-control" placeholder=form.password.label %}
+                                            {{ form.password.errors }}
+                                    </div> 
+                                    <div class="form-group">
+                                        <label>{{ form.observacao.label }}</label>
+                                        {% render_field form.observacao class="form-control" placeholder=form.observacao.label %}
+                                            {{ form.observacao.errors }}
+                                    </div>                                    
+                                </div>
+                                <div class="footer text-center">
+                                    <button type="submit" class="btn btn-fill btn-warning btn-wd">Login</button>
+                                </div>
+                            </div>
+                                
+                        </form>
+                                
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer footer-transparent">
+            <div class="container">
+                <nav class="pull-left">
+                        <ul>
+                            <li>
+                                <img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
+                            </li>
+                        </ul>
+                    </nav>
+                    <!--div class="copyright pull-right"-->
+                    <div class="pull-right">
+                        &copy; 2017, SST</a>
+                    </div>
+            </div>
+        </footer>
 
-{% endblock %}
+    </div>                             
+       
+</div>
 
-{% block script %}
-	{{ block.super }}
-	<script src="{% static 'js/relogio.js' %}"></script>
-	<script src="{% static 'js/jquery.mask.js' %}"></script>
-	<script type="text/javascript">
-		$(document).ready(function () { 
-	        var $seuCampoCpf = $("#id_cpf");
-	        $seuCampoCpf.mask('000.000.000-00', {reverse: true});
-	    });
-	</script>
-{% endblock %}
 
+
+
+
+</body>
+        
+{% include "script.html" %}
+<script src="{% static 'js/relogio.js' %}"></script>
+<script src="{% static 'js/jquery.mask.js' %}"></script>
+<script type="text/javascript">
+        $().ready(function(){
+            lbd.checkFullPageBackgroundImage();
+            
+            setTimeout(function(){
+                // after 1000 ms we add the class animated to the login/register card
+                $('.card').removeClass('card-hidden');
+            }, 700);
+            var $seuCampoCpf = $("#id_cpf");
+            $seuCampoCpf.mask('000.000.000-00', {reverse: true});
+        });
+    </script>    
+</html>

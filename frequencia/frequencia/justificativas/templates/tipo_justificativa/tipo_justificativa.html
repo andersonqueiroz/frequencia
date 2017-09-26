@@ -3,26 +3,19 @@
 {% block content %}
 
 {% load static %}
-
-<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="brand">
-                    <h1>Tipos de justificativa</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="content">    
+                <div class="col-md-9">
+                    <h3>Tipos de justificativa</h3>
+                    <p>Listagem dos tipos de justificativa cadastrados</p>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="main main-raised">
-    <div class="profile-content">
-        <div class="container">
-            <div class="section"> 
-                <h3>Tipos de justificativa</h3>
-                <p>Veja os tipos de justificativa cadastrados.</p>
+                <div class="col-md-3">
+                <a class="btn btn-info btn-fill pull-right " href="{% url 'justificativas:tipo_justificativa_create' %}">Novo</a>
+                </div>
                 <legend></legend>
+                {% if object_list %}
                 <table class="table">
                     <thead>
                         <tr>                          
@@ -34,12 +27,17 @@
                         {% for tipo in object_list %}
                             <tr>
                                 <td>{{ tipo }}</td>
-                                <td><a href="{% url 'justificativas:tipo_justificativa_edit' tipo.pk %}"><i class="material-icons">edit</i></a></td>
+                                <td><a href="{% url 'justificativas:tipo_justificativa_edit' tipo.pk %}"><i class="fa fa-pencil"></i></a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
-                </table>                      
-            </div>   
+                </table>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <span>Não há tipos de justificativa cadastrados</span>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

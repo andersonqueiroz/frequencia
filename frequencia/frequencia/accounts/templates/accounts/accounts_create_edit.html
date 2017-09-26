@@ -1,167 +1,152 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block content %}
 
 	{% load widget_tweaks %}
 
-	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<div class="brand">
-						<h1>Criar usuário</h1>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
-
-	<div class="main main-raised">
-            <div class="container">
-            	<div class="row section">
-					<form method="post">
-
-						{% csrf_token %}
-
-						<div class="row vertical-align">
-							<div class="col-md-6">
-			            		<h2>Formulário</h2>
-				                <legend></legend>
-				                <h4>Dados gerais</h4>
-				                <p>Preencha os dados do usuário</p>
-			                </div>
-
-			                <div class="col-md-6">
-				                <div class="togglebutton pull-right">
-										<label>
-											{% render_field form.is_active type="togglebutton" checked="" %}
-											{{form.is_active.label}}
-										</label>
-								</div>
+	<div class="row">
+		<div class="col-md-12">
+            <div class="card">
+            	<div class="header">
+            	<h4 class="title">Criar usuário</h4>
+                
+                <p class="category">Preencha os dados da coordenadoria</p>
+                </div>
+                <div class="content">
+                    <form method="post">
+                         {% csrf_token %} 
+                         <div class="col-md-6 col-md-offset-6">
+			                <div class="togglebutton pull-right">
+								<label class="checkbox checked">
+		                            <span class="icons"><span class="first-icon fa fa-square-o"></span><span class="second-icon fa fa-check-square-o"></span>{% render_field form.is_active type="togglebutton" %}</span>{{form.is_active.label}}
+		                        </label>
 							</div>
 						</div>
 
-						{{ form.nom_field_errors }}
+                         {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-group col-md-6">
+                        	<label class="control-label">{{form.name.label}}</label>
+							{% render_field form.name class="form-control" %}
+							{% if form.name.errors %}
+                                <label class="error">{{ form.name.errors.0 }}</label>
+                            {% endif %}                        
+                        </div>
+                        <div class="form-group col-md-6">
+                        	<label class="control-label">{{form.username.label}}</label>
+							{% render_field form.username class="form-control" %}
+							{% if form.username.errors %}
+                                <label class="error">{{ form.username.errors.0 }}</label>
+                            {% endif %}                        
+                        </div>
+                        <div class="form-group col-md-6">
+                        	<label class="control-label">{{form.email.label}}</label>
+							{% render_field form.email class="form-control" %}
+							{% if form.email.errors %}
+                                <label class="error">{{ form.email.errors.0 }}</label>
+                            {% endif %}                        
+                        </div>
+                        <div class="form-group col-md-6">
+                        	<label class="control-label">{{form.cpf.label}}</label>
+							{% render_field form.cpf class="form-control" %}
+							{% if form.cpf.errors %}
+                                <label class="error">{{ form.cpf.errors.0 }}</label>
+                            {% endif %}                        
+                        </div>
+                        <div class="form-group col-md-6">
+                        	<label class="control-label">{{form.password1.label}}</label>
+							{% render_field form.password1 class="form-control" %}
+							{% if form.password1.errors %}
+                                <label class="error">{{ form.password1.errors.0 }}</label>
+                            {% endif %}                        
+                        </div>
+                        <div class="form-group col-md-6">
+                        	<label class="control-label">{{form.password2.label}}</label>
+							{% render_field form.password2 class="form-control" %}
+							{% if form.password2.errors %}
+                                <label class="error">{{ form.password2.errors.0 }}</label>
+                            {% endif %}                        
+                        </div>
 
 
-						<div class="col-md-6">
-							<div class="form-group label-floating">
-								<label class="control-label">{{form.name.label}}</label>
-								{% render_field form.name class="form-control" %}
-								{{ form.name.errors }}
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group label-floating">
-								<label class="control-label">{{form.username.label}}</label>
-								{% render_field form.username class="form-control" %}
-								{{ form.username.errors }}
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group label-floating">
-								<label class="control-label">{{form.email.label}}</label>
-								{% render_field form.email class="form-control" %}
-								{{ form.email.errors }}
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group label-floating">
-								<label class="control-label">{{form.cpf.label}}</label>
-								{% render_field form.cpf class="form-control" %}
-								{{ form.cpf.errors }}
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group label-floating">
-								<label class="control-label">{{form.password1.label}}</label>
-								{% render_field form.password1 class="form-control" %}
-								{{ form.password1.errors }}
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group label-floating">
-								<label class="control-label">{{form.password2.label}}</label>
-								{% render_field form.password2 class="form-control" %}
-								{{ form.password2.errors }}
-							</div>
-						</div>
-
-						<legend></legend>
+                        <legend></legend>
 		                <h4>Vínculos</h4>
 		                <p>Determine a função do usuário no sistema e dados contextuais.</p>
-
 		                <legend></legend>
 
-		                <div class="container">
-    						<div class="row">
-								<ul class="nav nav-tabs">
-								{% for form in vinculos_formset %}
+		                <div class="content">
+			                <ul role="tablist" class="nav nav-tabs">
+			                    {% for form in vinculos_formset %}
 			                      <li id="{{form.prefix}}-tab" class="{% if form.prefix == 'vinculos-0' %}active{% endif %}"><a data-toggle="tab" href="#{{form.prefix}}">Novo vínculo</a></li>
 			                    {% endfor %}
-			                    </ul>
+			                </ul>
+			                {{vinculos_formset.management_form}}
+			                <div id="tab-content" class="tab-content">
+									{% for form in vinculos_formset %}
+				                      	<div id="{{form.prefix}}" class="tab-pane fade {% if form.prefix == 'vinculos-0' %}in active{% endif %}">
 
-	                        	{{vinculos_formset.management_form}}
-
-								<div id="tab-content" class="tab-content">
-											{% for form in vinculos_formset %}
-						                      	<div id="{{form.prefix}}" class="tab-pane fade {% if form.prefix == 'vinculos-0' %}in active{% endif %}">
-
-													<div id="collapseOne" class="panel-collapse collapse in">
-								                    <div class="panel-body">
-													{% for field in form %}
-														{% if field.name == "ativo" %}
-															<div class="row vertical-align">
-																<div class="col-md-6">
-											                        <h3>Bolsistas</h3>
-		            												<p>Listagem de bolsistas ativos.</p>
-		            											</div>
-										                        <div class="col-md-6">
-													                <div class="togglebutton pull-right">
-																		<label>
-																			{% render_field field type="togglebutton" %}
-																			{{field.label}}
-																		</label>
-																	</div>
-																</div>
+											<div id="collapseOne" class="tab-pane">
+						                    <div class="panel-body">
+											{% for field in form %}
+												{% if field.name == "ativo" %}
+													<div class="row vertical-align">
+														<div class="col-md-6">
+									                        <h3>Bolsistas</h3>
+	        												<p>Listagem de bolsistas ativos.</p>
+	        											</div>
+	        											<div class="col-md-6 col-md-offset-6">
+											                <div class="togglebutton pull-right">
+																<label class="checkbox checked">
+										                            <span class="icons"><span class="first-icon fa fa-square-o"></span><span class="second-icon fa fa-check-square-o"></span>{% render_field field type="togglebutton" %}</span>{{field.label}}
+										                        </label>
 															</div>
-														{% elif field.name == "id" or field.name == "user" %}
-															{% render_field field %}
-														{% elif field.name == "group" %}
-							         						<div class="col-md-6">
-																<div class="form-group">
-																	<label class="control-label">{{field.label}}</label>
-																	{% render_field field class="form-control" onchange="getOption(this)" %}
-																</div>
-															</div>
-														{% else %}
-							         						<div class="col-md-6">
-																<div class="form-group">
-																	<label class="control-label">{{field.label}}</label>
-																	{% render_field field class="form-control" %}
-																</div>
-															</div>
-														{% endif %}
-												    {% endfor %}
-		    					                        </div>
-							                    	</div>
-						                      	</div>
-											{% endfor %}
+														</div>
+													</div>
+												{% elif field.name == "id" or field.name == "user" %}
+													{% render_field field %}
+												{% elif field.name == "group" %}
+					         						<div class="col-md-6">
+														<div class="form-group">
+															<label class="control-label">{{field.label}}</label>
+															{% render_field field class="form-control" onchange="getOption(this)" %}
+														</div>
+													</div>
+												{% else %}
+					         						<div class="col-md-6">
+														<div class="form-group">
+															<label class="control-label">{{field.label}}</label>
+															{% render_field field class="form-control" %}
+														</div>
+													</div>
+												{% endif %}
+										    {% endfor %}
+						                        </div>
+					                    	</div>
+				                      	</div>
+									{% endfor %}
 			                    </div>
-						    </div>
-						</div>
 
-						<div class="col-md-12 text-center">
-						    <button class="btn btn-primary" type="submit">Salvar</button>
-					    	<a class="btn btn-primary btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
-						</div>
-					</form>
+			            </div>
 
-            	</div>
-            </div>
+                        <div class="row">   						
+                            <div class="footer text-center">
+    					    	<a class="btn btn-info btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
+    						    <button class="btn btn-info btn-fill" type="submit">Salvar</button>
+    						</div>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+        </div>
 	</div>
+
+
 {% endblock %}
 
 {% block script %}
@@ -177,6 +162,9 @@
 	        $('[id*=-group]').each(function() { //foreach element with a class of item.
 				getOption($(this));        //pass in the current element into your function.
 			});
+
+			// Init Sliders
+            demo.initFormExtendedSliders();
 		});
 
 		function getOption(form) {

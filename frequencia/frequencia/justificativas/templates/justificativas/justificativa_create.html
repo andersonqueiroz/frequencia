@@ -7,96 +7,76 @@
 
 	{% load rules %}
 	{% has_perm 'accounts.is_bolsista' user as is_bolsista %}
-
-	<div class="header header-filter" style="background-image: url({% static 'images/bg.jpg' %})">
-	    <div class="container">
-	        <div class="row">
-	            <div class="col-md-8 col-md-offset-2">
-	                <div class="brand">
-						<h1>Nova justificativa</h1>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-
-	<div class="main main-raised">
-        <div class="container">
-        	<div class="row section">
-        		<div class="row vertical-align">
-					<div class="col-md-6">
-	            		<h2>Formulário</h2>
-		                <legend></legend>
-		                <h4>Dados gerais</h4>
-		                <p>Preencha os dados da justificativa de falta</p>
-	                </div>
-				</div>
-
-				<form action="#" method="POST">
-				    {% csrf_token %}
-						{% if form.errors %}
-							<div class="alert alert-danger" style="margin: 30px 10px;">
+	
+	<div class="row">
+		<div class="col-md-12">
+            <div class="card">
+            	<div class="header">
+            	<h4 class="title">Nova justificativa</h4>
+                
+                <p class="category">Preencha os dados da justificativa de falta</p>
+                </div>
+                <div class="content">
+                    <form action="#" method="post">
+	                     {% csrf_token %}
+	                         {% if form.non_field_errors %}
+								<div class="alert alert-danger">
 									{% for error in form.non_field_errors %}
-									<div class="container-fluid">
-									<div class="alert-icon">
-										<i class="material-icons">error_outline</i>
-									</div>
-									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-									<span aria-hidden="true"><i class="material-icons">clear</i></span>
-									</button>
 										{{ error }}
-									</div>
 									{% endfor %}
-							</div>
-						{% endif %}
-
-				    <div class="col-md-12">
-						<div class="form-group label-floating">
+								</div>
+							{% endif %}
+						<div class="form-group col-md-12">
 							<label class="control-label">{{form.tipo.label}}</label>
 							{% render_field form.tipo class="form-control" %}
-							{{ form.tipo.errors }}
+							{% if form.tipo.errors %}
+	                            <label class="error">{{ form.tipo.errors.0 }}</label>
+	                        {% endif %}
 						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="form-group label-floating">
+						<div class="form-group col-md-12">
 							<label class="control-label">{{form.descricao.label}}</label>
 							{% render_field form.descricao class="form-control" %}
-							{{ form.descricao.errors }}
+							{% if form.tipodescricao.errors %}
+	                            <label class="error">{{ form.descricao.errors.0 }}</label>
+	                        {% endif %}
 						</div>
-					</div>
-
-					<div class="col-md-6">
-						<div class="form-group label-floating">
-							{% render_field form.inicio class="form-control" id="datainicio" placeholder=form.inicio.label %}
-							{{ form.inicio.errors }}
+						<div class="form-group col-md-6">
+							<label class="control-label">{{form.inicio.label}}</label>
+							{% render_field form.inicio class="form-control datepicker" %}
+							{% if form.inicio.errors %}
+	                            <label class="error">{{ form.inicio.errors.0 }}</label>
+	                        {% endif %}
 						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group label-floating">
-							{% render_field form.termino class="form-control" id="datafim" placeholder=form.termino.label %}
-							{{ form.termino.errors }}
+						<div class="form-group col-md-6">
+							<label class="control-label">{{form.termino.label}}</label>
+							{% render_field form.termino class="form-control datepicker" %}
+							{% if form.termino.errors %}
+	                            <label class="error">{{ form.termino.errors.0 }}</label>
+	                        {% endif %}
 						</div>
-					</div>
-
-				    <div class="col-md-12 text-center">
-					    <button class="btn btn-primary" type="submit">Salvar</button>
-				    	<a class="btn btn-primary btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
-					</div>
-				</form>
-			</div>
-		</div>
+						<div class="row">
+						    <div class="text-center">
+						    	<a class="btn btn-info btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
+							    <button class="btn btn-info btn-fill" type="submit">Salvar</button>
+							</div>		
+	                    </div>
+                    </form>
+                </div>
+            </div> 
+        </div>
 	</div>
 
 {% endblock %}
 
 {% block script %}
-	{{ block.super }}
+{{ block.super }}
 
-	<script type="text/javascript">
-	    $(document).ready(function(){
-				$('#datainicio').datepicker({format : 'dd/mm/yyyy', weekStart: 0});
-				$('#datafim').datepicker({format : 'dd/mm/yyyy', weekStart: 0});
-		});
-	</script>
-
+<script src="{% static 'js/jquery.mask.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+            $('#id_inicio').mask('00/00/0000', {reverse: true});
+            $('#id_termino').mask('00/00/0000', {reverse: true});
+            demo.initFormExtendedDatetimepickers();
+    });
+</script>
 {% endblock %}

@@ -7,12 +7,11 @@ from frequencia.vinculos.models import Vinculo
 class FrequenciaForm(forms.Form):
 
     cpf = forms.CharField(label='CPF', max_length=15)
-    observacao = forms.CharField(widget=forms.Textarea, validators=[MaxLengthValidator(200)], max_length=200, required=False)
+    observacao = forms.CharField(widget=forms.Textarea(attrs={'rows':3}), validators=[MaxLengthValidator(200)], max_length=200, required=False)
     password = forms.CharField(widget=forms.PasswordInput)
 
     widgets = {
-            'password': forms.PasswordInput(),
-            'observacao': forms.Textarea(),
+            'password': forms.PasswordInput(),            
     }
 
     def clean(self):
