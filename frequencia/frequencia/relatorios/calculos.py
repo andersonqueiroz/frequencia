@@ -42,7 +42,7 @@ def get_relatorio_mes(user, mes, ano):
 	frequencias = get_registros_bolsista(user, data_inicio, data_fim)
 	ausencias = get_ausencias_bolsista(user, data_inicio, data_fim)
 
-	for dia in range(1, numero_dias):
+	for dia in range(1, numero_dias + 1):
 		dia = datetime.date(ano, mes, dia)
 		relatorio_dia = {'dia' : dia}
 
@@ -50,15 +50,13 @@ def get_relatorio_mes(user, mes, ano):
 		relatorio_dia['feriado'] = feriado[0] if feriado else False
 
 		ausencia = ausencias.filter(inicio__lte=dia, termino__gte=dia)
-		relatorio_dia['ausencia'] = ausencia.exists()
+		relatorio_dia['ausencia'] = ausencia if ausencia.exists() else False
 
 		registros_dia = frequencias.filter(created_at__date=dia)
 		relatorio_dia['registros'] = registros_dia
 		horas_trabalhadas = get_total_horas_trabalhadas(registros_dia)
 		relatorio_dia['horas_trabalhadas'] = horas_trabalhadas
-		horas_trabalhadas_periodo += horas_trabalhadas
-
-		relatorio_dia['observacoes'] = registros_dia.values('observacao')
+		horas_trabalhadas_periodo += horas_trabalhadas		
 
 		relatorio_dia['is_util'] = not relatorio_dia['feriado'] \
 								   and not relatorio_dia['ausencia'] \

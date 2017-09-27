@@ -52,7 +52,6 @@
 	<!--   Sharrre Library    -->
     <script src="{% static 'js/jquery.sharrre.js'%}"></script>
 
-	<!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
 	<script src="{% static 'js/demo.js'%}"></script>
 
 	<script type="text/javascript">
@@ -68,11 +67,19 @@
         <script type="text/javascript">
             {% for message in messages %}
             $.notify({
-                icon: 'pe-7s-bell',
+                icon: 'pe-7s-info',
                 message: '{{message|safe}}'
             },{
-                type: 'info',
-                timer: 4000
+                {% if message.tags == "error" %}
+                   type: "danger",
+                {% else %}
+                    type: '{{ message.tags }}',
+                {% endif %}
+
+                timer: 4000,
+                placement: {
+                    align: 'center'
+                }                
             });
             {% endfor %}
         </script>        

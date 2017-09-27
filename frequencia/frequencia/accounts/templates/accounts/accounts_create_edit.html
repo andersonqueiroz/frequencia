@@ -17,11 +17,13 @@
                     <form method="post">
                          {% csrf_token %} 
                          <div class="col-md-6 col-md-offset-6">
-			                <div class="togglebutton pull-right">
-								<label class="checkbox checked">
-		                            <span class="icons"><span class="first-icon fa fa-square-o"></span><span class="second-icon fa fa-check-square-o"></span>{% render_field form.is_active type="togglebutton" %}</span>{{form.is_active.label}}
+			                <div class="pull-right">
+								<label class="checkbox">
+		                            {% render_field form.is_active data-toggle="checkbox" %}
+		                            <span class="icons"><span class="first-icon fa fa-square-o"></span><span class="second-icon fa fa-check-square-o"></span></span>{{form.is_active.label}}
 		                        </label>
 							</div>
+							
 						</div>
 
                          {% if form.non_field_errors %}
@@ -101,9 +103,10 @@
 	        												<p>Listagem de bolsistas ativos.</p>
 	        											</div>
 	        											<div class="col-md-6 col-md-offset-6">
-											                <div class="togglebutton pull-right">
-																<label class="checkbox checked">
-										                            <span class="icons"><span class="first-icon fa fa-square-o"></span><span class="second-icon fa fa-check-square-o"></span>{% render_field field type="togglebutton" %}</span>{{field.label}}
+											                <div class="pull-right">
+																<label class="checkbox">
+																	{% render_field field data-toggle="checkbox" %}
+										                            <span class="icons"><span class="first-icon fa fa-square-o"></span><span class="second-icon fa fa-check-square-o"></span></span>{{field.label}}
 										                        </label>
 															</div>
 														</div>
