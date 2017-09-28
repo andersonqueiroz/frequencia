@@ -6,11 +6,12 @@ from workalendar.core import ChristianMixin
 from .models import FeriadoCalendarioAcademico
 
 class FeriadosRioGrandeDoNorte(Brazil):
-	
+
 	include_servidor_publico = True
+	include_corpus_christi = True
 	include_christmas = False
 	include_sao_joao = True
-	
+
 	FIXED_HOLIDAYS = (
 		(1, 1, "Confraternização universal"),
 		(1, 6, "Santos Reis"),
@@ -50,7 +51,7 @@ class FeriadosRioGrandeDoNorte(Brazil):
 		for holiday in db_holidays:
 			holidays.append(holiday)
 
-		return sorted(holidays, key=lambda x: x[0])		
+		return sorted(holidays, key=lambda x: x[0])
 
 	def is_working_day(self, day, extra_working_days=None, extra_holidays=None):
 		not_holiday = super(FeriadosRioGrandeDoNorte, self).is_working_day(day, extra_working_days, extra_holidays)

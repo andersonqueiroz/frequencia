@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="content">    
+            <div class="content">
                 <div class="col-md-9">
                     <h3>Máquinas</h3>
                     <p>Listagem de máquinas cadastrados</p>
@@ -18,9 +18,9 @@
                 {% if object_list %}
                 <table class="table">
                     <thead>
-                        <tr>                          
-                            <th>Nome</th>                          
-                            <th>Descrição</th>                          
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
                             <th>IP</th>
                             <th></th>
                         </tr>
@@ -33,7 +33,7 @@
 
                                 <td>{{ maquina.ip }}<a href="{% url 'registro:maquina_remove' maquina.pk %}"><i class="fa fa-trash text-danger"></i></a>
                                 </td>
-                                <td><a href="{% url "registro:maquina_edit" maquina.pk %}"><i class="fa fa-pencil"></i></a></td>
+                                <td><a href="{% url "registro:maquina_edit" maquina.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
                             </tr>
                         {% endfor %}
                     </tbody>

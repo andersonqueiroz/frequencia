@@ -11,4 +11,5 @@ urlpatterns = [
 
 	#Registro
 	url(r'^$', views.registro, name='registro'),
+	url(r'^registros_dia/$', views.registros_dia, {'Bolsista': None}, name='registros_dia'),
 ]

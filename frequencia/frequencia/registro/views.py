@@ -2,12 +2,14 @@ from rules.contrib.views import PermissionRequiredMixin, permission_required, ob
 
 from django.contrib import messages
 from django.urls import reverse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView
 from django.views.generic.edit import UpdateView, CreateView
 from django.views.generic.detail import DetailView
 from django.contrib.messages.views import SuccessMessageMixin
+
+from frequencia.vinculos.models import Vinculo
 
 from .forms import FrequenciaForm, EditMaquinaForm
 from .models import Frequencia, Maquina
@@ -64,25 +66,36 @@ def registro(request):
 	maquina = Maquina.objects.filter(ip=request.META.get('REMOTE_ADDR')).first()
 
 	if not maquina:
-		raise PermissionDenied
+		return HttpResponseRedirect(reverse('accounts:login'))
 
 	form = FrequenciaForm(request.POST or None)
 
-	context = {
-		'form': form,
-		'landing_page': True,
-		'now':now,
-	}
-
-	if form.is_valid():	
+	if form.is_valid():
 		bolsista = form.cleaned_data['bolsista']
 		tipo = 0 if not bolsista.registros_dia() else not bolsista.registros_dia().last().tipo
 		frequencia = Frequencia(bolsista=bolsista, maquina=maquina, tipo=tipo, observacao=form.cleaned_data['observacao'])
 		frequencia.save()
-		context['bolsista'] = bolsista
-		return render(request, 'registro/registros_dia.html', context)
-			
+		
+		request.session['bolsista_pk'] = bolsista.pk
+		return redirect(reverse('registro:registros_dia'))
+
+	context = {
+		'form': form,
+		'now':now,
+	}
+
 	return render(request, 'registro/registro.html', context)
+
+def registros_dia(request, **kwargs):
+	pk = request.session.get('bolsista_pk','')
+	bolsista = Vinculo.objects.get(pk=pk) if pk else None
+
+	if not bolsista or not pk:
+		return redirect(reverse('registro:registro'))
+
+	request.session['bolsista_pk'] = None
+	context = {'bolsista':bolsista}
+	return render(request, 'registro/registros_dia.html', context)
 
 
 #Máquinas
