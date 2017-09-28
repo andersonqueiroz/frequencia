@@ -102,7 +102,7 @@
                     </a>
                     <div class="collapse" id="mapsExamples">
                         <ul class="nav">
-                            <li><a href="{% url 'relatorios:relatorio_mensal' %}">Relatório mensal</a></li>
+                            <li><a href="{% url 'relatorios:busca_relatorio' %}">Relatório mensal</a></li>
                         </ul>
                     </div>
                 </li>
@@ -133,7 +133,7 @@
 						<li>
 							<a href="{% url 'relatorios:relatorio_mensal' %}">
 								<i class="fa fa-line-chart"></i>
-								<p>Relatório</p>
+								<p>{% now "F" %}</p>
 							</a>
 						</li>						
 

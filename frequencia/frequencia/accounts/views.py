@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -10,6 +10,8 @@ from django.views.generic.edit import UpdateView, CreateView
 from django.urls import reverse
 from django.contrib.auth.models import Group
 from django.forms import formset_factory, inlineformset_factory
+
+
 
 from frequencia.vinculos.forms import AdicionarVinculoForm, EditarVinculoForm
 from frequencia.vinculos.models import Vinculo
@@ -75,34 +77,21 @@ def accounts_edit(request, pk):
 	}
 	return render(request, template_name, context)
 
-
-class Login(LoginView):
-	template_name = 'accounts/login.html'
-	
-	def get_context_data(self, **kwargs):
-		context = super(Login, self).get_context_data(**kwargs)
-		context['hide_nav'] = True
-		return context
-
-
 @login_required
 def edit_password(request):
 	template_name = 'accounts/edit_password.html'
 	context = {}
-	if request.method == 'POST':
-		form = PasswordChangeForm(data=request.POST, user=request.user)
-		if form.is_valid():
-			form.save()
-			messages.info(request, 'Senha alterada com sucesso!')
-			context['success'] = True
-	else:
-		form = PasswordChangeForm(user=request.user)
+	
+	form = PasswordChangeForm(data=request.POST or None, user=request.user)
+	if form.is_valid():
+		form.save()
+		messages.info(request, 'Senha alterada com sucesso!')
+		#Reautenticando usuário com nova senha		
+		update_session_auth_hash(request, form.user)
+	
 	context['form'] = form
 	return render(request, template_name, context)
 
 	
 
 accounts = AccountListView.as_view()
-# accounts_create = AccountCreateView.as_view()
-#accounts_edit = AccountUpdateView.as_view()
-login = Login.as_view()

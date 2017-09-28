@@ -6,13 +6,13 @@
 {% load widget_tweaks %}
 {% load timedelta_filter %}
 
-<!-- DIVIDER -->
-<div class="row">
+<div class="row">	
 	<div class="col-md-12">
 	        <div class="card">
-	            <div class="header">
-	                <h4 class="title">Relatório mensal - {{periodo|date:"F/Y"}}</h4>
-	                <p class="category">Espelho de frequência mensal gerado em {% now "d/m/Y H:i" %}</p>
+	            <div class="header">	            	
+	                <h4 class="title">Relatório mensal de frequência - {{periodo|date:"F/Y"}}</h4>
+	                <h5>{{ bolsista }}</h5>                               
+	                <p class="category">Gerado em {% now "d/m/Y H:i" %}</p>                               
 	            </div>
 	            <div class="content table-responsive">
 	                <table class="table table-hover table-striped">
@@ -79,8 +79,8 @@
 					</p>
 
 					<div class="progress">
-	                    <div class="progress-bar progress-bar-success" style="width: {{porcentagem_horas_trabalhadas}}%"></div>
-	                    <div class="progress-bar progress-bar-primary" style="width: {{porcentagem_horas_abonadas}}%"></div>                    
+	                    <div class="progress-bar progress-bar-success" style="width: {{ porcentagem_horas_trabalhadas }}%"></div>
+	                    <div class="progress-bar progress-bar-primary" style="width: {{ porcentagem_horas_abonadas }}%"></div>                    
 	                </div>                
 				</div>
 	        </div>

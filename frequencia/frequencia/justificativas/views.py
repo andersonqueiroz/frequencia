@@ -1,7 +1,7 @@
 from rules.contrib.views import PermissionRequiredMixin, permission_required, objectgetter
 
-from django.urls import reverse
 from django.db.models import Q
+from django.urls import reverse
 from django.contrib import messages
 from django.views.generic import ListView
 from django.http import HttpResponseRedirect

@@ -5,7 +5,7 @@ from django.conf import settings
 from frequencia.accounts import views
 
 urlpatterns = [
-	url(r'^entrar/$', views.login, name='login'),
+	url(r'^entrar/$', login, {'template_name':'accounts/login.html'}, name='login'),
 	url(r'^sair/$', logout, {'next_page': settings.LOGOUT_URL}, name='logout'),
 	
 	url(r'^usuarios/$', views.accounts, name='accounts'),

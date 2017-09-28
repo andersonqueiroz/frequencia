@@ -7,15 +7,25 @@ from frequencia.registro.models import Frequencia
 from frequencia.justificativas.models import JustificativaFalta
 from frequencia.calendario.calendar import FeriadosRioGrandeDoNorte
 
-def get_registros_bolsista(user, data_inicio, data_fim):
-	return Frequencia.objects.filter(bolsista__user=user, created_at__date__gte=data_inicio, created_at__date__lte=data_fim)
+def get_registros_bolsista(vinculo, data_inicio, data_fim):
+	return Frequencia.objects.filter(bolsista=vinculo, created_at__date__gte=data_inicio, created_at__date__lte=data_fim)
 
-def get_ausencias_bolsista(user, data_inicio, data_fim):
-	justificativas = JustificativaFalta.objects.filter(vinculo__user=user, status=2)
+def get_ausencias_bolsista(vinculo, data_inicio, data_fim):
+	justificativas = JustificativaFalta.objects.filter(vinculo=vinculo, status=2)
 	return justificativas.filter(Q(inicio__month=data_inicio.month,
 											 inicio__year=data_inicio.year)	|
 										   Q(termino__month=data_fim.month,
 										   	 termino__year=data_fim.year))
+
+def get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim):
+	horas_abonadas = timedelta()
+	for ausencia in ausencias:
+		total_dias_ausencia = calendario.count_working_days(ausencia.inicio, ausencia.termino)
+		total_dias_ausencia_periodo = calendario.count_working_days(ausencia.inicio if ausencia.inicio >= data_inicio else data_inicio,
+																ausencia.termino if ausencia.termino <= data_fim else data_fim)
+		horas_abonadas += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo
+
+	return horas_abonadas
 
 def get_total_horas_trabalhadas(registros):
 	horas_trabalhadas = timedelta()
@@ -27,7 +37,7 @@ def get_total_horas_trabalhadas(registros):
 		horas_trabalhadas += saida.created_at - entradas[i].created_at
 	return horas_trabalhadas
 
-def get_relatorio_mes(user, mes, ano):
+def get_relatorio_mes(vinculo, mes, ano):
 
 	registros = []
 	horas_trabalhadas_periodo = timedelta()
@@ -39,8 +49,8 @@ def get_relatorio_mes(user, mes, ano):
 	data_inicio = datetime.date(ano, mes, 1)
 	data_fim = datetime.date(ano, mes, numero_dias)
 
-	frequencias = get_registros_bolsista(user, data_inicio, data_fim)
-	ausencias = get_ausencias_bolsista(user, data_inicio, data_fim)
+	frequencias = get_registros_bolsista(vinculo, data_inicio, data_fim)
+	ausencias = get_ausencias_bolsista(vinculo, data_inicio, data_fim)
 
 	for dia in range(1, numero_dias + 1):
 		dia = datetime.date(ano, mes, dia)
@@ -65,12 +75,7 @@ def get_relatorio_mes(user, mes, ano):
 		registros.append(relatorio_dia)
 
 	#Calculando horas abonadas no mês
-	horas_abonadas_periodo = timedelta()
-	for ausencia in ausencias:
-		total_dias_ausencia = calendario.count_working_days(ausencia.inicio, ausencia.termino)
-		total_dias_ausencia_periodo = calendario.count_working_days(ausencia.inicio if ausencia.inicio >= data_inicio else data_inicio,
-																ausencia.termino if ausencia.termino <= data_fim else data_fim)
-		horas_abonadas_periodo += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo
+	horas_abonadas_periodo = get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim)
 
 	dias_uteis = calendario.count_working_days(data_inicio, data_fim)
 

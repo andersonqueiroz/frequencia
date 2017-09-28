@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+	{% load widget_tweaks %}
+
+	{% load rules %}
+	{% has_perm 'accounts.is_servidor' user as is_servidor %}
+	
+	<div class="row">
+		<div class="col-md-12">
+            <div class="card">
+            	<div class="header">
+            		<h4 class="title">Relatório de frequência mensal</h4>
+                	<p class="category">Preencha os dados para consultar o relatório</p>
+                </div>
+                <div class="content">
+                    <form action="#" method="post">
+	                     {% csrf_token %}
+
+                         {% if form.non_field_errors %}
+							<div class="alert alert-danger">
+								{% for error in form.non_field_errors %}
+									{{ error }}
+								{% endfor %}
+							</div>
+						{% endif %}
+
+						{% if is_servidor %}
+							<div class="form-group col-md-12">
+								<label class="control-label">{{form.bolsista.label}}</label>
+								{% render_field form.bolsista class="form-control" %}
+								{% if form.bolsista.errors %}
+	                                <label class="error">{{ form.data.errors.0 }}</label>
+	                            {% endif %}
+							</div>
+						{% endif %}
+
+						<div class="form-group col-md-6">
+							<label class="control-label">{{form.mes.label}}</label>
+							{% render_field form.mes class="form-control" %}
+						</div>
+
+						<div class="form-group col-md-6">
+							<label class="control-label">{{form.ano.label}}</label>
+							{% render_field form.ano class="form-control" %}
+						</div>						
+
+						<div class="row">
+						    <div class="text-center">
+							    <button class="btn btn-warning btn-fill" type="submit">Gerar relatório</button>
+							</div>		
+	                    </div>
+                    </form>
+                </div>
+            </div> 
+        </div>
+	</div>
+
+{% endblock %}
