@@ -45,6 +45,7 @@ def accounts_create(request):
 		user = form.save()
 		for vinculo_form in vinculos_form:			
 			vinculo_form.save(user)
+		messages.info(request, 'Usuário cadastrado com sucesso!')
 		return redirect('accounts:accounts')
 	
 	context = {
@@ -66,6 +67,7 @@ def accounts_edit(request, pk):
 	if form.is_valid() and vinculos_formset.is_valid():
 		form.save()
 		vinculos_formset.save()
+		messages.info(request, 'Usuário atualizado com sucesso!')
 		return redirect(reverse('accounts:accounts_edit', kwargs={'pk':pk}))
 	context = {
 		'form': form,
@@ -91,7 +93,7 @@ def edit_password(request):
 		form = PasswordChangeForm(data=request.POST, user=request.user)
 		if form.is_valid():
 			form.save()
-			messages.success(request, 'Senha alterada com sucesso!')
+			messages.info(request, 'Senha alterada com sucesso!')
 			context['success'] = True
 	else:
 		form = PasswordChangeForm(user=request.user)

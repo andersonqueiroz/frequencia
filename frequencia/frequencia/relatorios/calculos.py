@@ -30,7 +30,7 @@ def get_total_horas_trabalhadas(registros):
 def get_relatorio_mes(user, mes, ano):
 
 	registros = []
-	horas_trabalhadas_mes = timedelta()
+	horas_trabalhadas_periodo = timedelta()
 
 	calendario = FeriadosRioGrandeDoNorte()
 	feriados = calendario.holidays(ano)
@@ -42,7 +42,7 @@ def get_relatorio_mes(user, mes, ano):
 	frequencias = get_registros_bolsista(user, data_inicio, data_fim)
 	ausencias = get_ausencias_bolsista(user, data_inicio, data_fim)
 
-	for dia in range(1, numero_dias):
+	for dia in range(1, numero_dias + 1):
 		dia = datetime.date(ano, mes, dia)
 		relatorio_dia = {'dia' : dia}
 
@@ -50,13 +50,17 @@ def get_relatorio_mes(user, mes, ano):
 		relatorio_dia['feriado'] = feriado[0] if feriado else False
 
 		ausencia = ausencias.filter(inicio__lte=dia, termino__gte=dia)
-		relatorio_dia['ausencia'] = ausencia.exists()
+		relatorio_dia['ausencia'] = ausencia if ausencia.exists() else False
 
 		registros_dia = frequencias.filter(created_at__date=dia)
 		relatorio_dia['registros'] = registros_dia
 		horas_trabalhadas = get_total_horas_trabalhadas(registros_dia)
 		relatorio_dia['horas_trabalhadas'] = horas_trabalhadas
-		horas_trabalhadas_mes += horas_trabalhadas
+		horas_trabalhadas_periodo += horas_trabalhadas		
+
+		relatorio_dia['is_util'] = not relatorio_dia['feriado'] \
+								   and not relatorio_dia['ausencia'] \
+								   and super(FeriadosRioGrandeDoNorte, calendario).is_working_day(dia)
 
 		registros.append(relatorio_dia)
 
@@ -68,10 +72,11 @@ def get_relatorio_mes(user, mes, ano):
 																ausencia.termino if ausencia.termino <= data_fim else data_fim)
 		horas_abonadas_periodo += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo
 
-	relatorio = {'registros': registros,
-				 'dias_uteis': calendario.count_working_days(data_inicio, data_fim),
-				 'horas_trabalhadas_mes': horas_trabalhadas_mes,
-				 'horas_abonadas_mes': horas_abonadas_periodo,
-				}
+	dias_uteis = calendario.count_working_days(data_inicio, data_fim)
 
-	return relatorio
+	return  {'registros': registros,
+			 'dias_uteis': dias_uteis,
+			 'total_horas_trabalhar': timedelta(hours=4) * dias_uteis,
+			 'horas_trabalhadas_periodo': horas_trabalhadas_periodo,
+			 'horas_abonadas_periodo': horas_abonadas_periodo,
+		    }

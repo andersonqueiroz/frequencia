@@ -25,7 +25,7 @@
                             <p>Veja os setores que compõem esta unidade.</p>
                         </div>
                         <div class="col-md-3">
-                        <a class="btn btn-info btn-fill pull-right " href="{% url 'vinculos:setor_create' %}">Novo setor</a>
+                        <a class="btn btn-warning btn-fill pull-right " href="{% url 'vinculos:setor_create' %}">Novo setor</a>
                         </div>
                         <legend></legend>
                         <table class="table">
@@ -39,7 +39,7 @@
                                 {% for setor in object_list %}
                                     <tr>
                                         <td>{{ setor }}</td>
-                                        <td><a href="{% url 'vinculos:setor_edit' setor.pk %}"><i class="fa fa-pencil"></i></a></td>
+                                        <td><a href="{% url 'vinculos:setor_edit' setor.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -51,7 +51,7 @@
                             <p>Veja as coordenadorias que compõem esta unidade.</p>
                         </div>
                         <div class="col-md-3">
-                            <a class="btn btn-info btn-fill pull-right " href="{% url 'vinculos:coordenadoria_create' %}">Nova coordenadoria</a>
+                            <a class="btn btn-warning btn-fill pull-right " href="{% url 'vinculos:coordenadoria_create' %}">Nova coordenadoria</a>
                         </div>
                         <legend></legend>
                         <table class="table">
@@ -65,7 +65,7 @@
                                 {% for coordenadoria in coordenadorias %}
                                     <tr>
                                         <td>{{ coordenadoria }}</td>
-                                        <td><a href="{% url 'vinculos:coordenadoria_edit' coordenadoria.pk %}"><i class="fa fa-pencil"></i></a></td>
+                                        <td><a href="{% url 'vinculos:coordenadoria_edit' coordenadoria.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

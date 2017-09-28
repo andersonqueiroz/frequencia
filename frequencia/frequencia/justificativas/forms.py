@@ -33,6 +33,8 @@ class CreateJustificativaForm(forms.ModelForm):
 		if data_inicio and data_termino and data_inicio > data_termino:
 			raise forms.ValidationError("Data de termino deve ser posterior à data de inicio")
 
+		return cleaned_data
+
 	def save(self, user, commit=True):
 		justificativa = super(CreateJustificativaForm, self).save(commit=False)
 		vinculos = user.vinculos.filter(ativo=True)
