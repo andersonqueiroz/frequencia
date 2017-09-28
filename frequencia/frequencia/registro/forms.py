@@ -3,7 +3,14 @@ from django.core.validators import MaxLengthValidator
 
 from frequencia.accounts.models import User
 from frequencia.vinculos.models import Vinculo
+from .models import Maquina
 
+class EditMaquinaForm(forms.ModelForm):
+    class Meta:
+        model = Maquina
+        fields = ['nome', 'descricao', 'ip']
+
+        
 class FrequenciaForm(forms.Form):
 
     cpf = forms.CharField(label='CPF', max_length=15)
