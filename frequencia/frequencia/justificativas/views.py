@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.contrib import messages
 from django.views.generic import ListView
 from django.http import HttpResponseRedirect
-from django.views.generic.edit import UpdateView
 from django.views.generic.detail import DetailView
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
