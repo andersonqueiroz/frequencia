@@ -52,6 +52,9 @@ def get_relatorio_mes(vinculo, mes, ano):
 	frequencias = get_registros_bolsista(vinculo, data_inicio, data_fim)
 	ausencias = get_ausencias_bolsista(vinculo, data_inicio, data_fim)
 
+	if not frequencias and not ausencias:
+		return None
+
 	for dia in range(1, numero_dias + 1):
 		dia = datetime.date(ano, mes, dia)
 		relatorio_dia = {'dia' : dia}

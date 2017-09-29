@@ -86,33 +86,37 @@ class RelatorioMensalTemplateView(PermissionRequiredMixin, TemplateView):
 			messages.error(self.request, 'Data informada é inválida!')
 			return redirect(reverse('relatorios:busca_relatorio'))
 
+		self.relatorio = get_relatorio_mes(self.bolsista, self.mes, self.ano)
+
+		if not self.relatorio:
+			messages.warning(self.request, 'Não há registros ou ausências no período informado.')
+			return redirect(reverse('relatorios:busca_relatorio'))
+
 		return super(RelatorioMensalTemplateView, self).dispatch(*args, **kwargs)
 
-	def get_object(self):		
-		print(self.bolsista)
+	def get_object(self):	
 		return self.bolsista
 
 	def get_context_data(self, **kwargs):
-		context = super(RelatorioMensalTemplateView, self).get_context_data(**kwargs)
+		context = super(RelatorioMensalTemplateView, self).get_context_data(**kwargs)					
 
-		relatorio = get_relatorio_mes(self.bolsista, self.mes, self.ano)
 		context['periodo'] = date(day=1, month=self.mes, year=self.ano)
 		context['bolsista'] = self.bolsista
-		context['lista_dias'] = relatorio['registros']
-		context['dias_uteis'] = relatorio['dias_uteis']		
-		context['total_horas_trabalhar'] =  relatorio['total_horas_trabalhar']
-		context['horas_trabalhadas_periodo'] = relatorio['horas_trabalhadas_periodo']	
-		context['horas_abonadas_periodo'] = relatorio['horas_abonadas_periodo']
+		context['lista_dias'] = self.relatorio['registros']
+		context['dias_uteis'] = self.relatorio['dias_uteis']		
+		context['total_horas_trabalhar'] =  self.relatorio['total_horas_trabalhar']
+		context['horas_trabalhadas_periodo'] = self.relatorio['horas_trabalhadas_periodo']	
+		context['horas_abonadas_periodo'] = self.relatorio['horas_abonadas_periodo']
 		
-		context['saldo_atual_mes'] = relatorio['total_horas_trabalhar'] \
-									 - relatorio['horas_trabalhadas_periodo'] \
-									 - relatorio['horas_abonadas_periodo']	
+		context['saldo_atual_mes'] = self.relatorio['total_horas_trabalhar'] \
+									 - self.relatorio['horas_trabalhadas_periodo'] \
+									 - self.relatorio['horas_abonadas_periodo']	
 
 		if context['saldo_atual_mes'].days < 0:
 			 context['credito_horas'] = context['saldo_atual_mes'] * -1
 
-		porcentagem_horas_trabalhadas = int(relatorio['horas_trabalhadas_periodo'] * 100 / relatorio['total_horas_trabalhar'])
-		porcentagem_horas_abonadas = int(relatorio['horas_abonadas_periodo'] * 100 / relatorio['total_horas_trabalhar'])
+		porcentagem_horas_trabalhadas = int(self.relatorio['horas_trabalhadas_periodo'] * 100 / self.relatorio['total_horas_trabalhar'])
+		porcentagem_horas_abonadas = int(self.relatorio['horas_abonadas_periodo'] * 100 / self.relatorio['total_horas_trabalhar'])
 
 		context['porcentagem_horas_trabalhadas'] = porcentagem_horas_trabalhadas
 

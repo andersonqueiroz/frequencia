@@ -12,4 +12,5 @@ urlpatterns = [
 	url(r'^usuario/novo/$', views.accounts_create, name='accounts_create'),
 	url(r'^usuario/editar/(?P<pk>\d+)/$', views.accounts_edit, name='accounts_edit'),
 	url(r'^usuario/editar_senha/$', views.edit_password, name='edit_password'),
+	url(r'^usuario/redefinir_senha/(?P<pk>[0-9]+)/$', views.reset_password, name='reset_password'),
 ]

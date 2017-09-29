@@ -90,18 +90,14 @@
 			                </ul>
 			                {{vinculos_formset.management_form}}
 			                <div id="tab-content" class="tab-content">
-									{% for form in vinculos_formset %}
-				                      	<div id="{{form.prefix}}" class="tab-pane fade {% if form.prefix == 'vinculos-0' %}in active{% endif %}">
-
-											<div id="collapseOne" class="tab-pane">
+								{% for form in vinculos_formset %}
+			                      	<div id="{{form.prefix}}" class="tab-pane fade {% if form.prefix == 'vinculos-0' %}in active{% endif %}">
+										<div id="collapseOne" class="tab-pane">
 						                    <div class="panel-body">
 											{% for field in form %}
+												<div>
 												{% if field.name == "ativo" %}
-													<div class="row vertical-align">
-														<div class="col-md-6">
-									                        <h3>Bolsistas</h3>
-	        												<p>Listagem de bolsistas ativos.</p>
-	        											</div>
+													<div class="row vertical-align">														
 	        											<div class="col-md-6 col-md-offset-6">
 											                <div class="pull-right">
 																<label class="checkbox">
@@ -128,18 +124,22 @@
 														</div>
 													</div>
 												{% endif %}
+												</div>
 										    {% endfor %}
-						                        </div>
-					                    	</div>
-				                      	</div>
-									{% endfor %}
-			                    </div>
+						                    </div>
+				                    	</div>
+			                      	</div>
+								{% endfor %}
+		                    </div>
 
 			            </div>
 
                         <div class="row">   						
                             <div class="footer text-center">
     					    	<a class="btn btn-warning btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
+    					    	{% if object %}
+    					    	<a class="btn btn-danger btn-fill" href="{% url 'accounts:reset_password' object.pk %}" type="button">Redefinir senha</a>
+    					    	{% endif %}
     						    <button class="btn btn-warning btn-fill" type="submit">Salvar</button>
     						</div>
                         </div>

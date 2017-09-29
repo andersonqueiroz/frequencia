@@ -10,14 +10,14 @@
             </div>
             <div class="content">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-12">
                         <div class="table-responsive">
                             <table class="table">
                                 <tbody>
                                     <tr>
                                         <td>
                                             <div class="flag">
-                                                <img src="../assets/img/flags/US.png"
+                                                <img src="../assets/img/flags/US.png">
                                             </div>
                                         </td>
                                         <td>USA</td>
@@ -31,7 +31,7 @@
                                     <tr>
                                         <td>
                                             <div class="flag">
-                                                <img src="../assets/img/flags/DE.png"
+                                                <img src="../assets/img/flags/DE.png">
                                             </div>
                                         </td>
                                         <td>Germany</td>
@@ -45,7 +45,7 @@
                                     <tr>
                                         <td>
                                             <div class="flag">
-                                                <img src="../assets/img/flags/AU.png"
+                                                <img src="../assets/img/flags/AU.png">
                                             </div>
                                         </td>
                                         <td>Australia</td>
@@ -59,7 +59,7 @@
                                     <tr>
                                         <td>
                                             <div class="flag">
-                                                <img src="../assets/img/flags/GB.png"
+                                                <img src="../assets/img/flags/GB.png">
                                             </div>
                                         </td>
                                         <td>United Kingdom</td>
@@ -73,7 +73,7 @@
                                     <tr>
                                         <td>
                                             <div class="flag">
-                                                <img src="../assets/img/flags/RO.png"
+                                                <img src="../assets/img/flags/RO.png">
                                             </div>
                                         </td>
                                         <td>Romania</td>
@@ -87,7 +87,7 @@
                                     <tr>
                                         <td>
                                             <div class="flag">
-                                                <img src="../assets/img/flags/BR.png"
+                                                <img src="../assets/img/flags/BR.png">
                                             </div>
                                         </td>
                                         <td>Brasil</td>
@@ -101,10 +101,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-md-offset-1">
-                        <div id="worldMap" style="height: 300px;"></div>
-                    </div>
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -308,4 +305,13 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block script %}
+    {{block.super}}
+    <script type="text/javascript">
+        $(document).ready(function(){
+             demo.initDashboardPageCharts();
+        });
+    </script>
 {% endblock %}

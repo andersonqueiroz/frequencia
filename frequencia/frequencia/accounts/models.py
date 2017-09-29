@@ -1,11 +1,16 @@
 import re
 
 from django.db import models
+from django.db.models import Q
 from django.core import validators
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.conf import settings
 
 from frequencia.core.basemodel import basemodel
+
+class CustomUserManager(UserManager):
+	def buscar(self, query):
+		return self.filter(Q(name__contains=query) | Q(username__contains=query))
 
 class User(basemodel, AbstractBaseUser, PermissionsMixin):
 
@@ -20,7 +25,7 @@ class User(basemodel, AbstractBaseUser, PermissionsMixin):
 	is_active = models.BooleanField('Está ativo', blank=True, default=True)
 	is_staff = models.BooleanField('Acesso ao admin do projeto', blank=True, default=False)
 
-	objects = UserManager()
+	objects = CustomUserManager()
 
 	USERNAME_FIELD = 'username'
 	REQUIRED_FIELDS = ['email']
