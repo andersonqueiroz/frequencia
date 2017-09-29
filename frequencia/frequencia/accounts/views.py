@@ -1,17 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib import messages
-from django.views.generic.edit import UpdateView, CreateView
 from django.urls import reverse
+from django.contrib import messages
+from django.views.generic import ListView
 from django.contrib.auth.models import Group
+from django.http import HttpResponseRedirect
+from django.views.generic.base import RedirectView
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import UpdateView, CreateView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.forms import formset_factory, inlineformset_factory
-
-
+from django.shortcuts import render, redirect, get_object_or_404
 
 from frequencia.vinculos.forms import AdicionarVinculoForm, EditarVinculoForm
 from frequencia.vinculos.models import Vinculo
@@ -24,9 +23,14 @@ class AccountListView(ListView):
 	model = User
 	template_name = 'accounts/accounts.html'
 
+	def get_queryset(self):
+		busca = self.request.GET.get('busca', '')
+		return User.objects.buscar(busca) if busca else User.objects.filter(is_active=True)
+
 	def get_context_data(self, **kwargs):
 		context = super(AccountListView, self).get_context_data(**kwargs)
 		queryset = context['object_list']
+		context['busca'] = True if self.request.GET.get('busca') else False
 		context['bolsistas'] = queryset.filter(vinculos__ativo=True, vinculos__group__name='Bolsista')
 		context['chefes'] = queryset.filter(vinculos__ativo=True, vinculos__group__name='Chefe de setor')
 		context['coordenadores'] = queryset.filter(vinculos__ativo=True, vinculos__group__name='Coordenador')
@@ -74,6 +78,7 @@ def accounts_edit(request, pk):
 	context = {
 		'form': form,
 		'vinculos_formset': vinculos_formset,
+		'object' : instance,
 	}
 	return render(request, template_name, context)
 
@@ -92,6 +97,18 @@ def edit_password(request):
 	context['form'] = form
 	return render(request, template_name, context)
 
-	
+class ResetPasswordRedirectView(RedirectView):
+
+	permanent = False
+	query_string = True
+
+	def get_redirect_url(self, *args, **kwargs):
+		user = get_object_or_404(User, pk=kwargs['pk'])
+		user.set_password('12345')
+		user.save()
+
+		messages.info(self.request, 'Senha do usuário redefinida para <b>12345</b>')
+		return reverse('accounts:accounts_edit', kwargs={'pk': user.pk})
 
 accounts = AccountListView.as_view()
+reset_password = ResetPasswordRedirectView.as_view()
