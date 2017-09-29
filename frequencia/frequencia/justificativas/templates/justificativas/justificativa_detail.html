@@ -1,124 +1,165 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block content %}
 
-	{% load widget_tweaks %}
-	{% load rules %}
+    {% load widget_tweaks %}
+    {% load rules %}
 
-	{% has_perm 'justificativa.can_analyse' user object as can_analyse %}
+    {% has_perm 'justificativa.can_analyse' user object as can_analyse %}
 
-	<div class="row">
-	    <div class="col-md-12">
-	        <div class="card">
-	            <div class="header">
-	                <h4 class="title">Justificativa de falta</h4>
-	                <p class="category">Dados gerais</p>
-	            </div>
-	            <div class="content">
-		            <div class="col-xs-12 table-responsive">
-				        <table class="table">
-				            <tbody>
-				                <tr>
-				                    <td style="border:0;">Bolsista: {{ object.vinculo.user }}</td>
-				                    <td style="border:0;">Setor: {{ object.vinculo.setor }}</td>
-				                </tr><tr>
-				                    <td style="border:0;">Período: {{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}}</td>
-				                    <td style="border:0;">Status: {{ object.get_status_display }}</td>
-				                </tr>
-				                <tr>
-				                    <td style="border:0;" colspan="4">Descrição: {{object.descricao}}</td>
-				                </tr>
-				            </tbody>
-				        </table>
-				    </div>
-	 			</div>
-	 			<legend></legend>
-	 			
-	    {% if not object.usuario_analise %}
-		    {% if can_analyse %}
-		    
-		                <div class="header">Análise da justificativa de falta</div>
-		                <div class="content">
-		                    <form action="#" method="post">
-		                         {% csrf_token %}
-		                         {% if form.non_field_errors %}
-									<div class="alert alert-danger">
-										{% for error in form.non_field_errors %}
-											{{ error }}
-										{% endfor %}
-									</div>
-								{% endif %}
-		                        <div class="form-group col-md-8">
-		                            <label>{{ form.status.label }}</label>
-		                            {% render_field form.status class="form-control" %}
-		                            {{ form.status.errors }}
-		                        </div>
-		                        <div class="form-group col-md-4">
-		                            <label>{{ form.horas_abonadas.label }}</label>
-		                            {% render_field form.horas_abonadas class="form-control" value=object.horas_sugeridas %}
-		                            {{ form.horas_abonadas.errors }}
-		                        </div>
-		                        <div class="form-group col-md-12">
-		                            <label>{{ form.parecer.label }}</label>
-		                            {% render_field form.parecer class="form-control" %}
-		                            {{ form.parecer.errors }}
-		                        </div>
-		                        
-		                        <div class="text-center">
-			                        <a class="btn btn-info btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
-			    					<button class="btn btn-info btn-fill" type="submit">Salvar</button>
-		                        </div>
-		                        
-		                    </form>
-		                </div>
-
-		     {% else %}
-			     <div class="content">
-			     	<div class="alert alert-warning">
-	                        <span>Aguardando análise da chefia</span>
-	                </div>
-	            </div>
-		    {% endif %}
-		{% else %}
-			<div class="header">
-                <p class="category">Parecer da chefia</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Justificativa de falta</h4>
+                <p class="category">Dados gerais</p>
             </div>
             <div class="content">
-	            <div class="col-xs-12 table-responsive">
-			        <table class="table">
-			            <tbody>
-			                <tr>
-			                    <td style="border:0;">Avaliado por: {{ object.usuario_analise.user.name }}</td>
-			                    <td style="border:0;">Horas abonadas: {{ object.horas_abonadas }}</td>
-			                </tr>
-			                {% if object.parecer %}
-			                <tr>
-			                    <td style="border:0;" colspan="4">Parecer da chefia: {{object.parecer}}</td>
-			                </tr>
-			                {% endif %}
-			            </tbody>
-			        </table>
-			    </div>
-			    <div class="text-center">
-			    	<a class="btn btn-info btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
-				</div>
-	 		</div>
-			
-			
-		{% endif %}
-	</div>
-	</div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Período</label>
+                            <p>{{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} (2 dias)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Bolsista</label>
+                            <input type="text" class="form-control" value="{{object.vinculo.user}}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Setor</label>
+                            <input type="text" class="form-control" value="{{object.vinculo.setor}}" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Status</label>
+                            <input type="text" class="form-control" value="{{object.get_status_display}}" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 text-justify">
+                        <div class="form-group">
+                            <label>Descrição</label>
+                            <p>{{object.descricao}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-md-offset-2">
+                        <div class="form-group">
+                            <label>Anexo</label>
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-paperclip fa-stack-1x"></i>
+                                <i class="fa fa-ban fa-stack-2x text-danger"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+               
+                <legend></legend>
+
+                {% if not object.usuario_analise %}
+                    {% if can_analyse %}
+                        <div class="header">Análise da justificativa de falta</div>
+                        <div class="content">
+                            <form action="#" method="post">
+                                 {% csrf_token %}
+                                 {% if form.non_field_errors %}
+                                    <div class="alert alert-danger">
+                                        {% for error in form.non_field_errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>{{ form.status.label }}</label>
+                                        {% render_field form.status class="form-control" %}
+                                        {{ form.status.errors }}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>{{ form.horas_abonadas.label }}</label>
+                                        {% render_field form.horas_abonadas class="form-control" value=object.horas_sugeridas %}
+                                        {{ form.horas_abonadas.errors }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <label>{{ form.parecer.label }}</label>
+                                        {% render_field form.parecer class="form-control" %}
+                                        {{ form.parecer.errors }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center">
+                                        <a class="btn btn-info btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
+                                        <button class="btn btn-info btn-fill" type="submit">Salvar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="content">
+                            <div class="alert alert-warning">
+                                    <span>Aguardando análise da chefia</span>
+                            </div>
+                        </div>
+                    {%endif%}
+                {% else %}
+                    <div class="header">Parecer da chefia</div>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Avaliado por</label>
+                                    <input type="text" class="form-control" value="{{ object.usuario_analise.user.name }}" readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Horas abonadas</label>
+                                    <input type="text" class="form-control" value="{{ object.horas_abonadas }}" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+                        {% if object.parecer %}
+                            <div class="row">
+                                <div class="col-md-8 text-justify">
+                                    <div class="form-group">
+                                        <label>Parecer da chefia</label>
+                                        <p>{{object.parecer}}</p>
+                                    </div>
+                                </div>
+                            </div>  
+                        {% endif %}  
+                        <div class="row">
+                            <div class="text-center">
+                                <a class="btn btn-info btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
+                            </div>
+                        </div>
+                    </div>
+                {%endif%}
+            </div>    
+        </div>
+    </div>    
 </div>
 
 {% endblock %}
 
 {% block script %}
-	{{ block.super }}
-	<script src="{% static 'js/jquery.mask.js' %}"></script>
-	<script type="text/javascript">
-	  $(document).ready(function(){
-			$('#id_horas_abonadas').mask('00:00:00', {reverse: true});
-		});
-	</script>
+    {{ block.super }}
+    <script src="{% static 'js/jquery.mask.js' %}"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+            $('#id_horas_abonadas').mask('00:00:00', {reverse: true});
+        });
+    </script>
 {% endblock %}
