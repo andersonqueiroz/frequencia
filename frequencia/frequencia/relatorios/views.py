@@ -107,6 +107,7 @@ class RelatorioMensalTemplateView(PermissionRequiredMixin, TemplateView):
 		context['total_horas_trabalhar'] =  self.relatorio['total_horas_trabalhar']
 		context['horas_trabalhadas_periodo'] = self.relatorio['horas_trabalhadas_periodo']	
 		context['horas_abonadas_periodo'] = self.relatorio['horas_abonadas_periodo']
+		context['saldo_mes_anterior'] = self.relatorio['saldo_mes_anterior']
 		
 		context['saldo_atual_mes'] = self.relatorio['total_horas_trabalhar'] \
 									 - self.relatorio['horas_trabalhadas_periodo'] \

@@ -1,13 +1,14 @@
 from rules.contrib.views import PermissionRequiredMixin, permission_required, objectgetter
 
-from django.contrib import messages
 from django.urls import reverse
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.views.generic import ListView
-from django.views.generic.edit import UpdateView, CreateView
+from django.db.models import ProtectedError
+from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView, CreateView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import render, get_object_or_404, redirect
 
 from frequencia.vinculos.models import Vinculo
 
@@ -54,8 +55,12 @@ class MaquinaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView
 def maquina_remove(request, pk):
 
 	maquina = get_object_or_404(Maquina, pk=pk)
-	maquina.delete()
-	messages.success(request, 'Máquina excluída com sucesso!')
+
+	try:
+		maquina.delete()
+		messages.success(request, 'Máquina excluída com sucesso!')
+	except ProtectedError:
+		messages.error(request, 'Essa máquina não pode ser removida! Existem registros associados.')
 	return redirect('registro:maquinas')
 
 

@@ -4,8 +4,8 @@
 {% block content %}
 
     {% load widget_tweaks %}
-    {% load rules %}
 
+    {% load rules %}
     {% has_perm 'justificativa.can_analyse' user object as can_analyse %}
 
 <div class="row">
@@ -20,7 +20,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Período</label>
-                            <p>{{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} (2 dias)</p>
+                            <p>{{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} ({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</p>
                         </div>
                     </div>
                 </div>
@@ -100,8 +100,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="text-center">
-                                        <a class="btn btn-info btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
-                                        <button class="btn btn-info btn-fill" type="submit">Salvar</button>
+                                        <a class="btn btn-warning btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
+                                        <button class="btn btn-warning btn-fill" type="submit">Salvar</button>
                                     </div>
                                 </div>
                             </form>
@@ -142,7 +142,7 @@
                         {% endif %}  
                         <div class="row">
                             <div class="text-center">
-                                <a class="btn btn-info btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
+                                <a class="btn btn-warning btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
                             </div>
                         </div>
                     </div>

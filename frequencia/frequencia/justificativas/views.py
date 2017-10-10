@@ -1,3 +1,4 @@
+from datetime import timedelta
 from rules.contrib.views import PermissionRequiredMixin, permission_required, objectgetter
 
 from django.db.models import Q
@@ -72,7 +73,8 @@ class JustificativaListView(LoginRequiredMixin, ListView):
 		user = self.request.user
 
 		busca = self.request.GET.get('busca', '')
-		justificativas = JustificativaFalta.objects.buscar(busca).order_by('vinculo__setor__pk') if busca else JustificativaFalta.objects.filter(status=0)
+		justificativas = JustificativaFalta.objects.buscar(busca) if busca else JustificativaFalta.objects.filter(status=0)
+		justificativas = justificativas.order_by('vinculo__setor__pk')
 
 		if user.is_superuser or user.has_perm('accounts.is_gestor'):
 			context['object_list'] = justificativas.all()
@@ -129,6 +131,11 @@ class JustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, Upda
 
 	def get_success_url(self):
 		return reverse('justificativas:justificativa_edit', kwargs={'pk' : self.object.pk})
+
+	def get_context_data(self, **kwargs):
+		context = super(JustificativaUpdateView, self).get_context_data(**kwargs)
+		context['numero_dias_falta'] = abs((self.object.inicio - self.object.termino).days) + 1
+		return context
 
 #Tipos de justificativa
 tipo_justificativa = TipoJustificativaListView.as_view()

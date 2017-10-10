@@ -76,6 +76,9 @@
 						{% else %}
 							Débito atual do mês: <strong>-{{ saldo_atual_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
 						{% endif %}
+						<legend></legend>
+						Débito do mês anterior: <strong>{{ saldo_mes_anterior|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
+
 					</p>
 
 					<div class="progress">

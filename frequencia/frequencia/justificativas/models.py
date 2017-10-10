@@ -5,6 +5,7 @@ from django.db.models import Q
 
 from frequencia.core.basemodel import basemodel
 from frequencia.vinculos.models import Vinculo
+from frequencia.calendario.calendar import FeriadosRioGrandeDoNorte
 
 class TipoJustificativaFalta(basemodel):
 
@@ -46,9 +47,11 @@ class JustificativaFalta(basemodel):
 
 	@property
 	def horas_sugeridas(self):
-		horas_sugeridas = abs((self.inicio - self.termino).days) + 1
-		horas_sugeridas *= self.vinculo.carga_horaria_diaria
+		calendario = FeriadosRioGrandeDoNorte()
+		numero_dias_uteis = calendario.count_working_days(self.inicio, self.termino)
+		horas_sugeridas = self.vinculo.carga_horaria_diaria * numero_dias_uteis
 		return timedelta(hours=horas_sugeridas)
+
 
 	def __str__(self):
 		return '{0} - {1}'.format(self.vinculo.user.name, self.descricao)

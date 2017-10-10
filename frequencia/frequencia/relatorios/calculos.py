@@ -30,12 +30,41 @@ def get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim):
 def get_total_horas_trabalhadas(registros):
 	horas_trabalhadas = timedelta()
 
-	entradas = registros.filter(tipo=0)
-	saidas = registros.filter(tipo=1)
+	dias = registros.extra({'data': "date(created_at)"}).values('data').distinct()
 
-	for i, saida in enumerate(saidas):
-		horas_trabalhadas += saida.created_at - entradas[i].created_at
+	for dia in dias:
+		entradas = registros.filter(tipo=0, created_at__date=dia['data'])
+		saidas = registros.filter(tipo=1, created_at__date=dia['data'])
+
+		for i, saida in enumerate(saidas):
+			horas_trabalhadas += saida.created_at - entradas[i].created_at	
+
 	return horas_trabalhadas
+
+"""
+Retorna o cálculo:
+Total de horas a trabalhar - horas trabalhadas - horas abonadas
+"""
+def get_balanco_mes(vinculo, mes, ano):
+	calendario = FeriadosRioGrandeDoNorte()
+	num_dias_mes = calendar.monthrange(ano, mes)[1]
+
+	data_inicio = datetime.date(ano, mes, 1) 
+	data_fim = datetime.date(ano, mes, num_dias_mes)
+
+	num_dias_uteis_mes = calendario.count_working_days(data_inicio, data_fim)
+	horas_trabalhar = num_dias_uteis_mes * vinculo.carga_horaria_diaria
+	horas_trabalhar = timedelta(hours=horas_trabalhar)
+
+	frequencias = get_registros_bolsista(vinculo, data_inicio, data_fim)
+	ausencias = get_ausencias_bolsista(vinculo, data_inicio, data_fim)
+
+	horas_trabalhadas = get_total_horas_trabalhadas(frequencias)
+	horas_abonadas_periodo = get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim)
+
+	saldo_mes = horas_trabalhar - horas_trabalhadas - horas_abonadas_periodo	
+	return saldo_mes
+	
 
 def get_relatorio_mes(vinculo, mes, ano):
 
@@ -60,6 +89,7 @@ def get_relatorio_mes(vinculo, mes, ano):
 		relatorio_dia = {'dia' : dia}
 
 		feriado = [feriado for feriado in feriados if feriado[0] == dia]
+	
 		relatorio_dia['feriado'] = feriado[0] if feriado else False
 
 		ausencia = ausencias.filter(inicio__lte=dia, termino__gte=dia)
@@ -82,9 +112,14 @@ def get_relatorio_mes(vinculo, mes, ano):
 
 	dias_uteis = calendario.count_working_days(data_inicio, data_fim)
 
+	#Verificando débitos do mês anterior
+	mes_ano_anterior = datetime.date(ano, mes, 1) - timedelta(days=1)
+	saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)
+
 	return  {'registros': registros,
 			 'dias_uteis': dias_uteis,
-			 'total_horas_trabalhar': timedelta(hours=4) * dias_uteis,
+			 'total_horas_trabalhar': timedelta(hours=vinculo.carga_horaria_diaria) * dias_uteis,
 			 'horas_trabalhadas_periodo': horas_trabalhadas_periodo,
 			 'horas_abonadas_periodo': horas_abonadas_periodo,
+			 'saldo_mes_anterior': saldo_mes_anterior,
 		    }

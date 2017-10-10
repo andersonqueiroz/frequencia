@@ -24,8 +24,8 @@ class Frequencia(basemodel):
 		(1, 'Saída')
 	)
 
-	bolsista = models.ForeignKey(Vinculo, verbose_name='Bolsista', related_name='registros')
-	maquina = models.ForeignKey(Maquina, verbose_name='Máquina', related_name='registros')
+	bolsista = models.ForeignKey(Vinculo, verbose_name='Bolsista', related_name='registros', on_delete=models.PROTECT)
+	maquina = models.ForeignKey(Maquina, verbose_name='Máquina', related_name='registros', on_delete=models.PROTECT)
 
 	observacao = models.TextField('Observação', blank=True)
 	tipo = models.IntegerField('Tipo', choices=TIPO_CHOICES, default=0)
