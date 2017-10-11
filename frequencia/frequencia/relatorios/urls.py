@@ -7,4 +7,5 @@ urlpatterns = [
 	url(r'^$', views.busca_relatorio, name='busca_relatorio'),
 	url(r'^mensal/$', views.relatorio_mensal, name='relatorio_mensal'),
 	url(r'^mensal/(?P<pk>\d+)/$', views.relatorio_mensal, name='relatorio_mensal'),
+	url(r'^geral/$', views.listagem_geral, name='listagem_geral'),
 ]

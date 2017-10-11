@@ -6,7 +6,6 @@ from .models import Coordenadoria, Setor
 
 @rules.predicate
 def is_vinculo_chefe(user, vinculo):
-	
 	coordenadorias_user = Coordenadoria.objects.filter(vinculos__user=user)
 	setores_user = Setor.objects.filter(Q(vinculos__user=user) | Q(coordenadoria__in=coordenadorias_user))
 

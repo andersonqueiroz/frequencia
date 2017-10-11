@@ -30,7 +30,7 @@
 						{% if is_servidor %}
 							<div class="form-group col-md-12">
 								<label class="control-label">{{form.bolsista.label}}</label>
-								{% render_field form.bolsista class="form-control select2" %}
+								{% render_field form.bolsista class="form-control select2" required="" %}
 								{% if form.bolsista.errors %}
 	                                <label class="error">{{ form.data.errors.0 }}</label>
 	                            {% endif %}

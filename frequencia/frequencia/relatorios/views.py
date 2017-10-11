@@ -1,8 +1,7 @@
-from datetime import date
+from datetime import date, timedelta
 
 from rules.contrib.views import PermissionRequiredMixin
 
-from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
@@ -11,9 +10,10 @@ from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 
-from frequencia.vinculos.models import Vinculo, Coordenadoria, Setor
+from frequencia.vinculos.models import Vinculo
+from frequencia.vinculos.utils import get_bolsistas
 
-from .calculos import get_relatorio_mes
+from .calculos import get_relatorio_mes, get_total_horas_trabalhadas
 from .forms import BuscaRelatorioForm
 
 class BuscaRelatorioMensalTemplateView(LoginRequiredMixin, FormView):
@@ -21,31 +21,10 @@ class BuscaRelatorioMensalTemplateView(LoginRequiredMixin, FormView):
 	template_name = 'relatorios/busca_relatorio.html'
 	form_class = BuscaRelatorioForm
 
-	def get_bolsistas(self):
-		bolsistas = Vinculo.objects.filter(group__name='Bolsista', ativo=True).order_by('setor')
-
-		user = self.request.user
-
-		if user.is_superuser or user.has_perm('accounts.is_gestor'):
-			return bolsistas.all()
-
-		elif user.has_perm('accounts.is_coordenador_chefe'):
-			vinculos = user.vinculos.filter(ativo=True)
-			vinculos = vinculos.filter(Q(group__name='Coordenador') | Q(group__name='Chefe de setor'))
-
-			coordenadorias = Coordenadoria.objects.filter(vinculos__in=vinculos)
-			setores = Setor.objects.filter(Q(coordenadoria__in=coordenadorias) | Q(vinculos__in=vinculos))
-
-			bolsistas = bolsistas.filter(setor__in=setores)
-		else:
-			bolsistas = None
-
-		return bolsistas
-
 	def get_form_kwargs(self):
 		kwargs = super(BuscaRelatorioMensalTemplateView, self).get_form_kwargs()
 		kwargs.update({
-		     'vinculos' : self.get_bolsistas()
+		     'vinculos' : get_bolsistas(self.request.user)
 		})
 		return kwargs
 
@@ -78,6 +57,9 @@ class RelatorioMensalTemplateView(PermissionRequiredMixin, TemplateView):
 				messages.error(self.request, 'Bolsista não informado!')
 				return redirect(reverse('relatorios:busca_relatorio'))
 
+		return super(RelatorioMensalTemplateView, self).dispatch(*args, **kwargs)
+
+	def get_relatorio(self):	
 		try:
 			self.mes = int(self.request.GET.get('mes', timezone.now().date().month))
 			self.ano = int(self.request.GET.get('ano', timezone.now().date().year))
@@ -86,19 +68,21 @@ class RelatorioMensalTemplateView(PermissionRequiredMixin, TemplateView):
 			messages.error(self.request, 'Data informada é inválida!')
 			return redirect(reverse('relatorios:busca_relatorio'))
 
-		self.relatorio = get_relatorio_mes(self.bolsista, self.mes, self.ano)
+		relatorio = get_relatorio_mes(self.bolsista, self.mes, self.ano)
 
-		if not self.relatorio:
+		if not relatorio:
 			messages.warning(self.request, 'Não há registros ou ausências no período informado.')
 			return redirect(reverse('relatorios:busca_relatorio'))
 
-		return super(RelatorioMensalTemplateView, self).dispatch(*args, **kwargs)
+		return relatorio
 
-	def get_object(self):	
+	def get_object(self):
 		return self.bolsista
 
 	def get_context_data(self, **kwargs):
-		context = super(RelatorioMensalTemplateView, self).get_context_data(**kwargs)					
+		context = super(RelatorioMensalTemplateView, self).get_context_data(**kwargs)	
+
+		self.relatorio = self.get_relatorio()		
 
 		context['periodo'] = date(day=1, month=self.mes, year=self.ano)
 		context['bolsista'] = self.bolsista
@@ -107,17 +91,28 @@ class RelatorioMensalTemplateView(PermissionRequiredMixin, TemplateView):
 		context['total_horas_trabalhar'] =  self.relatorio['total_horas_trabalhar']
 		context['horas_trabalhadas_periodo'] = self.relatorio['horas_trabalhadas_periodo']	
 		context['horas_abonadas_periodo'] = self.relatorio['horas_abonadas_periodo']
-		context['saldo_mes_anterior'] = self.relatorio['saldo_mes_anterior']
+
+		if self.relatorio['saldo_mes_anterior'].days > 0:
+			context['saldo_mes_anterior'] = self.relatorio['saldo_mes_anterior']
+		else:
+			context['saldo_mes_anterior'] = timedelta()
+
+		#### DEBUG ####
+		# context['saldo_mes_anterior'] = timedelta(hours=0)
+		# self.relatorio['horas_trabalhadas_periodo'] = timedelta(hours=12)
+		# context['horas_trabalhadas_periodo'] = timedelta(hours=12)
+
 		
 		context['saldo_atual_mes'] = self.relatorio['total_horas_trabalhar'] \
+									 + context['saldo_mes_anterior'] \
 									 - self.relatorio['horas_trabalhadas_periodo'] \
 									 - self.relatorio['horas_abonadas_periodo']	
 
 		if context['saldo_atual_mes'].days < 0:
 			 context['credito_horas'] = context['saldo_atual_mes'] * -1
 
-		porcentagem_horas_trabalhadas = int(self.relatorio['horas_trabalhadas_periodo'] * 100 / self.relatorio['total_horas_trabalhar'])
-		porcentagem_horas_abonadas = int(self.relatorio['horas_abonadas_periodo'] * 100 / self.relatorio['total_horas_trabalhar'])
+		porcentagem_horas_trabalhadas = int(self.relatorio['horas_trabalhadas_periodo'] * 100 / (self.relatorio['total_horas_trabalhar'] + context['saldo_mes_anterior']))
+		porcentagem_horas_abonadas = int(self.relatorio['horas_abonadas_periodo'] * 100 / (self.relatorio['total_horas_trabalhar'] + context['saldo_mes_anterior']))
 
 		context['porcentagem_horas_trabalhadas'] = porcentagem_horas_trabalhadas
 
@@ -128,5 +123,22 @@ class RelatorioMensalTemplateView(PermissionRequiredMixin, TemplateView):
 
 		return context
 
+class ListagemGeralTemplateView(TemplateView):
+
+	template_name = 'relatorios/listagem_geral.html'
+	permission_required = 'relatorio.can_view'
+
+	def get_context_data(self, **kwargs):
+		context = super(ListagemGeralTemplateView, self).get_context_data(**kwargs)
+		bolsistas = get_bolsistas(self.request.user)
+
+		if bolsistas:
+			for bolsista in bolsistas:
+				bolsista.horas_trabalhadas = get_total_horas_trabalhadas(bolsista.registros_dia())
+
+		context['bolsistas'] = bolsistas
+		return context
+
 relatorio_mensal = RelatorioMensalTemplateView.as_view()
 busca_relatorio = BuscaRelatorioMensalTemplateView.as_view()
+listagem_geral = ListagemGeralTemplateView.as_view()

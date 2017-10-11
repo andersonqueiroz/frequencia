@@ -61,12 +61,16 @@
 	            <legend></legend>
 	            <div class="footer">
 		            <p>
-			            Horas a trabalhar ({{dias_uteis}} dias úteis): <strong>{{ total_horas_trabalhar|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong><br>
+			            Horas a trabalhar ({{dias_uteis}} dias úteis): <strong>{{ total_horas_trabalhar|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
+			            {% if saldo_mes_anterior %}
+							<strong data-toggle="tooltip" title="Débito do mês anterior" class="text-danger">		
+								+ {{ saldo_mes_anterior|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}
+							</strong>
+						{% endif %}<br>
 
 						Horas trabalhadas no período: <strong><span class="text-success">{{ horas_trabalhadas_periodo|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</span></strong><br>
 
 						{% if horas_abonadas_periodo %}
-							<legend></legend>
 							Horas abonadas: <strong><span class="text-primary text-bold">{{ horas_abonadas_periodo|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</span></strong><br>
 						{% endif %}
 
@@ -76,15 +80,15 @@
 						{% else %}
 							Débito atual do mês: <strong>-{{ saldo_atual_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
 						{% endif %}
-						<legend></legend>
-						Débito do mês anterior: <strong>{{ saldo_mes_anterior|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
-
 					</p>
 
 					<div class="progress">
 	                    <div class="progress-bar progress-bar-success" style="width: {{ porcentagem_horas_trabalhadas }}%"></div>
-	                    <div class="progress-bar progress-bar-primary" style="width: {{ porcentagem_horas_abonadas }}%"></div>                    
-	                </div>                
+	                    <div class="progress-bar progress-bar-primary" style="width: {{ porcentagem_horas_abonadas }}%"></div>
+	                </div>        
+	                <div class="text-center">
+	                	<a class="btn btn-warning btn-simple" onclick="window.history.back()" type="button">Voltar</a>
+	                </div>
 				</div>
 	        </div>
 	    </div>

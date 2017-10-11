@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load static %}
+{% load timedelta_filter %}
+
+<div class="row">	
+	<div class="col-md-12">
+	        <div class="card">
+	            <div class="header">	            	
+	                <h4 class="title">Listagem geral do dia</h4>                          
+	                <p class="category">{% now "d/m/Y" %}</p>                               
+	            </div>
+	            <div class="content table-responsive">
+	                <table class="table table-hover table-striped">
+	                    <thead>
+	                        <tr>
+								<th>Bolsista</th>
+								<th>Setor</th>
+								<th>Registros</th>
+								<th>Horas trabalhadas</th>
+							</tr>
+	                    </thead>
+	                    <tbody>
+	                    {% for bolsista in bolsistas %}	                    	
+							<tr>
+							  	<td>{{ bolsista.user.name }}</td>
+							  	<td>{{ bolsista.setor }}</td>
+							  	<td>
+							  		{% if bolsista.registros_dia %}
+									  	{% for registro in bolsista.registros_dia %}  		
+									  		{{registro.created_at|date:"H:i:s"}}
+										  		{% if registro.observacao %}
+												<a href="#" data-toggle="tooltip" title="{{ registro.observacao }}"><i class="fa fa-exclamation-circle"></i></a>
+												{% endif %}
+									  		{% if registro.tipo %}<br>{% else %} - {% endif %}	  		
+									  	{% endfor %}
+									{% else %}
+										Nenhum registro
+									{% endif %}
+								</td>
+								<td>{{ bolsista.horas_trabalhadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</td>
+							</tr>
+							{% endfor %}
+	                    </tbody>
+	                </table>	                
+	            </div>
+	            <div class="footer">		            				
+	                <div class="text-center">
+	                	<a class="btn btn-warning btn-simple" onclick="window.history.back()" type="button">Voltar</a>
+	                </div>
+				</div>
+	        </div>
+	    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+	{{block.super}}
+	<script>
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip();
+	});
+	</script>
+{% endblock %}

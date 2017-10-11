@@ -39,6 +39,10 @@ class EditarVinculoForm(forms.ModelForm):
 
 class EditSetorForm(forms.ModelForm):
 
+	def __init__(self, *args, **kwargs):
+		super(EditSetorForm, self).__init__(*args, **kwargs)
+		self.fields['coordenadoria'].empty_label = "Selecione a coordenadoria"
+
 	class Meta:
 		model = Setor
 		fields = ['nome', 'coordenadoria']

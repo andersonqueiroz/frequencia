@@ -7,6 +7,9 @@ from frequencia.registro.models import Frequencia
 from frequencia.justificativas.models import JustificativaFalta
 from frequencia.calendario.calendar import FeriadosRioGrandeDoNorte
 
+def get_primeiro_dia_trabalho(vinculo):
+	return Frequencia.objects.filter(bolsista=vinculo).first()
+
 def get_registros_bolsista(vinculo, data_inicio, data_fim):
 	return Frequencia.objects.filter(bolsista=vinculo, created_at__date__gte=data_inicio, created_at__date__lte=data_fim)
 
@@ -37,7 +40,7 @@ def get_total_horas_trabalhadas(registros):
 		saidas = registros.filter(tipo=1, created_at__date=dia['data'])
 
 		for i, saida in enumerate(saidas):
-			horas_trabalhadas += saida.created_at - entradas[i].created_at	
+			horas_trabalhadas += saida.created_at - entradas[i].created_at
 
 	return horas_trabalhadas
 
@@ -62,7 +65,7 @@ def get_balanco_mes(vinculo, mes, ano):
 	horas_trabalhadas = get_total_horas_trabalhadas(frequencias)
 	horas_abonadas_periodo = get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim)
 
-	saldo_mes = horas_trabalhar - horas_trabalhadas - horas_abonadas_periodo	
+	saldo_mes = horas_trabalhar - horas_trabalhadas - horas_abonadas_periodo
 	return saldo_mes
 	
 
@@ -112,9 +115,13 @@ def get_relatorio_mes(vinculo, mes, ano):
 
 	dias_uteis = calendario.count_working_days(data_inicio, data_fim)
 
-	#Verificando débitos do mês anterior
-	mes_ano_anterior = datetime.date(ano, mes, 1) - timedelta(days=1)
-	saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)
+	#Verificando débitos do mês anterior caso esse não seja o primeiro mês de trabalho
+	primeiro_dia_trabalho = get_primeiro_dia_trabalho(vinculo).created_at
+	if primeiro_dia_trabalho.month is not mes and primeiro_dia_trabalho.year is not ano:
+		mes_ano_anterior = datetime.date(ano, mes, 1) - timedelta(days=1)
+		saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)
+	else:
+		saldo_mes_anterior = timedelta()
 
 	return  {'registros': registros,
 			 'dias_uteis': dias_uteis,

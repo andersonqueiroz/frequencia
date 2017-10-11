@@ -19,10 +19,10 @@ class FeriadosRioGrandeDoNorte(Brazil):
         (5, 1, "Dia do trabalhador"),
         (9, 7, "Independência do Brasil"),
         (10, 3, "Mártires de Cunhau e Uruaçu"),
-        (10, 12, "Nossa Senhora Aparecida"),
+        (10, 12, "Padroeira do Brasil"),
         (11, 2, "Finados"),
         (11, 15, "Proclamação da República"),
-        (11, 21, "Nossa Senhora da Apresentação"),
+        (11, 21, "Padroeira de Natal"),
         (12, 25, "Natal"),
         (12, 31, "Ano Novo"),
 	)
