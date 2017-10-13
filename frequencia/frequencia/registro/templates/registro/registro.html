@@ -120,6 +120,12 @@
         }, 700);
         var $seuCampoCpf = $("#id_cpf");
         $seuCampoCpf.mask('000.000.000-00', {reverse: true});
+
+        $("#id_cpf").keyup(function () {
+            if (this.value.length == this.maxLength) {
+              $('#id_password').focus();
+            }
+        });
     });
 </script>
 

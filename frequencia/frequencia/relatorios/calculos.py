@@ -56,7 +56,7 @@ def get_balanco_mes(vinculo, mes, ano):
 	data_fim = datetime.date(ano, mes, num_dias_mes)
 
 	num_dias_uteis_mes = calendario.count_working_days(data_inicio, data_fim)
-	horas_trabalhar = num_dias_uteis_mes * vinculo.carga_horaria_diaria
+	horas_trabalhar = num_dias_uteis_mes * (vinculo.carga_horaria_diaria or 0)
 	horas_trabalhar = timedelta(hours=horas_trabalhar)
 
 	frequencias = get_registros_bolsista(vinculo, data_inicio, data_fim)
@@ -67,6 +67,20 @@ def get_balanco_mes(vinculo, mes, ano):
 
 	saldo_mes = horas_trabalhar - horas_trabalhadas - horas_abonadas_periodo
 	return saldo_mes
+
+def get_balanco_mes_anterior(vinculo, mes_atual, ano_atual):
+	saldo_mes_anterior = timedelta()
+
+	#Retornará zero se for o primeiro mês de trabalho do bolsista
+	try:
+		primeiro_dia_trabalho = get_primeiro_dia_trabalho(vinculo).created_at
+		if primeiro_dia_trabalho.month is not mes_atual and primeiro_dia_trabalho.year is not ano_atual:
+			mes_ano_anterior = datetime.date(ano_atual, mes_atual, 1) - timedelta(days=1)
+			saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)
+	except:
+		return saldo_mes_anterior
+	finally:
+		return saldo_mes_anterior
 	
 
 def get_relatorio_mes(vinculo, mes, ano):
@@ -110,23 +124,34 @@ def get_relatorio_mes(vinculo, mes, ano):
 
 		registros.append(relatorio_dia)
 
-	#Calculando horas abonadas no mês
-	horas_abonadas_periodo = get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim)
-
-	dias_uteis = calendario.count_working_days(data_inicio, data_fim)
-
-	#Verificando débitos do mês anterior caso esse não seja o primeiro mês de trabalho
-	primeiro_dia_trabalho = get_primeiro_dia_trabalho(vinculo).created_at
-	if primeiro_dia_trabalho.month is not mes and primeiro_dia_trabalho.year is not ano:
-		mes_ano_anterior = datetime.date(ano, mes, 1) - timedelta(days=1)
-		saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)
-	else:
-		saldo_mes_anterior = timedelta()
+	dias_uteis = calendario.count_working_days(data_inicio, data_fim)	
 
 	return  {'registros': registros,
 			 'dias_uteis': dias_uteis,
 			 'total_horas_trabalhar': timedelta(hours=vinculo.carga_horaria_diaria) * dias_uteis,
 			 'horas_trabalhadas_periodo': horas_trabalhadas_periodo,
-			 'horas_abonadas_periodo': horas_abonadas_periodo,
-			 'saldo_mes_anterior': saldo_mes_anterior,
+			 'horas_abonadas_periodo': get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim),
+			 'saldo_mes_anterior': get_balanco_mes_anterior(vinculo, mes, ano),
 		    }
+
+def get_relatorio_mensal_setor(setor, mes, ano):
+
+	bolsistas = setor.vinculos.filter(group__name='Bolsista', 
+									  ativo=True, 
+									  user__is_active=True, 
+									  created_at__month__lte=mes, 
+									  created_at__year__lte=ano)
+
+	relatorio = []	
+	for bolsista in bolsistas:
+
+		balanco_mes = get_balanco_mes(bolsista, mes, ano)
+		balanco_mes_anterior = get_balanco_mes_anterior(bolsista, mes, ano)
+		relatorio.append({
+			'bolsista': bolsista,
+			'balanco_mes_atual': balanco_mes,
+			'balanco_mes_anterior': balanco_mes_anterior,
+			'balanco_geral': balanco_mes + balanco_mes_anterior,		
+		})
+
+	return relatorio

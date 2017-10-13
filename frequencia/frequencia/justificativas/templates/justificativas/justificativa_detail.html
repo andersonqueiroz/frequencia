@@ -83,29 +83,60 @@
                                     <div class="form-group col-md-6">
                                         <label>{{ form.status.label }}</label>
                                         {% render_field form.status class="form-control" %}
-                                        {{ form.status.errors }}
+                                        {% if form.status.errors %}
+                                            <label class="error">{{ form.status.errors.0 }}</label>
+                                        {% endif %}
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>{{ form.horas_abonadas.label }}</label>
                                         {% render_field form.horas_abonadas class="form-control" value=object.horas_sugeridas %}
-                                        {{ form.horas_abonadas.errors }}
+                                        {% if form.horas_abonadas.errors %}
+                                            <label class="error">{{ form.horas_abonadas.errors.0 }}</label>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-12">
                                         <label>{{ form.parecer.label }}</label>
                                         {% render_field form.parecer class="form-control" %}
-                                        {{ form.parecer.errors }}
+                                        {% if form.parecer.errors %}
+                                            <label class="error">{{ form.parecer.errors.0 }}</label>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="text-center">
-                                        <a class="btn btn-warning btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
-                                        <button class="btn btn-warning btn-fill" type="submit">Salvar</button>
+                                        <a class="btn btn-warning btn-simple" type="button" href="{% url 'justificativas:justificativas' %}">Voltar</a>
+                                        <a class="btn btn-warning btn-fill confirm-modal" data-toggle="modal" data-target="#confirmar_homologacao">Salvar</a>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+
+                                <!-- Modal de confirmação -->
+                                <div class="modal fade" id="confirmar_homologacao" tabindex="-1" role="dialog" style="display: none;">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Avaliação de justificativa de falta</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        Você deseja realmente homologar a justificativa? Esta operação não pode ser desfeita.
+                                        <br><br>
+                                        <b>Bolsista:</b> {{object.vinculo.user}}<br>
+                                        <b>Setor:</b> {{object.vinculo.setor}}<br>
+                                        <b>Período:</b> {{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} <b class="text-danger">({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</b><br><br>
+                                        Horas abonadas: <h5 class="text-danger" id="horas_abonadas_modal"></h5>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-warning btn-fill">Confirmar</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- Fim do modal-->
+                            </form>                            
+                        </div>                        
                     {% else %}
                         <div class="content">
                             <div class="alert alert-warning">
@@ -159,7 +190,11 @@
     <script src="{% static 'js/jquery.mask.js' %}"></script>
     <script type="text/javascript">
       $(document).ready(function(){
-            $('#id_horas_abonadas').mask('00:00:00', {reverse: true});
-        });
+         $('#id_horas_abonadas').mask('00:00:00', {reverse: true});
+         $('.confirm-modal').on('click', function(){
+            var _horas = $('#id_horas_abonadas').val();
+            $("#horas_abonadas_modal").text(_horas);
+         });
+      });
     </script>
 {% endblock %}

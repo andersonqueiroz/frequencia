@@ -30,7 +30,7 @@
                             <td>
                                 {{ feriado.1 }}
                                 {% if feriado.2 and can_manage_feriado %}
-                                    <a href="{% url 'calendario:feriado_remove' feriado.2 %}"><i class="fa fa-trash text-danger"></i></a>
+                                    <a href="" data-toggle="modal" data-target="#confirmar_exclusao" object_id="{{ feriado.2 }}" class="delete_modal"><i class="fa fa-trash text-danger"></i></a>
                                 {% endif %}
                             </td>
                         </tr>
@@ -75,6 +75,25 @@
     {% endif %}
 </div>
 
+<div class="modal fade" id="confirmar_exclusao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title" id="myModalLabel">Confirmação de exclusão de feriado</h4>
+      </div>
+      <div class="modal-body">
+        Você deseja realmente remover este feriado?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>
+        <a type="button" id="button_delete_modal" class="btn btn-danger btn-fill">Excluir</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {% endblock %}
 
 {% block script %}
@@ -85,6 +104,14 @@
     $(document).ready(function(){
             $('#id_data').mask('00/00/0000', {reverse: true});
             demo.initFormExtendedDatetimepickers();
+    });
+
+    //Delete
+    var feriado_id;
+
+    $(".delete_modal").click(function(){
+      feriado_id = $(this).attr('object_id');
+      $("#button_delete_modal").attr('href', '/calendario/feriado/remover/' + feriado_id);
     });
 </script>
 {% endblock %}

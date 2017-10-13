@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load static %}
+{% load widget_tweaks %}
+{% load timedelta_filter %}
+
+<div class="row">	
+	<div class="col-md-12">
+	        <div class="card">
+	            <div class="header">	            	
+	                <h4 class="title">Relatório mensal de frequência - {{periodo|date:"F/Y"}}</h4>
+	                <h5>{{ object }}</h5>                          
+	                <p class="category">Gerado em {% now "d/m/Y H:i" %}</p>                               
+	            </div>
+	            <div class="content table-responsive">
+	                <table class="table table-hover table-striped">
+	                    <thead>
+	                        <tr>
+								<th>Bolsista</th>
+								<th>Saldo do mês atual</th>
+								<th>Saldo do mês anterior</th>
+								<th>
+									Saldo total 
+									<a href="#" data-toggle="tooltip" title="Débito do mês atual somado ao do mês anterior"><i class="fa fa-question-circle"></i></a>
+								</th>
+								<th>Detalhes</th>
+							</tr>
+	                    </thead>
+	                    <tbody>
+	                    {% if relatorio %}
+		                    {% for bolsista in relatorio %}	    
+
+								<tr>
+								  	<td>{{bolsista.bolsista.user}}</td>
+
+								  	{% with atual=bolsista.balanco_mes_atual antes=bolsista.balanco_mes_anterior total=bolsista.balanco_geral%}	
+									  	<td>
+									  		{% if atual.days > 0 %}-{% endif %}{{atual|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
+									  	</td>
+									  	<td>
+									  		{% if antes.days > 0 %}-{% endif %}{{antes|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
+									  	</td>
+									  	<td>
+									  		{% if total.days > 0 %}-{% endif %}{{total|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
+									  	</td>
+									{% endwith %}
+										<td><a href="{% url 'relatorios:relatorio_mensal' bolsista.bolsista.pk %}?mes={{periodo.month}}&ano={{periodo.year}}"><i class="fa fa-search"></i></a></td>  	
+								</tr>
+
+							{% endfor %}
+						{% else %}
+							<td colspan="3">Nenhum registro encontrado no mês</td>
+						{% endif %}
+	                    </tbody>
+	                </table>	                
+	            </div>
+	            <legend></legend>
+	            <div class="footer">
+		            <div class="text-center">
+	                	<a class="btn btn-warning btn-simple" onclick="window.history.back()" type="button">Voltar</a>
+	                </div>
+				</div>
+	        </div>
+	    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+	{{block.super}}
+	<script>
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip();
+	});
+	</script>
+{% endblock %}
