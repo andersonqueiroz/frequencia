@@ -12,10 +12,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 
 from frequencia.vinculos.models import Vinculo, Setor
-from frequencia.vinculos.utils import get_bolsistas
+from frequencia.vinculos.utils import get_bolsistas, get_setores
 
 from .calculos import get_relatorio_mes, get_relatorio_mensal_setor, get_total_horas_trabalhadas
-from .forms import BuscaRelatorioForm
+from .forms import BuscaRelatorioForm, BuscaRelatorioSetorForm
 
 class BuscaRelatorioMensalTemplateView(LoginRequiredMixin, FormView):
 
@@ -42,6 +42,29 @@ class BuscaRelatorioMensalTemplateView(LoginRequiredMixin, FormView):
 		else:
 			url = reverse('relatorios:relatorio_mensal')
 
+		return url + '?mes={0}&ano={1}'.format(self.mes, self.ano)
+
+class BuscaRelatorioSetorTemplateView(LoginRequiredMixin, FormView):
+
+	template_name = 'relatorios/busca_setor.html'
+	form_class = BuscaRelatorioSetorForm
+
+	def get_form_kwargs(self):
+		kwargs = super(BuscaRelatorioSetorTemplateView, self).get_form_kwargs()
+		kwargs.update({
+		     'setores' : get_setores(self.request.user)
+		})
+		return kwargs
+
+	def form_valid(self, form):
+		self.mes = form.cleaned_data['mes']
+		self.ano = form.cleaned_data['ano']
+		self.setor = form.cleaned_data['setor']
+
+		return super(BuscaRelatorioSetorTemplateView, self).form_valid(form)
+
+	def get_success_url(self):		
+		url = reverse('relatorios:relatorio_setor', kwargs={'pk': self.setor.pk})
 		return url + '?mes={0}&ano={1}'.format(self.mes, self.ano)
 
 class RelatorioMensalTemplateView(PermissionRequiredMixin, TemplateView):
@@ -157,5 +180,6 @@ class ListagemGeralTemplateView(TemplateView):
 
 relatorio_mensal = RelatorioMensalTemplateView.as_view()
 busca_relatorio = BuscaRelatorioMensalTemplateView.as_view()
+busca_setor = BuscaRelatorioSetorTemplateView.as_view()
 listagem_geral = ListagemGeralTemplateView.as_view()
 relatorio_setor = RelatorioSetorTemplateView.as_view()

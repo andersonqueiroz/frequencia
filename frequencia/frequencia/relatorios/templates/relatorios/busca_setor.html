@@ -12,7 +12,7 @@
 		<div class="col-md-12">
             <div class="card">
             	<div class="header">
-            		<h4 class="title">Relatório de frequência mensal</h4>
+            		<h4 class="title">Relatório de frequência mensal do setor</h4>
                 	<p class="category">Preencha os dados para consultar o relatório</p>
                 </div>
                 <div class="content">
@@ -26,25 +26,23 @@
 								{% endfor %}
 							</div>
 						{% endif %}
-
-						{% if is_servidor %}
-							<div class="form-group col-md-12">
-								<label class="control-label">{{form.bolsista.label}}</label>
-								{% render_field form.bolsista class="form-control select2" required="" %}
-								{% if form.bolsista.errors %}
-	                                <label class="error">{{ form.bolsista.errors.0 }}</label>
-	                            {% endif %}
-							</div>
-						{% endif %}
+						
+						<div class="form-group col-md-12">
+							<label class="control-label">{{form.setor.label}}</label>
+							{% render_field form.setor class="form-control select2" required="" %}
+							{% if form.setor.errors %}
+                                <label class="error">{{ form.setor.errors.0 }}</label>
+                            {% endif %}
+						</div>
 
 						<div class="form-group col-md-6">
 							<label class="control-label">{{form.mes.label}}</label>
-							{% render_field form.mes class="form-control" data-minimum-results-for-search="Infinity" %}
+							{% render_field form.mes class="form-control" %}
 						</div>
 
 						<div class="form-group col-md-6">
 							<label class="control-label">{{form.ano.label}}</label>
-							{% render_field form.ano class="form-control" data-minimum-results-for-search="Infinity" %}
+							{% render_field form.ano class="form-control" %}
 						</div>						
 
 						<div class="row">
@@ -63,6 +61,8 @@
 {% block script %}
 	{{block.super}}
 	<script type="text/javascript">
-		$('select').select2();		
+		$('select').select2({
+			minimumResultsForSearch: -1,
+		});		
 	</script>
 {% endblock %}

@@ -8,34 +8,24 @@
 
 <nav class="navbar navbar-transparent navbar-absolute">
     <div class="container">    
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+        <div class="navbar-header">            
             <a class="navbar-brand " href="{% url "registro:registro" %}">Frequência BCZM</a>
         </div>
-        <div class="collapse navbar-collapse">       
-            {% if not hide_nav %}
-            	
-	            <ul class="nav navbar-nav navbar-right">
-	                <li>
-	                   <a href="{% url "accounts:login" %}">
-                        <i class="fa fa-home"></i>
-	                        Entrar
-	                    </a>
-	                </li>
-	            </ul>
-            {% endif %}
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                   <a href="{% url "registro:registro" %}">
+                    <i class="fa fa-clock-o"></i>
+                        Registrar frequência
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
 
-
 <div class="wrapper wrapper-full-page">
-    <div class="full-page login-page" data-color="peteca" data-image="{% static "images/bczm-acervo.jpg" %}">   
+    <div class="full-page login-page" data-color="peteca" data-image="{% static 'images/bczm-acervo.jpg' %}">   
         
     <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
         <div class="content">
@@ -88,13 +78,13 @@
                 <nav class="pull-left">
                         <ul>
                             <li>
-                                <img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
+                                <img src="{% static 'images/logobczm.png' %}">
                             </li>
                         </ul>
                     </nav>
                     <!--div class="copyright pull-right"-->
                     <div class="pull-right">
-                        &copy; 2017, SST</a>
+                        &copy; 2017, SST
                     </div>
             </div>
         </footer>
@@ -104,9 +94,9 @@
 </div>
 
 </body>
-        
-{% include "script.html" %}
-<script type="text/javascript">
+
+    {% include "script.html" %}
+    <script type="text/javascript">
         $(document).ready(function(){
             lbd.checkFullPageBackgroundImage();
             setTimeout(function(){
@@ -114,5 +104,6 @@
             }, 300);
         });
     </script>    
+
 </html>
 

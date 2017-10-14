@@ -199,16 +199,6 @@
     text-align: center;
     text-transform: uppercase;
 }
-/*
-.fixed-plugin li.header-product-name{
-    height: 60px;
-    line-height: 60px;
-    font-size: 16px;
-    text-transform: none;
-    text-align: center;
-    font-weight: 300;
-}
-*/
 
 .fixed-plugin .adjustments-line p{
     float: left;
@@ -401,73 +391,4 @@
   position: relative;
   top: -2px;
   width: 24px;
-}
-
-.btn-facebook {
-  border-color: #3b5998;
-  color: #3b5998;
-}
-.btn-facebook:hover,
-.btn-facebook:focus,
-.btn-facebook:active,
-.btn-facebook.active,
-.open > .btn-facebook.dropdown-toggle {
-  background-color: transparent;
-  color: #3b5998;
-  border-color: #3b5998;
-  opacity: 1;
-}
-.btn-facebook:disabled,
-.btn-facebook[disabled],
-.btn-facebook.disabled {
-  background-color: transparent;
-  border-color: #3b5998;
-}
-.btn-facebook.btn-fill {
-  color: #ffffff;
-  background-color: #3b5998;
-  opacity: 0.9;
-}
-.btn-facebook.btn-fill:hover,
-.btn-facebook.btn-fill:focus,
-.btn-facebook.btn-fill:active,
-.btn-facebook.btn-fill.active,
-.open > .btn-facebook.btn-fill.dropdown-toggle {
-  background-color: #3b5998;
-  color: #ffffff;
-  opacity: 1;
-}
-.btn-twitter {
-  border-color: #55acee;
-  color: #55acee;
-}
-.btn-twitter:hover,
-.btn-twitter:focus,
-.btn-twitter:active,
-.btn-twitter.active,
-.open > .btn-twitter.dropdown-toggle {
-  background-color: transparent;
-  color: #55acee;
-  border-color: #55acee;
-  opacity: 1;
-}
-.btn-twitter:disabled,
-.btn-twitter[disabled],
-.btn-twitter.disabled {
-  background-color: transparent;
-  border-color: #55acee;
-}
-.btn-twitter.btn-fill {
-  color: #ffffff;
-  background-color: #55acee;
-  opacity: 0.9;
-}
-.btn-twitter.btn-fill:hover,
-.btn-twitter.btn-fill:focus,
-.btn-twitter.btn-fill:active,
-.btn-twitter.btn-fill.active,
-.open > .btn-twitter.btn-fill.dropdown-toggle {
-  background-color: #55acee;
-  color: #ffffff;
-  opacity: 1;
 }

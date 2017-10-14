@@ -5,12 +5,6 @@
 
 <div class="wrapper">
     <div class="sidebar" data-color="peteca" data-image="{% static "images/bczm-acervo.jpg" %}">
-        <!--
-
-            Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
-            Tip 2: you can also add an image using data-image tag
-
-        -->
 
         <div class="logo">
             <a href="{% url "core:home" %}" class="logo-text">
@@ -111,6 +105,7 @@
                         <ul class="nav">
                             <li><a href="{% url 'relatorios:busca_relatorio' %}">Relatório mensal</a></li>
                             <li><a href="{% url 'relatorios:listagem_geral' %}">Listagem geral</a></li>
+                            <li><a href="{% url 'relatorios:busca_setor' %}">Relatório por setor</a></li>
                         </ul>
                     </div>
                 </li>
@@ -127,13 +122,7 @@
 						<i class="fa fa-navicon visible-on-sidebar-mini"></i>
 					</button>
 				</div>
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
+				<div class="navbar-header">					
 					<a class="navbar-brand">Frequência BCZM</a>
 				</div>
 				<div class="collapse navbar-collapse">

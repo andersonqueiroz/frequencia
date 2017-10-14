@@ -15,7 +15,7 @@
 	                <p class="category">Gerado em {% now "d/m/Y H:i" %}</p>                               
 	            </div>
 	            <div class="content table-responsive">
-	                <table class="table table-hover table-striped">
+	                <table class="table table-hover">
 	                    <thead>
 	                        <tr>
 								<th>Dia</th>
@@ -68,10 +68,10 @@
 							</strong>
 						{% endif %}<br>
 
-						Horas trabalhadas no período: <strong><span class="text-success">{{ horas_trabalhadas_periodo|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</span></strong><br>
+						Horas trabalhadas no período: <strong><span class="text-success">{{ horas_trabalhadas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</span></strong><br>
 
 						{% if horas_abonadas_periodo %}
-							Horas abonadas: <strong><span class="text-primary text-bold">{{ horas_abonadas_periodo|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</span></strong><br>
+							Horas abonadas: <strong><span class="text-primary text-bold">{{ horas_abonadas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</span></strong><br>
 						{% endif %}
 
 						<legend></legend>

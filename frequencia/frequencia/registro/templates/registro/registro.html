@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt">
 {% include "head.html" %}
 
 {% load static %}
@@ -7,13 +7,7 @@
 <body> 
 <nav class="navbar navbar-transparent navbar-absolute">
     <div class="container">    
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+        <div class="navbar-header">            
             <a class="navbar-brand" href="#">Frequência BCZM</a>
         </div>
         <div class="collapse navbar-collapse">       
@@ -33,7 +27,6 @@
 <div class="wrapper wrapper-full-page">
     <div class="full-page login-page" data-color="orange" data-image="{% static "images/bczm-acervo.jpg" %}">   
         
-    <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
         <div class="content">
             <div class="container">
                 <div class="row">                   
@@ -41,13 +34,11 @@
                         <form action="{% url 'registro:registro' %}" method="POST">
                         {% csrf_token %}
                             
-                        <!--   if you want to have the card without animation please remove the ".card-hidden" class   -->
                             <div class="card ">
                                 <div class="text-center">Registro de frequência</div>
                                 <div class="text-center">
-                                    <h1><span class="h">{{now|date:"H"}}</span>:<span class="h m">{{now|date:"i"}}</span>:<span class="h s">{{now|date:"s"}}</span></h1>
-                                    <h5>{{now|date:"D, d M Y"}}</h5>
-                                
+                                    <h1><span class="h">{% now "H" %}</span>:<span class="h m">{% now "i" %}</span>:<span class="h s">{% now "s" %}</span></h1>
+                                    <h5>{% now "D, d M Y" %}</h5>                                
                                 </div>
                                 
                                 <div class="content">
@@ -89,15 +80,15 @@
         <footer class="footer footer-transparent">
             <div class="container">
                 <nav class="pull-left">
-                        <ul>
-                            <li>
-                                <img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
-                            </li>
-                        </ul>
-                    </nav>                    
-                    <div class="pull-right">
-                        &copy; 2017, SST
-                    </div>
+                    <ul>
+                        <li>
+                            <img src="{% static 'images/logobczm.png' %}">
+                        </li>
+                    </ul>
+                </nav>                    
+                <div class="pull-right">
+                    &copy; 2017, SST
+                </div>
             </div>
         </footer>
 
@@ -106,7 +97,7 @@
 </div>
 
 </body>
-        
+     
 {% include "script.html" %}
 <script src="{% static 'js/relogio.js' %}"></script>
 <script src="{% static 'js/jquery.mask.js' %}"></script>
@@ -114,10 +105,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         lbd.checkFullPageBackgroundImage();
-        
-        setTimeout(function(){
-            $('.card').removeClass('card-hidden');
-        }, 700);
+
         var $seuCampoCpf = $("#id_cpf");
         $seuCampoCpf.mask('000.000.000-00', {reverse: true});
 

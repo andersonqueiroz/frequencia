@@ -15,8 +15,6 @@ from frequencia.vinculos.models import Vinculo
 from .forms import FrequenciaForm, EditMaquinaForm
 from .models import Frequencia, Maquina
 
-import datetime
-
 #Máquinas
 class MaquinaListView(PermissionRequiredMixin, ListView):
 
@@ -67,7 +65,6 @@ def maquina_remove(request, pk):
 #Registro
 def registro(request):
 
-	now = datetime.datetime.now()
 	maquina = Maquina.objects.filter(ip=request.META.get('REMOTE_ADDR')).first()
 
 	if not maquina:
@@ -86,10 +83,9 @@ def registro(request):
 
 	context = {
 		'form': form,
-		'now':now,
 	}
 
-	return render(request, 'registro/registro.html', context)
+	return render(request, 'registro/registro.html', context)	
 
 def registros_dia(request, **kwargs):
 	pk = request.session.get('bolsista_pk','')

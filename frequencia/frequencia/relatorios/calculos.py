@@ -26,8 +26,7 @@ def get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim):
 		total_dias_ausencia = calendario.count_working_days(ausencia.inicio, ausencia.termino)
 		total_dias_ausencia_periodo = calendario.count_working_days(ausencia.inicio if ausencia.inicio >= data_inicio else data_inicio,
 																ausencia.termino if ausencia.termino <= data_fim else data_fim)
-		horas_abonadas += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo
-
+		horas_abonadas += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo		
 	return horas_abonadas
 
 def get_total_horas_trabalhadas(registros):
@@ -125,7 +124,7 @@ def get_relatorio_mes(vinculo, mes, ano):
 		registros.append(relatorio_dia)
 
 	dias_uteis = calendario.count_working_days(data_inicio, data_fim)	
-
+	
 	return  {'registros': registros,
 			 'dias_uteis': dias_uteis,
 			 'total_horas_trabalhar': timedelta(hours=vinculo.carga_horaria_diaria) * dias_uteis,
