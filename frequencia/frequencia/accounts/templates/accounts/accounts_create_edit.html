@@ -138,7 +138,7 @@
                             <div class="footer text-center">
     					    	<a class="btn btn-warning btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
     					    	{% if object %}
-    					    	<a class="btn btn-danger btn-fill" data-toggle="modal" data-target="#confirmar_redefinicao" type="button">Redefinir senha</a>    					    	
+    					    		<a class="btn btn-danger btn-fill" data-toggle="modal" data-target="#confirmar_redefinicao" type="button">Redefinir senha</a>			    	
     					    	{% endif %}
     						    <button class="btn btn-warning btn-fill" type="submit">Salvar</button>
     						</div>
@@ -149,23 +149,25 @@
         </div>
 	</div>
 
-	<div class="modal fade" id="confirmar_redefinicao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-	        <h4 class="modal-title" id="myModalLabel">Confirmação de redefinição de senha</h4>
-	      </div>
-	      <div class="modal-body">
-	        Você deseja realmente redefinir a senha do usuário para o valor padrão?
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>
-	        <a type="button" class="btn btn-danger btn-fill" href="{% url 'accounts:reset_password' object.pk %}">Redefinir</a>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+	{% if object %}
+		<div class="modal fade" id="confirmar_redefinicao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Confirmação de redefinição de senha</h4>
+		      </div>
+		      <div class="modal-body">
+		        Você deseja realmente redefinir a senha do usuário para o valor padrão?
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>
+		        <a type="button" class="btn btn-danger btn-fill" href="{% url 'accounts:reset_password' object.pk %}">Redefinir</a>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	{% endif %}
 
 
 {% endblock %}
