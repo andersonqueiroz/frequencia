@@ -67,70 +67,59 @@ class BuscaRelatorioSetorTemplateView(LoginRequiredMixin, FormView):
 		url = reverse('relatorios:relatorio_setor', kwargs={'pk': self.setor.pk})
 		return url + '?mes={0}&ano={1}'.format(self.mes, self.ano)
 
-class RelatorioMensalTemplateView(PermissionRequiredMixin, TemplateView):
+class RelatorioMensalDetailView(PermissionRequiredMixin, DetailView):
 
+	model = Vinculo
 	template_name = 'relatorios/relatorio_mensal.html'
 	permission_required = 'relatorio.can_view'
 
 	def dispatch(self, *args, **kwargs):
-		if 'pk' in self.kwargs:
-			self.bolsista = get_object_or_404(Vinculo, pk=self.kwargs['pk'])
-		else:			
-			self.bolsista = self.request.user.vinculos.filter(group__name='Bolsista', ativo=True).first()
-			if not self.bolsista:
-				messages.error(self.request, 'Bolsista não informado!')
-				return redirect(reverse('relatorios:busca_relatorio'))
-
 		try:
-			self.mes = int(self.request.GET.get('mes', timezone.now().date().month))
-			self.ano = int(self.request.GET.get('ano', timezone.now().date().year))
-			date(self.ano, self.mes, 1)
+			mes = int(self.request.GET.get('mes', timezone.now().date().month))
+			ano = int(self.request.GET.get('ano', timezone.now().date().year))
+			self.periodo = date(day=1, month=mes, year=ano)
 		except ValueError:
 			messages.error(self.request, 'Data informada é inválida!')
 			return redirect(reverse('relatorios:busca_relatorio'))
 
-		return super(RelatorioMensalTemplateView, self).dispatch(*args, **kwargs)
+		return super(RelatorioMensalDetailView, self).dispatch(*args, **kwargs)
 
 	def get_object(self):
-		return self.bolsista
+		if 'pk' in self.kwargs:
+			return super(RelatorioMensalDetailView, self).get_object()
 
+		return self.request.user.vinculos.filter(group__name='Bolsista', ativo=True).first()	
+	
 	def get_context_data(self, **kwargs):
-		context = super(RelatorioMensalTemplateView, self).get_context_data(**kwargs)	
+		context = super(RelatorioMensalDetailView, self).get_context_data(**kwargs)	
 
-		relatorio = get_relatorio_mes(self.bolsista, self.mes, self.ano)
-		if not relatorio:
-			messages.warning(self.request, 'Não há registros ou ausências no período informado.')
-			return redirect(reverse('relatorios:busca_relatorio'))
+		self.relatorio = get_relatorio_mes(self.object, self.periodo.month, self.periodo.year)
+		if not self.relatorio:
+			messages.warning(self.request, 'Não há registros ou ausências no período informado.')			
+			return context
 
-		context['periodo'] = date(day=1, month=self.mes, year=self.ano)
-		context['bolsista'] = self.bolsista
-		context['lista_dias'] = relatorio['registros']
-		context['dias_uteis'] = relatorio['dias_uteis']		
-		context['total_horas_trabalhar'] = relatorio['total_horas_trabalhar']
-		context['horas_trabalhadas_periodo'] = relatorio['horas_trabalhadas_periodo']	
-		context['horas_abonadas_periodo'] = relatorio['horas_abonadas_periodo']
+		context['periodo'] = self.periodo
+		context['bolsista'] = self.object
+		context['lista_dias'] = self.relatorio['registros']
+		context['dias_uteis'] = self.relatorio['dias_uteis']		
+		context['total_horas_trabalhar'] = self.relatorio['total_horas_trabalhar']
+		context['horas_trabalhadas_periodo'] = self.relatorio['horas_trabalhadas_periodo']	
+		context['horas_abonadas_periodo'] = self.relatorio['horas_abonadas_periodo']
 
-		if relatorio['saldo_mes_anterior'].days > 0:
-			context['saldo_mes_anterior'] = relatorio['saldo_mes_anterior']
-		else:
-			context['saldo_mes_anterior'] = timedelta()
-
-		#### DEBUG ####
-		# context['saldo_mes_anterior'] = timedelta(hours=0)
-		# self.relatorio['horas_trabalhadas_periodo'] = timedelta(hours=12)
-		# context['horas_trabalhadas_periodo'] = timedelta(hours=12)
-
+		context['saldo_mes_anterior'] = timedelta()
+		if self.relatorio['saldo_mes_anterior'].days > 0:
+			context['saldo_mes_anterior'] = self.relatorio['saldo_mes_anterior']		
 		
-		context['saldo_atual_mes'] = relatorio['total_horas_trabalhar'] \
+		context['saldo_atual_mes'] = self.relatorio['total_horas_trabalhar'] \
 									 + context['saldo_mes_anterior'] \
-									 - relatorio['horas_trabalhadas_periodo'] \
-									 - relatorio['horas_abonadas_periodo']	
+									 - self.relatorio['horas_trabalhadas_periodo'] \
+									 - self.relatorio['horas_abonadas_periodo']	
 
 		if context['saldo_atual_mes'].days < 0:
 			 context['credito_horas'] = context['saldo_atual_mes'] * -1
 
-		porcentagem_horas_trabalhadas = int(relatorio['horas_trabalhadas_periodo'] * 100 / (relatorio['total_horas_trabalhar'] + context['saldo_mes_anterior']))
-		porcentagem_horas_abonadas = int(relatorio['horas_abonadas_periodo'] * 100 / (relatorio['total_horas_trabalhar'] + context['saldo_mes_anterior']))
+		porcentagem_horas_trabalhadas = int(self.relatorio['horas_trabalhadas_periodo'] * 100 / (self.relatorio['total_horas_trabalhar'] + context['saldo_mes_anterior']))
+		porcentagem_horas_abonadas = int(self.relatorio['horas_abonadas_periodo'] * 100 / (self.relatorio['total_horas_trabalhar'] + context['saldo_mes_anterior']))
 
 		context['porcentagem_horas_trabalhadas'] = porcentagem_horas_trabalhadas
 
@@ -141,7 +130,14 @@ class RelatorioMensalTemplateView(PermissionRequiredMixin, TemplateView):
 
 		return context
 
-class RelatorioSetorTemplateView(DetailView):
+	def render_to_response(self, context):
+		if not self.relatorio:
+			return redirect('relatorios:busca_relatorio')
+
+		return super(RelatorioMensalDetailView, self).render_to_response(context)
+	
+
+class RelatorioSetorDetailView(DetailView):
 
 	model = Setor
 	template_name = 'relatorios/relatorio_setor.html'
@@ -153,12 +149,12 @@ class RelatorioSetorTemplateView(DetailView):
 			self.periodo = date(ano, mes, 1)
 		except ValueError:
 			messages.error(self.request, 'Data informada é inválida!')
-			return redirect(reverse('relatorios:busca_relatorio'))
+			return redirect(reverse('relatorios:busca_setor'))
 
-		return super(RelatorioSetorTemplateView, self).dispatch(*args, **kwargs)	
+		return super(RelatorioSetorDetailView, self).dispatch(*args, **kwargs)	
 
 	def get_context_data(self, **kwargs):
-		context = super(RelatorioSetorTemplateView, self).get_context_data(**kwargs)	
+		context = super(RelatorioSetorDetailView, self).get_context_data(**kwargs)	
 		context['relatorio'] = get_relatorio_mensal_setor(self.object, self.periodo.month, self.periodo.year)
 		context['periodo'] = self.periodo
 		return context
@@ -178,8 +174,8 @@ class ListagemGeralTemplateView(TemplateView):
 		context['bolsistas'] = bolsistas
 		return context
 
-relatorio_mensal = RelatorioMensalTemplateView.as_view()
+relatorio_mensal = RelatorioMensalDetailView.as_view()
 busca_relatorio = BuscaRelatorioMensalTemplateView.as_view()
 busca_setor = BuscaRelatorioSetorTemplateView.as_view()
 listagem_geral = ListagemGeralTemplateView.as_view()
-relatorio_setor = RelatorioSetorTemplateView.as_view()
+relatorio_setor = RelatorioSetorDetailView.as_view()

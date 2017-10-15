@@ -1,4 +1,3 @@
-from datetime import timedelta
 from rules.contrib.views import PermissionRequiredMixin, permission_required, objectgetter
 
 from django.db.models import Q
@@ -9,11 +8,12 @@ from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import render, get_object_or_404, redirect
 
 from frequencia.vinculos.models import Coordenadoria, Setor
+from frequencia.vinculos.utils import get_setores
 
 from .models import TipoJustificativaFalta, JustificativaFalta
 from .forms import EditTipoJustificativaForm, CreateJustificativaForm, EditJustificativaForm
@@ -67,31 +67,24 @@ class JustificativaListView(LoginRequiredMixin, ListView):
 	model = JustificativaFalta
 	template_name = 'justificativas/justificativas.html'
 
-	def get_context_data(self, **kwargs):
-		context = super(JustificativaListView, self).get_context_data(**kwargs)
+	def get_queryset(self, **kwargs):		
 
 		user = self.request.user
 
 		busca = self.request.GET.get('busca', '')
-		justificativas = JustificativaFalta.objects.buscar(busca) if busca else JustificativaFalta.objects.filter(status=0)
-		justificativas = justificativas.order_by('vinculo__setor__pk')
+		justificativas = JustificativaFalta.objects.buscar(busca).order_by('vinculo__setor__pk')
 
-		if user.is_superuser or user.has_perm('accounts.is_gestor'):
-			context['object_list'] = justificativas.all()
-			return context
+		if not busca:
+			justificativas = justificativas.filter(status=0)
+
+		if user.has_perm('accounts.is_gestor'):
+			return justificativas.all()			
 
 		if user.has_perm('accounts.is_coordenador_chefe'):
-			vinculos = user.vinculos.filter(ativo=True)
-			vinculos = vinculos.filter(Q(group__name='Coordenador') | Q(group__name='Chefe de setor'))
-
-			coordenadorias = Coordenadoria.objects.filter(vinculos__in=vinculos)
-			setores = Setor.objects.filter(Q(coordenadoria__in=coordenadorias) | Q(vinculos__in=vinculos))
-
-			context['object_list'] = justificativas.filter(vinculo__setor__in=setores)
-		else:
-			context['object_list'] = justificativas.filter(vinculo__user=user)
-
-		return context
+			setores = get_setores(user)
+			return justificativas.filter(vinculo__setor__in=setores)
+		
+		return justificativas.filter(vinculo__user=user)
 
 class JustificativaCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
 

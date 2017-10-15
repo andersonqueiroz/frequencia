@@ -3,17 +3,11 @@
 {% include "head.html" %}
 
 {% load static %}
-<body>
+<body style="display:none">
 
 <nav class="navbar navbar-transparent navbar-absolute">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+        <div class="navbar-header">            
             <a class="navbar-brand" href="{% url "registro:registro" %}">Frequência BCZM</a>
         </div>
         <div class="collapse navbar-collapse">
@@ -103,7 +97,7 @@
                     </nav>
                     <!--div class="copyright pull-right"-->
                     <div class="pull-right">
-                        &copy; 2017, SST</a>
+                        &copy; {% now "Y" %}, SST</a>
                     </div>
             </div>
         </footer>

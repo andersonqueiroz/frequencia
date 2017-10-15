@@ -29,7 +29,7 @@
 						
 						<div class="form-group col-md-12">
 							<label class="control-label">{{form.setor.label}}</label>
-							{% render_field form.setor class="form-control select2" required="" %}
+							{% render_field form.setor class="form-control" required="" %}
 							{% if form.setor.errors %}
                                 <label class="error">{{ form.setor.errors.0 }}</label>
                             {% endif %}
@@ -37,12 +37,12 @@
 
 						<div class="form-group col-md-6">
 							<label class="control-label">{{form.mes.label}}</label>
-							{% render_field form.mes class="form-control" %}
+							{% render_field form.mes class="form-control" data-minimum-results-for-search="Infinity" %}
 						</div>
 
 						<div class="form-group col-md-6">
 							<label class="control-label">{{form.ano.label}}</label>
-							{% render_field form.ano class="form-control" %}
+							{% render_field form.ano class="form-control" data-minimum-results-for-search="Infinity" %}
 						</div>						
 
 						<div class="row">
@@ -61,8 +61,6 @@
 {% block script %}
 	{{block.super}}
 	<script type="text/javascript">
-		$('select').select2({
-			minimumResultsForSearch: -1,
-		});		
+		$('select').select2({width: '100%'});
 	</script>
 {% endblock %}

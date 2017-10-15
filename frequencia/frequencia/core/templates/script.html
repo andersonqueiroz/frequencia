@@ -35,26 +35,28 @@
     <!-- Select2 Library -->
     <script src="{% static 'js/select2.min.js'%}"></script>
 
-    <script src="{% static 'js/demo.js'%}"></script>
-      
-    {% if messages %}
-        <script type="text/javascript">
-            {% for message in messages %}
-            $.notify({
-                icon: 'pe-7s-info',
-                message: '{{message|safe}}'
-            },{
-                {% if message.tags == "error" %}
-                   type: "danger",
-                {% else %}
-                    type: '{{ message.tags }}',
-                {% endif %}
+    <script src="{% static 'js/demo-charts.js'%}"></script>
 
-                timer: 4000,
-                placement: {
-                    align: 'center'
-                }                
-            });
-            {% endfor %}
-        </script>        
-    {% endif %}
+    <script type="text/javascript">
+        $('body').show();        
+
+        {% if messages %}     
+            {% for message in messages %}
+                $.notify({
+                    icon: 'pe-7s-info',
+                    message: '{{message|safe}}'
+                },{
+                    {% if message.tags == "error" %}
+                       type: "danger",
+                    {% else %}
+                        type: '{{ message.tags }}',
+                    {% endif %}
+
+                    timer: 5000,
+                    placement: {
+                        align: 'center'
+                    }                
+                });
+            {% endfor %}       
+        {% endif %}
+    </script>

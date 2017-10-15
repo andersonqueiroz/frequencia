@@ -21,7 +21,10 @@ class TipoJustificativaFalta(basemodel):
 
 class JustificativaFaltaManager(models.Manager):
 	def buscar(self, query):
-		return self.filter(Q(vinculo__user__name__contains=query) | Q(descricao__contains=query))
+		if not query:
+			return self
+		return self.filter(Q(vinculo__user__name__contains=query) | 
+						   Q(descricao__contains=query))
 
 class JustificativaFalta(basemodel):
 
@@ -43,7 +46,7 @@ class JustificativaFalta(basemodel):
 	termino = models.DateField('Data de término')
 
 	parecer = models.TextField('Parecer da chefia', blank=True)
-	horas_abonadas = models.DurationField('Tempo a ser abonado', blank=True, null=True)
+	horas_abonadas = models.DurationField('Tempo abonado', blank=True, null=True)
 
 	@property
 	def horas_sugeridas(self):

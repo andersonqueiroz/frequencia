@@ -1,10 +1,10 @@
 {% load static %}
 
 {% include "head.html" %}
-<body>
+<body style="display:none">
 
 <div class="wrapper">
-    <div class="sidebar" data-color="peteca" data-image="{% static "images/bczm-acervo.jpg" %}">
+    <div class="sidebar" data-image="{% static "images/bczm-acervo.jpg" %}">
 
         <div class="logo">
             <a href="{% url "core:home" %}" class="logo-text">
@@ -194,7 +194,7 @@
         <footer class="footer">
             <div class="container-fluid">
                 <p class="copyright pull-right">
-                    &copy; 2017 <a href="http://bczm.ufrn.br">Coordenadoria de Apoio Tecnológico</a>, Biblioteca Central Zila Mamede
+                    &copy; {% now "Y" %} <a href="http://bczm.ufrn.br">Coordenadoria de Apoio Tecnológico</a>, Biblioteca Central Zila Mamede
                 </p>
             </div>
         </footer>
