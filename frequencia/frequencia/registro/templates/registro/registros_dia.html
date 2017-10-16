@@ -1,120 +1,114 @@
-<!doctype html>
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
 <html lang="en">
+
 {% include "head.html" %}
 
-{% load static %}
-<body style="display:none">
+<style type="text/css">
+    body{
+        position:relative;
+        background: url({% static 'images/bczm-acervo.jpg' %}) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        width:100%;
+        height:100%;
+        margin:0
+    }
+    body:after{
+        position:fixed;
+        content:"";
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        background:rgba(16, 16, 16, 0.78);
+        z-index:-1;
+    } 
 
-<nav class="navbar navbar-transparent navbar-absolute">
-    <div class="container">
-        <div class="navbar-header">            
-            <a class="navbar-brand" href="{% url "registro:registro" %}">Frequência BCZM</a>
-        </div>
-        <div class="collapse navbar-collapse">
+    .card-registro {
+        margin-bottom: 20px;
+    }
+</style>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                   <a href="{% url "accounts:login" %}">
-                   <i class="fa fa-home"></i>
-                        Entrar
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<body class="bg-dark fixed-nav sticky-footer "> 
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <a class="navbar-brand" href="{% url 'core:index' %}">Frequência BCZM</a>
+    <ul class="navbar-nav ml-auto">  
+        <i class="fa fa-sign-in" aria-hidden="true"></i>      
+        <a class="nav-link" href="{% url 'accounts:login' %}">Entrar</a>
+    </ul>
+  </nav>
 
+  <div class="container">
+        <div class="card card-login mx-auto mt-5">
+          <div class="card-header">
+              <div class="text-center">
+                Registros do dia
+                <h5>{% now "D, d M Y" %}</h5>                
+              </div>
+          </div>
 
-<div class="wrapper wrapper-full-page">
-    <div class="full-page login-page" data-color="orange" data-image="{% static "images/bczm-acervo.jpg" %}">
+          <div class="card-body">
+                <div class="text-center font-weight-bold">
+                    {{bolsista}}
+                </div>                
+                {% if bolsista %}
+                <table class="table text-center font-weight-bold">
+                    <tbody>
+                    {% for registro in bolsista.registros_dia %}
+                        <tr>
+                            {% if registro.tipo %}
+                                <td class="text-danger align-middle">
+                                    <i class="fa fa-arrow-circle-o-left fa-2x pull-left" aria-hidden="true"></i>
+                                    <span>{{registro.get_tipo_display}}</span>
+                                </td>        
+                            {% else %}
+                                <td class="text-success align-middle">
+                                    <i class="fa fa-arrow-circle-o-right fa-2x pull-left" aria-hidden="true"></i>
+                                    <span>{{registro.get_tipo_display}}</span>
+                                </td>
+                            {% endif %}
+                                    
+                            <td>                                
+                                <strong>{{registro.created_at|time:'H:i'}}</strong>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <h3>Sem registros para esse dia</h3>
+                {% endif %}                           
+          </div>
+          <div class="text-center card-registro">
+              <a class="btn text-info" href="{% url 'registro:registro' %}">Voltar</a>
+          </div>    
+      </div>
+    </div> 
 
-    <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
-        <div class="content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                        <!--   if you want to have the card without animation please remove the ".card-hidden" class   -->
-                        <div class="card ">
-                            <div class="text-center">
-                            	<h3>Registros do dia</h3>
-
-                            </div>
-                            <div class="text-center">
-                                <h5>{{now|date:"D, d M Y"}}</h5>
-
-                            </div>
-                            <div class="content">
-								<h4 class="text-center truncate">{{bolsista}}</h4>
-							</div>
-
-                            <div class="content">
-                                {% if bolsista %}
-								<table class="table">
-				                    <tbody>
-									{% for registro in bolsista.registros_dia %}
-			                            <tr>
-				                            <td>
-					                            {% if registro.get_tipo_display == "Entrada" %}
-													<a class="btn btn-success btn-fill btn-round pull-left">
-														{{registro.get_tipo_display}}
-													</a>
-												{% else %}
-													<a class="btn btn-danger btn-fill btn-round pull-left">
-														&nbsp;&nbsp;{{registro.get_tipo_display}}&nbsp;&nbsp;
-													</a>
-												{% endif %}
-											</td>
-											<td>
-												<div class="log pull-left">
-													<h5 class=""><strong>{{registro.created_at|time:'H:i'}}</strong></h5>
-												</div>
-											</td>
-			                            </tr>
-									{% endfor %}
-					                </tbody>
-								</table>
-								{% else %}
-									<h3>Sem registros para esse dia</h3>
-								{% endif %}
-								<div class="footer text-center">
-									<a class="btn btn-info btn-simple btn-lg" href="{% url 'registro:registro' %}">Voltar</a>
-								</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <footer class="footer footer-transparent">
-            <div class="container">
-                <nav class="pull-left">
-                        <ul>
-                            <li>
-                                <img class="logoBCZM" src="{% static 'images/logobczm.png' %}">
-                            </li>
-                        </ul>
-                    </nav>
-                    <!--div class="copyright pull-right"-->
-                    <div class="pull-right">
-                        &copy; {% now "Y" %}, SST</a>
-                    </div>
-            </div>
-        </footer>
-
-    </div>
-
-</div>
-
+    <div class="container-fluid footer navbar-fixed-bottom text-center" id="footer-wrapper">
+        <small style="color: #FFF"> © Biblioteca Central Zila Mamede - {% now "Y" %}</small>
+    </div>  
 </body>
-
+     
 {% include "script.html" %}
+<script src="{% static 'js/relogio.js' %}"></script>
+<script src="{% static 'js/jquery.mask.js' %}"></script>
+
 <script type="text/javascript">
-    $().ready(function(){
-        lbd.checkFullPageBackgroundImage();
+    $(document).ready(function(){
+
+        $('#footer-wrapper').attr('style', 'position: fixed!important; bottom: 20px;');       
 
         setTimeout(function () {
            window.location.href = {% url 'registro:registro' %};
         }, 10000);
     });
+    
 </script>
+
+</html>

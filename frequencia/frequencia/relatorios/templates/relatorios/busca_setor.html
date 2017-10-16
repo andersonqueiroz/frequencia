@@ -8,57 +8,50 @@
 	{% load rules %}
 	{% has_perm 'accounts.is_servidor' user as is_servidor %}
 	
-	<div class="row">
-		<div class="col-md-12">
-            <div class="card">
-            	<div class="header">
-            		<h4 class="title">Relatório de frequência mensal do setor</h4>
-                	<p class="category">Preencha os dados para consultar o relatório</p>
+	<div class="card mb-3">
+	    <div class="card-header">
+	      <i class="fa fa-table"></i> Relatório de frequência mensal de setor
+	    </div>
+	    <div class="card-body">
+            <form action="#" method="post">
+                 {% csrf_token %}
+
+                 {% if form.non_field_errors %}
+					<div class="alert alert-danger">
+						{% for error in form.non_field_errors %}
+							{{ error }}
+						{% endfor %}
+					</div>
+				{% endif %}
+				
+				<div class="row">				
+					<div class="form-group col-md-12">
+						<label class="control-label">{{form.setor.label}}</label>
+						{% render_field form.setor class="form-control" required="" %}
+						{% if form.setor.errors %}
+	                        <label class="error">{{ form.setor.errors.0 }}</label>
+	                    {% endif %}
+					</div>
+					<div class="form-group col-md-6">
+						<label class="control-label">{{form.mes.label}}</label>
+						{% render_field form.mes class="form-control" data-minimum-results-for-search="Infinity" %}
+					</div>
+
+					<div class="form-group col-md-6">
+						<label class="control-label">{{form.ano.label}}</label>
+						{% render_field form.ano class="form-control" data-minimum-results-for-search="Infinity" %}
+					</div>						
                 </div>
-                <div class="content">
-                    <form action="#" method="post">
-	                     {% csrf_token %}
-
-                         {% if form.non_field_errors %}
-							<div class="alert alert-danger">
-								{% for error in form.non_field_errors %}
-									{{ error }}
-								{% endfor %}
-							</div>
-						{% endif %}
-						
-						<div class="form-group col-md-12">
-							<label class="control-label">{{form.setor.label}}</label>
-							{% render_field form.setor class="form-control" required="" %}
-							{% if form.setor.errors %}
-                                <label class="error">{{ form.setor.errors.0 }}</label>
-                            {% endif %}
-						</div>
-
-						<div class="form-group col-md-6">
-							<label class="control-label">{{form.mes.label}}</label>
-							{% render_field form.mes class="form-control" data-minimum-results-for-search="Infinity" %}
-						</div>
-
-						<div class="form-group col-md-6">
-							<label class="control-label">{{form.ano.label}}</label>
-							{% render_field form.ano class="form-control" data-minimum-results-for-search="Infinity" %}
-						</div>						
-
-						<div class="row">
-						    <div class="text-center">
-							    <button class="btn btn-warning btn-fill" type="submit">Gerar relatório</button>
-							</div>		
-	                    </div>
-                    </form>
-                </div>
-            </div> 
+			    <div class="text-center">
+				    <button class="btn btn-info" type="submit">Gerar relatório</button>
+				</div>		
+            </form>
         </div>
-	</div>
+    </div> 
 
 {% endblock %}
 
-{% block script %}
+{% block scripts %}
 	{{block.super}}
 	<script type="text/javascript">
 		$('select').select2({width: '100%'});

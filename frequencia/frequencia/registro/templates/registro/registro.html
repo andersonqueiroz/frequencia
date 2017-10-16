@@ -1,99 +1,93 @@
-<!doctype html>
-<html lang="pt">
-{% include "head.html" %}
-
 {% load static %}
 {% load widget_tweaks %}
-<body style="display:none;">
 
-    <nav class="navbar navbar-transparent navbar-absolute">
-        <div class="container">    
-            <div class="navbar-header">            
-                <a class="navbar-brand" href="#">Frequência BCZM</a>
+<!DOCTYPE html>
+<html lang="en">
+
+{% include "head.html" %}
+
+<style type="text/css">
+    body{
+        position:relative;
+        background: url({% static 'images/bczm-acervo.jpg' %}) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        width:100%;
+        height:100%;
+        margin:0
+    }
+    body:after{
+        position:fixed;
+        content:"";
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        background:rgba(16, 16, 16, 0.78);
+        z-index:-1;
+    } 
+
+    .card-registro {
+        margin-bottom: 20px;
+    }
+</style>
+
+<body class="bg-dark fixed-nav sticky-footer "> 
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <a class="navbar-brand" href="{% url 'core:index' %}">Frequência BCZM</a>
+    <ul class="navbar-nav ml-auto">               
+        <a class="nav-link font-weight-bold" href="{% url 'accounts:login' %}"><i class="fa fa-sign-in"></i> Entrar</a>
+    </ul>
+  </nav>
+
+    <div class="container">
+        <div class="card card-login mx-auto mt-5">
+          <div class="card-header">
+              <div class="text-center">
+                Registro de frequência
+                <h1><span class="h">{% now "H" %}</span>:<span class="h m">{% now "i" %}</span>:<span class="h s">{% now "s" %}</span></h1>
+                <h5>{% now "D, d M Y" %}</h5>                                
             </div>
-            <div class="collapse navbar-collapse">       
-                
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                       <a href="{% url "accounts:login" %}">
-                       <i class="fa fa-home"></i>
-                            Entrar
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="wrapper wrapper-full-page">
-        <div class="full-page login-page" data-color="orange" data-image="{% static "images/bczm-acervo.jpg" %}">   
-            
-            <div class="content">
-                <div class="container">
-                    <div class="row">                   
-                        <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                            <form action="{% url 'registro:registro' %}" method="POST">
-                            {% csrf_token %}
-                                
-                                <div class="card ">
-                                    <div class="text-center">Registro de frequência</div>
-                                    <div class="text-center">
-                                        <h1><span class="h">{% now "H" %}</span>:<span class="h m">{% now "i" %}</span>:<span class="h s">{% now "s" %}</span></h1>
-                                        <h5>{% now "D, d M Y" %}</h5>                                
-                                    </div>
-                                    
-                                    <div class="content">
-                                        {% if form.errors %}
-                                        <div class="alert alert-danger">
-                                            <button type="button" aria-hidden="true" class="close">×</button>
-                                            <span>{{ form.non_field_errors.0 }}</span>
-                                        </div>
-                                        {% endif %}
-                                        <div class="form-group">
-                                            <label>{{ form.cpf.label }}</label>
-
-                                            {% render_field form.cpf class="form-control" placeholder=form.cpf.label autofocus="" %}
-                                                {{ form.cpf.errors }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label>{{ form.password.label }}</label>
-                                            {% render_field form.password class="form-control" placeholder=form.password.label %}
-                                                {{ form.password.errors }}
-                                        </div> 
-                                        <div class="form-group">
-                                            <label>{{ form.observacao.label }}</label>
-                                            {% render_field form.observacao class="form-control" placeholder=form.observacao.label %}
-                                                {{ form.observacao.errors }}
-                                        </div>                                    
-                                    </div>
-                                    <div class="footer text-center">
-                                        <button type="submit" class="btn btn-fill btn-warning btn-wd">Registrar</button>
-                                    </div>
-                                </div>
-                                    
-                            </form>
-                                    
-                        </div>                    
-                    </div>
+          </div>
+         <form action="{% url 'registro:registro' %}" method="POST">
+            {% csrf_token %}
+            <div class="card-body">
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <button type="button" aria-hidden="true" class="close">×</button>
+                    <span>{{ form.non_field_errors.0 }}</span>
                 </div>
-            </div>
+                {% endif %}
+                <div class="form-group">
+                    <label>{{ form.cpf.label }}</label>
 
-            <footer class="footer footer-transparent">
-                <div class="container">
-                    <nav class="pull-left">
-                        <ul>
-                            <li>
-                                <img src="{% static 'images/logobczm.png' %}">
-                            </li>
-                        </ul>
-                    </nav>                    
-                    <div class="pull-right">
-                        &copy; {% now "Y" %}, SST
-                    </div>
+                    {% render_field form.cpf class="form-control" placeholder=form.cpf.label autofocus="" %}
+                        {{ form.cpf.errors }}
                 </div>
-            </footer>
-        </div>  
-    </div>
+                <div class="form-group">
+                    <label>{{ form.password.label }}</label>
+                    {% render_field form.password class="form-control" placeholder=form.password.label %}
+                        {{ form.password.errors }}
+                </div> 
+                <div class="form-group">
+                    <label>{{ form.observacao.label }}</label>
+                    {% render_field form.observacao class="form-control" placeholder=form.observacao.label %}
+                        {{ form.observacao.errors }}
+                </div>                                    
+            </div>
+            <div class="text-center card-registro">
+                <button type="submit" class="btn btn-info">Registrar</button>
+            </div>
+         </form>     
+      </div>
+    </div> 
+
+    <div class="container-fluid footer navbar-fixed-bottom text-center" id="footer-wrapper">
+        <small style="color: #FFF"> © Biblioteca Central Zila Mamede - {% now "Y" %}</small>
+    </div>  
+
 </body>
      
 {% include "script.html" %}
@@ -101,9 +95,9 @@
 <script src="{% static 'js/jquery.mask.js' %}"></script>
 
 <script type="text/javascript">
-    $(document).ready(function(){          
+    $(document).ready(function(){
 
-        lbd.checkFullPageBackgroundImage();
+        $('#footer-wrapper').attr('style', 'position: fixed!important; bottom: 20px;');
 
         var $seuCampoCpf = $("#id_cpf");
         $seuCampoCpf.mask('000.000.000-00', {reverse: true});

@@ -20,56 +20,58 @@
             <span class="nav-link-text">Home</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'vinculos:setores_coordenadorias' %}">
             <i class="fa fa-fw fa-area-chart"></i>
             <span class="nav-link-text">Setores</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'registro:maquinas' %}">
             <i class="fa fa-fw fa-table"></i>
             <span class="nav-link-text">Máquinas</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+        <li class="nav-item">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseUsuarios" data-parent="#exampleAccordion">
             <i class="fa fa-fw fa-wrench"></i>
             <span class="nav-link-text">Usuários</span>
           </a>
-          <ul class="sidenav-second-level collapse" id="collapseComponents">
+          <ul class="sidenav-second-level collapse" id="collapseUsuarios">
             <li><a href="{% url 'accounts:accounts' %}">Listar</a></li>
             <li><a href="{% url 'accounts:accounts_create' %}">Novo usuário</a></li>
           </ul>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseExamplePages" data-parent="#exampleAccordion">
+        <li class="nav-item">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseJustificativas" data-parent="#exampleAccordion">
             <i class="fa fa-fw fa-file"></i>
             <span class="nav-link-text">Justificativas</span>
           </a>
-          <ul class="sidenav-second-level collapse" id="collapseExamplePages">
+          <ul class="sidenav-second-level collapse" id="collapseJustificativas">
             <li><a href="{% url 'justificativas:justificativas' %}">Listar</a></li>
             <li><a href="{% url 'justificativas:justificativa_create' %}">Nova justificativa</a></li>
             <li><a href="{% url 'justificativas:tipo_justificativa' %}">Gerenciar tipos</a></li>
           </ul>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Calendario">
+
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'calendario:feriados' %}">
             <i class="fa fa-fw fa-table"></i>
             <span class="nav-link-text">Calendário</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseExamplePages" data-parent="#exampleAccordion">
+
+        <li class="nav-item">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseRelatorios" data-parent="#collapseRelatorios">
             <i class="fa fa-fw fa-file"></i>
-            <span class="nav-link-text">Justificativas</span>
+            <span class="nav-link-text">Relatórios</span>
           </a>
-          <ul class="sidenav-second-level collapse" id="collapseExamplePages">
-            <li><a href="{% url 'justificativas:justificativas' %}">Listar</a></li>
-            <li><a href="{% url 'justificativas:justificativa_create' %}">Nova justificativa</a></li>
-            <li><a href="{% url 'justificativas:tipo_justificativa' %}">Gerenciar tipos</a></li>
+          <ul class="sidenav-second-level collapse" id="collapseRelatorios">
+            <li><a href="{% url 'relatorios:busca_relatorio' %}">Relatório mensal</a></li>
+            <li><a href="{% url 'relatorios:listagem_geral' %}">Listagem geral</a></li>
+            <li><a href="{% url 'relatorios:busca_setor' %}">Relatório por setor</a></li>
           </ul>
-        </li>               
+        </li>              
       </ul>
       <ul class="navbar-nav sidenav-toggler">
         <li class="nav-item">
@@ -90,16 +92,16 @@
             </span-->
           </a>
           <div class="dropdown-menu dropdown-menu-right">
-            <h6 class="dropdown-header">{{user}}</h6>
+            <h6 class="dropdown-header">{{ user }}</h6>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="{% url 'accounts:edit_password' %}">
               <span>
                 <strong>
                   <i class="fa fa-key"></i> Alterar senha</strong>
               </span>              
               <div class="dropdown-message small">Clique para alterar a senha do seu usuário</div>
             </a>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="{% url 'accounts:logout' %}">
               <span>
                 <strong>
                   <i class="fa fa-sign-out"></i> Sair do sistema</strong>
