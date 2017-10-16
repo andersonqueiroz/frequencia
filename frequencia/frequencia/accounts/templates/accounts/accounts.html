@@ -3,176 +3,171 @@
 
 {% block content %}
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="header">
-                <div class="col-md-9">
-                    <h4 class="title">Usuários ativos</h4>                
-                    <p class="category">Listagem de todos os usuários que atualmente utilizam o sistema</p>
-                </div>
-                <form url="#" method="GET">
-                    <div class="input-group col-md-3">
-                        <input type="text" name="busca" placeholder="Buscar usuário" class="form-control">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                    </div>
-                </form>
-            </div>
+
+<div class="card mb-3">
+
+    <div class="card-header">
+      <i class="fa fa-table"></i> Usuários
+      <form url="#" method="GET" class="pull-right">
+        <div class="input-group">
+            <input type="text" name="busca" placeholder="Buscar usuário" class="form-control">
+            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        </div>
+      </form>
+    </div>
             
-            <div class="content">
-                {% if not busca %}
-                    <ul role="tablist" class="nav nav-tabs">
-                        <li role="presentation" class="active">
-                            <a data-toggle="tab" href="#bolsistas" aria-expanded="true">Bolsistas</a>
-                        </li>
-                        <li role="" class="">
-                            <a data-toggle="tab" href="#chefes" aria-expanded="true">Chefes</a>
-                        </li>
-                        <li role="" class="">
-                            <a data-toggle="tab" href="#coordenadores" aria-expanded="true">Coordenadores</a>
-                        </li>
-                        <li role="" class="">
-                            <a data-toggle="tab" href="#gestores" aria-expanded="true">Gestores</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="bolsistas" class="tab-pane active">
-                            <table class="table">
-                                <thead>
-                                    <tr>                          
-                                        <th>Nome</th>                          
-                                        <th>Login</th>                          
-                                        <th>CPF</th>                           
-                                        <th>E-mail</th>                          
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for account in bolsistas %}
-                                        <tr>
-                                            <td>{{ account.name }}</td>                       
-                                            <td>{{ account.username }}</td>
-                                            <td>{{ account.cpf }}</td>
-                                            <td>{{ account.email }}</td>
-                                            <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="chefes" class="tab-pane">
-                            <table class="table">
-                                <thead>
-                                    <tr>                          
-                                        <th>Nome</th>                          
-                                        <th>Login</th>                          
-                                        <th>CPF</th>                           
-                                        <th>E-mail</th>                          
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for account in chefes %}
-                                        <tr>
-                                            <td>{{ account.name }}</td>                       
-                                            <td>{{ account.username }}</td>
-                                            <td>{{ account.cpf }}</td>
-                                            <td>{{ account.email }}</td>
-                                            <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="coordenadores" class="tab-pane">
-                            <table class="table">
-                                <thead>
-                                    <tr>                          
-                                        <th>Nome</th>                          
-                                        <th>Login</th>                          
-                                        <th>CPF</th>                           
-                                        <th>E-mail</th>                          
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for account in coodenadores %}
-                                        <tr>
-                                            <td>{{ account.name }}</td>                       
-                                            <td>{{ account.username }}</td>
-                                            <td>{{ account.cpf }}</td>                                            
-                                            <td>{{ account.email }}</td>
-                                            <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="gestores" class="tab-pane">                        
-                            <table class="table">
-                                <thead>
-                                    <tr>                          
-                                        <th>Nome</th>                          
-                                        <th>Login</th>                          
-                                        <th>CPF</th>                             
-                                        <th>E-mail</th>                          
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for account in gestores %}
-                                        <tr>
-                                            <td>{{ account.name }}</td>                       
-                                            <td>{{ account.username }}</td>
-                                            <td>{{ account.cpf }}</td>                                            
-                                            <td>{{ account.email }}</td>
-                                            <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                   </div>
-               {% else %}
+    <div class="card-body">
+        {% if not busca %}
+            <ul role="tablist" class="nav nav-tabs">
+                <li role="presentation">
+                    <a data-toggle="tab" href="#bolsistas" class="nav-link active" aria-expanded="true">Bolsistas</a>
+                </li>
+                <li role="presentation">
+                    <a data-toggle="tab" href="#chefes" class="nav-link" aria-expanded="true">Chefes</a>
+                </li>
+                <li role="presentation">
+                    <a data-toggle="tab" href="#coordenadores" class="nav-link" aria-expanded="true">Coordenadores</a>
+                </li>
+                <li role="presentation">
+                    <a data-toggle="tab" href="#gestores" class="nav-link" aria-expanded="true">Gestores</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="bolsistas" class="tab-pane active">
                     <table class="table">
                         <thead>
                             <tr>                          
                                 <th>Nome</th>                          
                                 <th>Login</th>                          
-                                <th>CPF</th>                      
-                                <th>Status</th>                          
+                                <th>CPF</th>                           
                                 <th>E-mail</th>                          
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for account in object_list %}
+                            {% for account in bolsistas %}
                                 <tr>
                                     <td>{{ account.name }}</td>                       
                                     <td>{{ account.username }}</td>
                                     <td>{{ account.cpf }}</td>
-                                    {% if account.is_active %}                    
-                                    <td>Ativo</td>
-                                    {% else %}
-                                    <td>Inativo</td>
-                                    {% endif %}
                                     <td>{{ account.email }}</td>
                                     <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
-                    <div class="row">
-                        <div class="text-center">
-                            <legend></legend>
-                            <a class="btn btn-warning btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
-                        </div>
-                    </div>   
-               {% endif %}
+                </div>
+                <div id="chefes" class="tab-pane">
+                    <table class="table">
+                        <thead>
+                            <tr>                          
+                                <th>Nome</th>                          
+                                <th>Login</th>                          
+                                <th>CPF</th>                           
+                                <th>E-mail</th>                          
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for account in chefes %}
+                                <tr>
+                                    <td>{{ account.name }}</td>                       
+                                    <td>{{ account.username }}</td>
+                                    <td>{{ account.cpf }}</td>
+                                    <td>{{ account.email }}</td>
+                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="coordenadores" class="tab-pane">
+                    <table class="table">
+                        <thead>
+                            <tr>                          
+                                <th>Nome</th>                          
+                                <th>Login</th>                          
+                                <th>CPF</th>                           
+                                <th>E-mail</th>                          
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for account in coodenadores %}
+                                <tr>
+                                    <td>{{ account.name }}</td>                       
+                                    <td>{{ account.username }}</td>
+                                    <td>{{ account.cpf }}</td>                                            
+                                    <td>{{ account.email }}</td>
+                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="gestores" class="tab-pane">                        
+                    <table class="table">
+                        <thead>
+                            <tr>                          
+                                <th>Nome</th>                          
+                                <th>Login</th>                          
+                                <th>CPF</th>                             
+                                <th>E-mail</th>                          
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for account in gestores %}
+                                <tr>
+                                    <td>{{ account.name }}</td>                       
+                                    <td>{{ account.username }}</td>
+                                    <td>{{ account.cpf }}</td>                                            
+                                    <td>{{ account.email }}</td>
+                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+           </div>
+        {% else %}
+            <table class="table">
+                <thead>
+                    <tr>                          
+                        <th>Nome</th>                          
+                        <th>Login</th>                          
+                        <th>CPF</th>                      
+                        <th>Status</th>                          
+                        <th>E-mail</th>                          
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for account in object_list %}
+                        <tr>
+                            <td>{{ account.name }}</td>                       
+                            <td>{{ account.username }}</td>
+                            <td>{{ account.cpf }}</td>
+                            {% if account.is_active %}                    
+                            <td>Ativo</td>
+                            {% else %}
+                            <td>Inativo</td>
+                            {% endif %}
+                            <td>{{ account.email }}</td>
+                            <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>            
+            <div class="text-center">
+                <legend></legend>
+                <a class="btn text-info" href="{% url 'accounts:accounts' %}">Voltar</a>
+            </div>   
+       {% endif %}        
+            
+    </div>
+</div>    
 
-            </div>
-        </div>
-    </div>    
-</div>
 
 {% endblock %}

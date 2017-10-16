@@ -3,52 +3,46 @@
 
 {% block content %}
 
-	{% load widget_tweaks %}
+{% load widget_tweaks %}
 
-	<div class="row">
-		<div class="col-md-12">
-            <div class="card">
-            
-            <div class="header">
-            	<h4 class="title">Gerenciar setor</h4>
-                
-                <p class="category">Preencha os dados do setor</p>
-                </div>
-                <div class="content">
-                    <form method="post">
-                         {% csrf_token %}
-	                        {% if form.non_field_errors %}
-                                <div class="alert alert-danger">
-                                    {% for error in form.non_field_errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
+<div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-table"></i> Gerenciar setor
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
 
-	                        <div class="form-group col-md-8">
-                            <label>{{ form.nome.label }}</label>
-                            {% render_field form.nome class="form-control" %}
-                            {% if form.nome.errors %}
-                                <label class="error">{{ form.nome.errors.0 }}</label>
-                            {% endif %}
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label>{{ form.coordenadoria.label }}</label>
-                            {% render_field form.coordenadoria class="form-control btn-group" %}
-                            {% if form.coordenadoria.errors %}
-                                <label class="error">{{ form.coordenadoria.errors.0 }}</label>
-                            {% endif %}
-                        </div>
-                        <div class="row">     						
-                            <div class="col-md-12 text-center">
-    					    	<a class="btn btn-warning btn-simple" href="{% url 'vinculos:setores_coordenadorias' %}" type="button">Voltar</a>
-    						    <button class="btn btn-warning btn-fill" type="submit">Salvar</button>
-    						</div>
-                        </div> 
-                    </form>
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
                 </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="form-group col-md-8">
+                    <label>{{ form.nome.label }}</label>
+                    {% render_field form.nome class="form-control" %}
+                    {% if form.nome.errors %}
+                        <label class="text-danger">{{ form.nome.errors.0 }}</label>
+                    {% endif %}
+                </div>
+                <div class="form-group col-md-4">
+                    <label>{{ form.coordenadoria.label }}</label>
+                    {% render_field form.coordenadoria class="form-control btn-group" %}
+                    {% if form.coordenadoria.errors %}
+                        <label class="text-danger">{{ form.coordenadoria.errors.0 }}</label>
+                    {% endif %}
+                </div>
+            </div>                                      
+            <div class="text-center">
+                <a class="btn text-info" href="{% url 'vinculos:setores_coordenadorias' %}">Voltar</a>
+                <button class="btn btn-info" type="submit">Salvar</button>
             </div>
-        </div>
-	</div>
+        </form>
+    </div>        
+</div>
 
 {% endblock %}

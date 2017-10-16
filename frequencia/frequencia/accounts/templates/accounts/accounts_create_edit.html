@@ -3,171 +3,148 @@
 
 {% block content %}
 
-	{% load widget_tweaks %}
+{% load widget_tweaks %}
 
-	<div class="row">
-		<div class="col-md-12">
-            <div class="card">
-            	<div class="header">
-            	<h4 class="title">Criar usuário</h4>
-                
-                <p class="category">Preencha os dados da coordenadoria</p>
-                </div>
-                <div class="content">
-                    <form method="post">
-                         {% csrf_token %} 
-                         <div class="col-md-6 col-md-offset-6">
-			                <div class="pull-right">
-								<label class="checkbox">
-		                            {% render_field form.is_active data-toggle="checkbox" %}
-		                            <span class="icons"><span class="first-icon fa fa-square-o"></span><span class="second-icon fa fa-check-square-o"></span></span>{{form.is_active.label}}
-		                        </label>
-							</div>
-							
-						</div>
-
-                         {% if form.non_field_errors %}
-                            <div class="alert alert-danger">
-                                {% for error in form.non_field_errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                        <div class="form-group col-md-6">
-                        	<label class="control-label">{{form.name.label}}</label>
-							{% render_field form.name class="form-control" %}
-							{% if form.name.errors %}
-                                <label class="error">{{ form.name.errors.0 }}</label>
-                            {% endif %}                        
-                        </div>
-                        <div class="form-group col-md-6">
-                        	<label class="control-label">{{form.username.label}}</label>
-							{% render_field form.username class="form-control" %}
-							{% if form.username.errors %}
-                                <label class="error">{{ form.username.errors.0 }}</label>
-                            {% endif %}                        
-                        </div>
-                        <div class="form-group col-md-6">
-                        	<label class="control-label">{{form.email.label}}</label>
-							{% render_field form.email class="form-control" %}
-							{% if form.email.errors %}
-                                <label class="error">{{ form.email.errors.0 }}</label>
-                            {% endif %}                        
-                        </div>
-                        <div class="form-group col-md-6">
-                        	<label class="control-label">{{form.cpf.label}}</label>
-							{% render_field form.cpf class="form-control" %}
-							{% if form.cpf.errors %}
-                                <label class="error">{{ form.cpf.errors.0 }}</label>
-                            {% endif %}                        
-                        </div>
-                        <div class="form-group col-md-6">
-                        	<label class="control-label">{{form.password1.label}}</label>
-							{% render_field form.password1 class="form-control" %}
-							{% if form.password1.errors %}
-                                <label class="error">{{ form.password1.errors.0 }}</label>
-                            {% endif %}                        
-                        </div>
-                        <div class="form-group col-md-6">
-                        	<label class="control-label">{{form.password2.label}}</label>
-							{% render_field form.password2 class="form-control" %}
-							{% if form.password2.errors %}
-                                <label class="error">{{ form.password2.errors.0 }}</label>
-                            {% endif %}                        
-                        </div>
-
-
-                        <legend></legend>
-		                <h4>Vínculos</h4>
-		                <p>Determine a função do usuário no sistema e dados contextuais.</p>
-		                <legend></legend>
-
-		                <div class="content">
-			                <ul role="tablist" class="nav nav-tabs">
-			                    {% for form in vinculos_formset %}
-			                      <li id="{{form.prefix}}-tab" class="{% if form.prefix == 'vinculos-0' %}active{% endif %}"><a data-toggle="tab" href="#{{form.prefix}}">Novo vínculo</a></li>
-			                    {% endfor %}
-			                </ul>
-			                {{vinculos_formset.management_form}}
-			                <div id="tab-content" class="tab-content">
-								{% for form in vinculos_formset %}
-			                      	<div id="{{form.prefix}}" class="tab-pane fade {% if form.prefix == 'vinculos-0' %}in active{% endif %}">
-										<div id="collapseOne" class="tab-pane">
-						                    <div class="panel-body">
-											{% for field in form %}
-												<div>
-												{% if field.name == "ativo" %}
-													<div class="row vertical-align">														
-	        											<div class="col-md-6 col-md-offset-6">
-											                <div class="pull-right">
-																<label class="checkbox">
-																	{% render_field field data-toggle="checkbox" %}
-										                            <span class="icons"><span class="first-icon fa fa-square-o"></span><span class="second-icon fa fa-check-square-o"></span></span>{{field.label}}
-										                        </label>
-															</div>
-														</div>
-													</div>
-												{% elif field.name == "id" or field.name == "user" %}
-													{% render_field field %}
-												{% elif field.name == "group" %}
-					         						<div class="col-md-6">
-														<div class="form-group">
-															<label class="control-label">{{field.label}}</label>
-															{% render_field field class="form-control" onchange="getOption(this)" %}
-														</div>
-													</div>
-												{% else %}
-					         						<div class="col-md-6">
-														<div class="form-group">
-															<label class="control-label">{{field.label}}</label>
-															{% render_field field class="form-control" %}
-														</div>
-													</div>
-												{% endif %}
-												</div>
-										    {% endfor %}
-						                    </div>
-				                    	</div>
-			                      	</div>
-								{% endfor %}
-		                    </div>
-
-			            </div>
-
-                        <div class="row">   						
-                            <div class="footer text-center">
-    					    	<a class="btn btn-warning btn-simple" href="{% url 'accounts:accounts' %}" type="button">Voltar</a>
-    					    	{% if object %}
-    					    		<a class="btn btn-danger btn-fill" data-toggle="modal" data-target="#confirmar_redefinicao" type="button">Redefinir senha</a>			    	
-    					    	{% endif %}
-    						    <button class="btn btn-warning btn-fill" type="submit">Salvar</button>
-    						</div>
-                        </div>
-                    </form>
-                </div>
-            </div> 
-        </div>
+<div class="card mb-3">
+	<div class="card-header">
+	  <i class="fa fa-table"></i> Gerenciar usuário
 	</div>
+    <div class="card-body">
+        <form method="post">
+             {% csrf_token %}              
 
-	{% if object %}
-		<div class="modal fade" id="confirmar_redefinicao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Confirmação de redefinição de senha</h4>
-		      </div>
-		      <div class="modal-body">
-		        Você deseja realmente redefinir a senha do usuário para o valor padrão?
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>
-		        <a type="button" class="btn btn-danger btn-fill" href="{% url 'accounts:reset_password' object.pk %}">Redefinir</a>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-	{% endif %}
+             {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="row">            	
+            	<div class="col-md-12">	                
+					<label class="checkbox">
+                        {% render_field form.is_active %}
+                        {{form.is_active.label}}
+                    </label>
+				</div>
+	            <div class="form-group col-md-6">
+	            	<label class="control-label">{{form.name.label}}</label>
+					{% render_field form.name class="form-control" %}
+					{% if form.name.errors %}
+	                    <label class="text-danger">{{ form.name.errors.0 }}</label>
+	                {% endif %}                        
+	            </div>
+	            <div class="form-group col-md-6">
+	            	<label class="control-label">{{form.username.label}}</label>
+					{% render_field form.username class="form-control" %}
+					{% if form.username.errors %}
+	                    <label class="text-danger">{{ form.username.errors.0 }}</label>
+	                {% endif %}                        
+	            </div>
+	            <div class="form-group col-md-6">
+	            	<label class="control-label">{{form.email.label}}</label>
+					{% render_field form.email class="form-control" %}
+					{% if form.email.errors %}
+	                    <label class="text-danger">{{ form.email.errors.0 }}</label>
+	                {% endif %}                        
+	            </div>
+	            <div class="form-group col-md-6">
+	            	<label class="control-label">{{form.cpf.label}}</label>
+					{% render_field form.cpf class="form-control" %}
+					{% if form.cpf.errors %}
+	                    <label class="text-danger">{{ form.cpf.errors.0 }}</label>
+	                {% endif %}                        
+	            </div>
+	            <div class="form-group col-md-6">
+	            	<label class="control-label">{{form.password1.label}}</label>
+					{% render_field form.password1 class="form-control" %}
+					{% if form.password1.errors %}
+	                    <label class="text-danger">{{ form.password1.errors.0 }}</label>
+	                {% endif %}                        
+	            </div>
+	            <div class="form-group col-md-6">
+	            	<label class="control-label">{{form.password2.label}}</label>
+					{% render_field form.password2 class="form-control" %}
+					{% if form.password2.errors %}
+	                    <label class="text-danger">{{ form.password2.errors.0 }}</label>
+	                {% endif %}                        
+	            </div>
+	        </div>
+
+            <h4>Vínculos</h4>
+
+            <ul role="tablist" class="nav nav-tabs">
+                {% for form in vinculos_formset %}
+                  <li id="{{form.prefix}}-tab"><a data-toggle="tab" class="nav-link{% if form.prefix == 'vinculos-0' %} active {% endif %}" href="#{{form.prefix}}">Novo vínculo</a></li>
+                {% endfor %}
+            </ul>
+            {{vinculos_formset.management_form}}
+            <div id="tab-content" class="tab-content">
+				{% for form in vinculos_formset %}
+                  	<div id="{{form.prefix}}" class="tab-pane {% if form.prefix == 'vinculos-0' %} active{% endif %}">		  
+						<div class="row">													
+						{% for field in form %}							
+							{% if field.name == "ativo" %}
+								<div class="col-md-12">
+									<label class="checkbox">
+										{% render_field field %}
+										{{field.label}}
+			                        </label>
+								</div>
+							{% elif field.name == "id" or field.name == "user" %}
+								{% render_field field %}
+							{% elif field.name == "group" %}
+         						<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">{{field.label}}</label>
+										{% render_field field class="form-control" onchange="getOption(this)" %}
+									</div>
+								</div>
+							{% else %}
+         						<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">{{field.label}}</label>
+										{% render_field field class="form-control" %}
+									</div>
+								</div>
+							{% endif %}
+					    {% endfor %}                    	
+						</div>
+                  	</div>
+				{% endfor %}
+            </div>
+
+             						
+            <div class="text-center">
+		    	<a class="btn text-info" href="{% url 'accounts:accounts' %}">Voltar</a>
+		    	{% if object %}
+		    		<button class="btn btn-danger" data-toggle="modal" data-target="#confirmar_redefinicao" type="button">Redefinir senha</button>
+		    	{% endif %}
+			    <button class="btn btn-info" type="submit">Salvar</button>
+			</div>            
+        </form>
+    </div>
+</div> 
+
+{% if object %}
+	<div class="modal fade" id="confirmar_redefinicao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Confirmação de redefinição de senha</h4>
+	      </div>
+	      <div class="modal-body">
+	        Você deseja realmente redefinir a senha do usuário para o valor padrão?
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>
+	        <a type="button" class="btn btn-danger btn-fill" href="{% url 'accounts:reset_password' object.pk %}">Redefinir</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+{% endif %}
 
 
 {% endblock %}

@@ -3,94 +3,80 @@
 {% block content %}
 {% load static %}
 
-	{% load widget_tweaks %}
+{% load widget_tweaks %}
 
-	{% load rules %}
-	{% has_perm 'accounts.is_bolsista' user as is_bolsista %}
-	
-	<div class="row">
-		<div class="col-md-12">
-            <div class="card">
-            	<div class="header">
-            	<h4 class="title">Nova justificativa</h4>
-                
-                <p class="category">Preencha os dados da justificativa de falta</p>
-                </div>
-                <div class="content">
-                    <form action="#" method="post">
-	                     {% csrf_token %}
-	                         {% if form.non_field_errors %}
-								<div class="alert alert-danger">
-									{% for error in form.non_field_errors %}
-										{{ error }}
-									{% endfor %}
-								</div>
-							{% endif %}
-						<div class="form-group col-md-12">
-							<label class="control-label">{{form.tipo.label}}</label>
-							{% render_field form.tipo class="form-control" %}
-							{% if form.tipo.errors %}
-	                            <label class="error">{{ form.tipo.errors.0 }}</label>
-	                        {% endif %}
-						</div>
-						<div class="form-group col-md-12">
-							<label class="control-label">{{form.descricao.label}}</label>
-							{% render_field form.descricao class="form-control" %}
-							{% if form.tipodescricao.errors %}
-	                            <label class="error">{{ form.descricao.errors.0 }}</label>
-	                        {% endif %}
-						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">{{form.inicio.label}}</label>
-							{% render_field form.inicio class="form-control datepicker" %}
-							{% if form.inicio.errors %}
-	                            <label class="error">{{ form.inicio.errors.0 }}</label>
-	                        {% endif %}
-						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">{{form.termino.label}}</label>
-							{% render_field form.termino class="form-control datepicker" %}
-							{% if form.termino.errors %}
-	                            <label class="error">{{ form.termino.errors.0 }}</label>
-	                        {% endif %}
-						</div>
-						<div class="row">
-						    <div class="text-center">
-						    	<a class="btn btn-warning btn-simple" href="{% url 'justificativas:justificativas' %}" type="button">Voltar</a>
-							    <button class="btn btn-warning btn-fill" type="submit">Salvar</button>
-							</div>		
-	                    </div>
-                    </form>
-                </div>
-            </div> 
-        </div>
-	</div>
+{% load rules %}
+{% has_perm 'accounts.is_bolsista' user as is_bolsista %}
+
+<div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-table"></i> Nova justificativa
+    </div>
+    <div class="card-body">     
+        <form action="#" method="post">
+             {% csrf_token %}
+                 {% if form.non_field_errors %}
+					<div class="alert alert-danger">
+						{% for error in form.non_field_errors %}
+							{{ error }}
+						{% endfor %}
+					</div>
+				{% endif %}
+			<div class="row">
+				<div class="form-group col-md-12">
+					<label class="control-label">{{form.tipo.label}}</label>
+					{% render_field form.tipo class="form-control" %}
+					{% if form.tipo.errors %}
+	                    <label class="error">{{ form.tipo.errors.0 }}</label>
+	                {% endif %}
+				</div>
+				<div class="form-group col-md-12">
+					<label class="control-label">{{form.descricao.label}}</label>
+					{% render_field form.descricao class="form-control" %}
+					{% if form.tipodescricao.errors %}
+	                    <label class="error">{{ form.descricao.errors.0 }}</label>
+	                {% endif %}
+				</div>
+				<div class="form-group col-md-6">
+					<label class="control-label">{{form.inicio.label}}</label>
+					{% render_field form.inicio class="form-control" data-toggle="datepicker" %}
+					{% if form.inicio.errors %}
+	                    <label class="error">{{ form.inicio.errors.0 }}</label>
+	                {% endif %}
+				</div>
+				<div class="form-group col-md-6">
+					<label class="control-label">{{form.termino.label}}</label>
+					{% render_field form.termino class="form-control" data-toggle="datepicker" %}
+					{% if form.termino.errors %}
+	                    <label class="error">{{ form.termino.errors.0 }}</label>
+	                {% endif %}
+				</div>
+            </div>
+			
+		    <div class="text-center">
+		    	<a class="btn text-info" href="{% url 'justificativas:justificativas' %}">Voltar</a>
+			    <button class="btn btn-info" type="submit">Salvar</button>
+			</div>		
+        </form>
+    </div>
+</div> 
 
 {% endblock %}
 
-{% block script %}
-{{ block.super }}
+{% block scripts %}
+	{{ block.super }}
 
-<script src="{% static 'js/jquery.mask.js' %}"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-            $('#id_inicio').mask('00/00/0000', {reverse: true});
-            $('#id_termino').mask('00/00/0000', {reverse: true});
+	<script src="{% static 'js/jquery.mask.js' %}"></script>
+	<script type="text/javascript">
+	    $(document).ready(function(){
+	            $('#id_inicio').mask('00/00/0000', {reverse: true});
+	            $('#id_termino').mask('00/00/0000', {reverse: true});
 
-            $('.datepicker').datetimepicker({
-	            format: 'DD/MM/YYYY',
-	            icons: {
-	                time: "fa fa-clock-o",
-	                date: "fa fa-calendar",
-	                up: "fa fa-chevron-up",
-	                down: "fa fa-chevron-down",
-	                previous: 'fa fa-chevron-left',
-	                next: 'fa fa-chevron-right',
-	                today: 'fa fa-screenshot',
-	                clear: 'fa fa-trash',
-	                close: 'fa fa-remove'
-	            }
-	         });     
-    });
-</script>
+	            $('[data-toggle="datepicker"]').datepicker({
+	                autoHide: true, 
+	                language: 'pt',
+	                format: 'dd/mm/yyyy'
+	            });   
+	    });
+	</script>
 {% endblock %}

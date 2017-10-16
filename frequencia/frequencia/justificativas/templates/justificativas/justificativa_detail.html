@@ -8,184 +8,164 @@
     {% load rules %}
     {% has_perm 'justificativa.can_analyse' user object as can_analyse %}
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="header">
-                <h4 class="title">Justificativa de falta</h4>
-                <p class="category">Dados gerais</p>
+<div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-table"></i> Justificativa de falta
+    </div>
+    <div class="card-body">     
+        <div class="row">
+            
+            <div class="form-group col-md-12">
+                <label>Período</label>
+                <p>{{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} ({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</p>
             </div>
+        
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Bolsista</label>
+                    <input type="text" class="form-control" value="{{object.vinculo.user}}" readonly="readonly">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Setor</label>
+                    <input type="text" class="form-control" value="{{object.vinculo.setor}}" readonly="readonly">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Status</label>
+                    <input type="text" class="form-control" value="{{object.get_status_display}}" readonly="readonly">
+                </div>
+            </div>
+        
+            <div class="col-md-12 text-justify">
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <p>{{object.descricao}}</p>
+                </div>
+            </div>
+
+            <div class="form-group col-md-12">
+                <label>Anexo</label>
+                <span class="fa-stack fa-lg">
+                    <i class="fa fa-paperclip fa-stack-1x"></i>
+                    <i class="fa fa-ban fa-stack-2x text-danger"></i>
+                </span>
+            </div>     
+        </div>
+       
+        <hr>
+        <h5>Análise da justificativa de falta</h5>
+        {% if not object.usuario_analise %}
+            {% if can_analyse %}                        
+                <div class="content">
+                    <form action="#" method="post">
+                         {% csrf_token %}
+                         {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>{{ form.status.label }}</label>
+                                {% render_field form.status class="form-control" %}
+                                {% if form.status.errors %}
+                                    <label class="text-danger">{{ form.status.errors.0 }}</label>
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>{{ form.horas_abonadas.label }}</label>
+                                {% render_field form.horas_abonadas class="form-control" value=object.horas_sugeridas %}
+                                {% if form.horas_abonadas.errors %}
+                                    <label class="text-danger">{{ form.horas_abonadas.errors.0 }}</label>
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>{{ form.parecer.label }}</label>
+                                {% render_field form.parecer class="form-control" %}
+                                {% if form.parecer.errors %}
+                                    <label class="text-danger">{{ form.parecer.errors.0 }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn text-info" href="{% url 'justificativas:justificativas' %}">Voltar</a>
+                            <button class="btn btn-info confirm-modal" data-toggle="modal" data-target="#confirmar_homologacao" type="button">Salvar</button>
+                        </div>
+
+                        <!-- Modal de confirmação -->
+                        <div class="modal fade" id="confirmar_homologacao" tabindex="-1" role="dialog" style="display: none;">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Avaliação de justificativa de falta</h4>
+                              </div>
+                              <div class="modal-body">
+                                Você deseja realmente homologar a justificativa? Esta operação não pode ser desfeita.
+                                <br><br>
+                                <b>Bolsista:</b> {{object.vinculo.user}}<br>
+                                <b>Setor:</b> {{object.vinculo.setor}}<br>
+                                <b>Período:</b> {{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} <b class="text-danger">({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</b><br><br>
+                                Horas abonadas: <h5 class="text-danger" id="horas_abonadas_modal"></h5>
+                              </div>
+                              <div class="modal-footer">
+                                <a href="#" class="btn text-info" data-dismiss="modal">Cancelar</a>
+                                <button type="submit button" class="btn btn-warning" class="text-danger">Confirmar</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Fim do modal-->
+                    </form>                            
+                </div>                        
+            {% else %}
+                <div class="content">
+                    <div class="alert alert-warning">
+                            <span>Aguardando análise da chefia</span>
+                    </div>
+                </div>
+            {%endif%}
+        {% else %}                    
             <div class="content">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Período</label>
-                            <p>{{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} ({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Bolsista</label>
-                            <input type="text" class="form-control" value="{{object.vinculo.user}}" readonly="readonly">
+                            <label>Avaliado por</label>
+                            <input type="text" class="form-control" value="{{ object.usuario_analise.user.name }}" readonly="readonly">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Setor</label>
-                            <input type="text" class="form-control" value="{{object.vinculo.setor}}" readonly="readonly">
+                            <label>Horas abonadas</label>
+                            <input type="text" class="form-control" value="{{ object.horas_abonadas }}" readonly="readonly">
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Status</label>
-                            <input type="text" class="form-control" value="{{object.get_status_display}}" readonly="readonly">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
+                {% if object.parecer %}                    
                     <div class="col-md-8 text-justify">
                         <div class="form-group">
-                            <label>Descrição</label>
-                            <p>{{object.descricao}}</p>
+                            <label>Parecer da chefia</label>
+                            <p>{{object.parecer}}</p>
                         </div>
                     </div>
-                    <div class="col-md-2 col-md-offset-2">
-                        <div class="form-group">
-                            <label>Anexo</label>
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-paperclip fa-stack-1x"></i>
-                                <i class="fa fa-ban fa-stack-2x text-danger"></i>
-                            </span>
-                        </div>
+                {% endif %}  
+                </div>                
+                    <div class="text-center">
+                        <a class="btn text-info" onclick="window.history.back()">Voltar</a>
                     </div>
-                </div>
-               
-                <legend></legend>
-
-                {% if not object.usuario_analise %}
-                    {% if can_analyse %}
-                        <div class="header">Análise da justificativa de falta</div>
-                        <div class="content">
-                            <form action="#" method="post">
-                                 {% csrf_token %}
-                                 {% if form.non_field_errors %}
-                                    <div class="alert alert-danger">
-                                        {% for error in form.non_field_errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label>{{ form.status.label }}</label>
-                                        {% render_field form.status class="form-control" %}
-                                        {% if form.status.errors %}
-                                            <label class="error">{{ form.status.errors.0 }}</label>
-                                        {% endif %}
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>{{ form.horas_abonadas.label }}</label>
-                                        {% render_field form.horas_abonadas class="form-control" value=object.horas_sugeridas %}
-                                        {% if form.horas_abonadas.errors %}
-                                            <label class="error">{{ form.horas_abonadas.errors.0 }}</label>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md-12">
-                                        <label>{{ form.parecer.label }}</label>
-                                        {% render_field form.parecer class="form-control" %}
-                                        {% if form.parecer.errors %}
-                                            <label class="error">{{ form.parecer.errors.0 }}</label>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="text-center">
-                                        <a class="btn btn-warning btn-simple" type="button" href="{% url 'justificativas:justificativas' %}">Voltar</a>
-                                        <a class="btn btn-warning btn-fill confirm-modal" data-toggle="modal" data-target="#confirmar_homologacao">Salvar</a>
-                                    </div>
-                                </div>
-
-                                <!-- Modal de confirmação -->
-                                <div class="modal fade" id="confirmar_homologacao" tabindex="-1" role="dialog" style="display: none;">
-                                  <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">Avaliação de justificativa de falta</h4>
-                                      </div>
-                                      <div class="modal-body">
-                                        Você deseja realmente homologar a justificativa? Esta operação não pode ser desfeita.
-                                        <br><br>
-                                        <b>Bolsista:</b> {{object.vinculo.user}}<br>
-                                        <b>Setor:</b> {{object.vinculo.setor}}<br>
-                                        <b>Período:</b> {{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} <b class="text-danger">({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</b><br><br>
-                                        Horas abonadas: <h5 class="text-danger" id="horas_abonadas_modal"></h5>
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-warning btn-fill">Confirmar</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- Fim do modal-->
-                            </form>                            
-                        </div>                        
-                    {% else %}
-                        <div class="content">
-                            <div class="alert alert-warning">
-                                    <span>Aguardando análise da chefia</span>
-                            </div>
-                        </div>
-                    {%endif%}
-                {% else %}
-                    <div class="header">Parecer da chefia</div>
-                    <div class="content">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Avaliado por</label>
-                                    <input type="text" class="form-control" value="{{ object.usuario_analise.user.name }}" readonly="readonly">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Horas abonadas</label>
-                                    <input type="text" class="form-control" value="{{ object.horas_abonadas }}" readonly="readonly">
-                                </div>
-                            </div>
-                        </div>
-                        {% if object.parecer %}
-                            <div class="row">
-                                <div class="col-md-8 text-justify">
-                                    <div class="form-group">
-                                        <label>Parecer da chefia</label>
-                                        <p>{{object.parecer}}</p>
-                                    </div>
-                                </div>
-                            </div>  
-                        {% endif %}  
-                        <div class="row">
-                            <div class="text-center">
-                                <a class="btn btn-warning btn-simple" onclick="window.history.back()" type="button">Voltar</a>
-                            </div>
-                        </div>
-                    </div>
-                {%endif%}
-            </div>    
-        </div>
+            </div>
+        {%endif%}
     </div>    
 </div>
 
 {% endblock %}
 
-{% block script %}
+{% block scripts %}
     {{ block.super }}
     <script src="{% static 'js/jquery.mask.js' %}"></script>
     <script type="text/javascript">

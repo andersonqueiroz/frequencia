@@ -3,98 +3,87 @@
 {% block content %}
 {% load static %}
 
-	{% load rules %}
-	{% has_perm 'accounts.is_servidor' user as is_servidor %}
+{% load rules %}
+{% has_perm 'accounts.is_servidor' user as is_servidor %}
 
-	<div class="row"> 
-		<div class="col-md-12">
-            <div class="card">
-                <div class="header">
-	                <div class="col-md-9">
-	                    <h4 class="title">Justificativas de falta</h4>
-	                    <p class="category">Listagem de justificativas em status pendente</p>
-	                </div>
-	                
-					<form url="#" method="GET">
-						<div class="input-group col-md-3">
-				    		<input type="text" name="busca" placeholder="Buscar" class="form-control">
-				    		<span class="input-group-addon"><i class="fa fa-search"></i></span>
-			    		</div>
-					</form>
-					
-		        </div>
+<div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-table"></i> Justificativas de falta cadastradas
 
-                <div class="content">
-    				{% regroup object_list by vinculo.setor as justificativas_setores %}
+      <form url="#" method="GET" class="pull-right">
+		<div class="input-group">
+    		<input type="text" name="busca" placeholder="Buscar justificativa" class="form-control">
+    		<span class="input-group-addon"><i class="fa fa-search"></i></span>
+		</div>
+	  </form>	  
+    </div>
+    <div class="card-body">  
 
-					{% if object_list %}                  
-						{% for setor in justificativas_setores %} 
-	                    <div class="panel-group" id="accordion">
-	                        <div class="panel panel-default">
-	                            <div class="panel-heading">
-	                                <h4 class="panel-title">
-	                                    <a data-target="#setor{{setor.grouper.pk}}" href="#" data-toggle="collapse" class="collapsed" aria-expanded="false">
-	                                        {{ setor.grouper }}
+		{% regroup object_list by vinculo.setor as justificativas_setores %}
 
-	                                        <b class="caret"></b>
-	                                    </a>
-	                                </h4>
-	                            </div>
-	                            <div id="setor{{setor.grouper.pk}}" class="peteca panel-collapse collapse" aria-expanded="true" style="height: 0px;">
-	                                <div class="panel-body">
-	                                    <table class="table">
-						                    <thead>
-						                        <tr>
-						                            <th>Ocorrência</th>
-						                            <th>Status</th>
-						                            <th>Inicio</th>
-						                            <th>Final</th>
-						                            <th>Bolsista</th>
-						                            <th></th>
-						                        </tr>
-						                    </thead>
-						                    <tbody>
-						                        {% for justificativa in setor.list %}
+		{% if object_list %}                  
+			{% for setor in justificativas_setores %}             
+            <div id="accordion" role="tablist">
+                <div class="card">
+                    <div class="card-header" role="tab" id="#setor{{setor.grouper.pk}}">
+                        <h5 class="mb-0">
+                            <a data-target="#setor{{setor.grouper.pk}}" href="#" data-toggle="collapse" class="collapsed" aria-expanded="false">
+                                {{ setor.grouper }}
+                                <b class="caret"></b>
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="setor{{setor.grouper.pk}}" class="peteca panel-collapse collapse" aria-expanded="true" style="height: 0px;">
+                        <div class="panel-body">
+                            <table class="table">
+			                    <thead>
+			                        <tr>
+			                            <th>Ocorrência</th>
+			                            <th>Status</th>
+			                            <th>Inicio</th>
+			                            <th>Final</th>
+			                            <th>Bolsista</th>
+			                            <th></th>
+			                        </tr>
+			                    </thead>
+			                    <tbody>
+			                        {% for justificativa in setor.list %}
 
-						                        	{% with st=justificativa.status %}						                        	
-						                            <tr {% if st == 1 %} class="text-danger" {% elif st == 2 %} class="text-success" {% endif %}>
-						                        	{% endwith %}
+			                        	{% with st=justificativa.status %}						                        	
+			                            <tr {% if st == 1 %} class="text-danger" {% elif st == 2 %} class="text-success" {% endif %}>
+			                        	{% endwith %}
 
-						                                <td>{{ justificativa.descricao|truncatechars:50 }}</td>
-						                                <td width="5%">{{ justificativa.get_status_display }}</td>
-						                                <td width="20%">{{ justificativa.inicio }}</td>
-						                                <td width="20%">{{ justificativa.termino }}</td>
-						                                <td width="20%">{{ justificativa.vinculo.user.name }}</td>
-						                                <td width="2%"><a href="{% url 'justificativas:justificativa_edit' justificativa.pk %}"><i class="fa fa-search pull-right"></i></a></td>
-						                            </tr>
-						                        {% endfor %}
-						                    </tbody>
-						                </table>
-	                                </div>
-	                            </div>
-	                        </div>
-
-	                    </div>
-	                    {% endfor %}
-                    {% else %}
-                        <div class="alert alert-warning">
-	                        <span>Justificativas de falta não encontradas</span>
-	                    </div>
-	                {% endif %}
-
+			                                <td>{{ justificativa.descricao|truncatechars:50 }}</td>
+			                                <td width="5%">{{ justificativa.get_status_display }}</td>
+			                                <td width="20%">{{ justificativa.inicio }}</td>
+			                                <td width="20%">{{ justificativa.termino }}</td>
+			                                <td width="20%">{{ justificativa.vinculo.user.name }}</td>
+			                                <td width="2%"><a href="{% url 'justificativas:justificativa_edit' justificativa.pk %}"><i class="fa fa-search pull-right"></i></a></td>
+			                            </tr>
+			                        {% endfor %}
+			                    </tbody>
+			                </table>
+                        </div>
+                    </div>
                 </div>
 
             </div>
-        </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-warning">
+                <span>Justificativas de falta não encontradas</span>
+            </div>
+        {% endif %}
+
     </div>
     
 {% endblock %}
 
-{% block script %}
+{% block scripts %}
 {{block.super}}
 <script type="text/javascript">
     $(document).ready(function(){
-        $('.peteca').collapse("show");
+        
     });
 </script>
 {% endblock %}

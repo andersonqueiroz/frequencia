@@ -3,46 +3,43 @@
 {% block content %}
 
 {% load static %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="content">
-                <div class="col-md-9">
-                    <h3>Máquinas</h3>
-                    <p>Listagem de máquinas cadastrados</p>
-                </div>
-                <div class="col-md-3">
-                <a class="btn btn-warning btn-fill pull-right " href="{% url "registro:maquina_create" %}">Novo</a>
-                </div>
-                {% if object_list %}
-                <table class="table">
-                    <thead>
+<div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-table"></i> Máquinas cadastradas
+    </div>
+    <div class="card-body">
+        {% if object_list %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Endereço IP</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for maquina in object_list %}
                         <tr>
-                            <th>Nome</th>
-                            <th>Descrição</th>
-                            <th>Endereço IP</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for maquina in object_list %}
-                            <tr>
-                                <td>{{ maquina.nome }}</td>
-                                <td>{{ maquina.descricao }}</td>
+                            <td>{{ maquina.nome }}</td>
+                            <td>{{ maquina.descricao }}</td>
 
-                                <td>{{ maquina.ip }}<a href="{% url 'registro:maquina_remove' maquina.pk %}"><i class="fa fa-trash text-danger"></i></a>
-                                </td>
-                                <td><a href="{% url "registro:maquina_edit" maquina.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                    <div class="alert alert-warning">
-                        <span>Não há máquinas cadastrados</span>
-                    </div>
-                {% endif %}
+                            <td>{{ maquina.ip }}<a href="{% url 'registro:maquina_remove' maquina.pk %}"> <i class="fa fa-trash text-danger"></i></a>
+                            </td>
+                            <td><a href="{% url "registro:maquina_edit" maquina.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="alert alert-warning">
+                <span>Não há máquinas cadastrados</span>
             </div>
+        {% endif %}
+        <div class="text-center">
+            <a class="btn btn-info " href="{% url "registro:maquina_create" %}">Nova máquina</a>
         </div>
     </div>
 </div>

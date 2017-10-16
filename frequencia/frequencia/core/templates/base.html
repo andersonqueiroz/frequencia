@@ -1,213 +1,141 @@
 {% load static %}
 
+<!DOCTYPE html>
+<html lang="en">
+
 {% include "head.html" %}
-<body style="display:none">
 
-<div class="wrapper">
-    <div class="sidebar" data-image="{% static "images/bczm-acervo.jpg" %}">
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+  <!-- SIDENAV -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <a class="navbar-brand" href="{% url 'core:home' %}">Frequência BCZM</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="{% url 'core:home' %}">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
+          <a class="nav-link" href="{% url 'vinculos:setores_coordenadorias' %}">
+            <i class="fa fa-fw fa-area-chart"></i>
+            <span class="nav-link-text">Setores</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+          <a class="nav-link" href="{% url 'registro:maquinas' %}">
+            <i class="fa fa-fw fa-table"></i>
+            <span class="nav-link-text">Máquinas</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+            <i class="fa fa-fw fa-wrench"></i>
+            <span class="nav-link-text">Usuários</span>
+          </a>
+          <ul class="sidenav-second-level collapse" id="collapseComponents">
+            <li><a href="{% url 'accounts:accounts' %}">Listar</a></li>
+            <li><a href="{% url 'accounts:accounts_create' %}">Novo usuário</a></li>
+          </ul>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseExamplePages" data-parent="#exampleAccordion">
+            <i class="fa fa-fw fa-file"></i>
+            <span class="nav-link-text">Justificativas</span>
+          </a>
+          <ul class="sidenav-second-level collapse" id="collapseExamplePages">
+            <li><a href="{% url 'justificativas:justificativas' %}">Listar</a></li>
+            <li><a href="{% url 'justificativas:justificativa_create' %}">Nova justificativa</a></li>
+            <li><a href="{% url 'justificativas:tipo_justificativa' %}">Gerenciar tipos</a></li>
+          </ul>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Calendario">
+          <a class="nav-link" href="{% url 'calendario:feriados' %}">
+            <i class="fa fa-fw fa-table"></i>
+            <span class="nav-link-text">Calendário</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseExamplePages" data-parent="#exampleAccordion">
+            <i class="fa fa-fw fa-file"></i>
+            <span class="nav-link-text">Justificativas</span>
+          </a>
+          <ul class="sidenav-second-level collapse" id="collapseExamplePages">
+            <li><a href="{% url 'justificativas:justificativas' %}">Listar</a></li>
+            <li><a href="{% url 'justificativas:justificativa_create' %}">Nova justificativa</a></li>
+            <li><a href="{% url 'justificativas:tipo_justificativa' %}">Gerenciar tipos</a></li>
+          </ul>
+        </li>               
+      </ul>
+      <ul class="navbar-nav sidenav-toggler">
+        <li class="nav-item">
+          <a class="nav-link text-center" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
+          </a>
+        </li>
+      </ul>
 
-        <div class="logo">
-            <a href="{% url "core:home" %}" class="logo-text">
-                Frequência BCZM
+      <!-- TOPNAV -->
+      <ul class="navbar-nav ml-auto">        
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle mr-lg-2" href="#" data-toggle="dropdown">
+            <i class="fa fa-fw fa-user"></i>
+            <span class="d-lg-none">Usuário</span>
+            <!--span class="indicator text-warning d-none d-lg-block">
+              <i class="fa fa-fw fa-circle"></i>
+            </span-->
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <h6 class="dropdown-header">{{user}}</h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">
+              <span>
+                <strong>
+                  <i class="fa fa-key"></i> Alterar senha</strong>
+              </span>              
+              <div class="dropdown-message small">Clique para alterar a senha do seu usuário</div>
             </a>
-        </div>
-		<div class="logo logo-mini">
-			<a href="{% url "core:home" %}" class="logo-text">
-				FB
-			</a>
-		</div>
-
-    	<div class="sidebar-wrapper">
-            <div class="user">
-                <div class="photo">
-                    <img src="{% static 'images/default-avatar.png' %}" />
-                </div>
-                <div class="info">
-                    <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                        {{ user }}
-                        <b class="caret"></b>
-                    </a>
-                    <div class="collapse" id="collapseExample">
-                        <ul class="nav">
-                            <!--li><a href="">Editar conta</a></li-->
-                            <li><a href="{% url "accounts:edit_password" %}">Alterar senha</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <ul class="nav">
-                <li>
-                    <a href="{% url "core:home" %}">
-                        <i class="pe-7s-home"></i>
-                        <p>HOME</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'vinculos:setores_coordenadorias' %}">
-                        <i class="pe-7s-plugin"></i>
-                        <p>Setores
-                        </p>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'registro:maquinas' %}">
-                        <i class="pe-7s-monitor"></i>
-                        <p>Máquinas
-                        </p>
-                    </a>
-                </li>
-                <li>
-                    <a data-toggle="collapse" href="#Usuarios" >
-                        <i class="pe-7s-users"></i>
-                        <p>Usuários 
-                        <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse" id="Usuarios">
-                        <ul class="nav">
-                            <li><a href="{% url 'accounts:accounts' %}">Listar</a></li>
-                            <li><a href="{% url 'accounts:accounts_create' %}">Novo usuário</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li>
-                    <a data-toggle="collapse" href="#Justificativas" >
-                        <i class="pe-7s-note"></i>
-                        <p>Justificativas
-                        <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse" id="Justificativas">
-                        <ul class="nav">
-                            <li><a href="{% url 'justificativas:justificativas' %}">Listar</a></li>
-                            <li><a href="{% url 'justificativas:justificativa_create' %}">Nova justificativa</a></li>
-                            <li><a href="{% url 'justificativas:tipo_justificativa' %}">Gerenciar tipos</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li>
-                    <a href="{% url 'calendario:feriados' %}">
-                        <i class="pe-7s-date"></i>
-                        <p>Calendário</p>
-                    </a>
-                </li>
-                <li>
-                    <a data-toggle="collapse" href="#mapsExamples">
-                        <i class="pe-7s-note2"></i>
-                        <p>Relatórios
-                           <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse" id="mapsExamples">
-                        <ul class="nav">
-                            <li><a href="{% url 'relatorios:busca_relatorio' %}">Relatório mensal</a></li>
-                            <li><a href="{% url 'relatorios:listagem_geral' %}">Listagem geral</a></li>
-                            <li><a href="{% url 'relatorios:busca_setor' %}">Relatório por setor</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-
-            </ul>
-    	</div>
+            <a class="dropdown-item" href="#">
+              <span>
+                <strong>
+                  <i class="fa fa-sign-out"></i> Sair do sistema</strong>
+              </span>              
+              <div class="dropdown-message small">Terminar a sessão atual</div>
+            </a>  
+          </div>
+        </li>                
+      </ul>
     </div>
-		<nav class="navbar navbar-default navbar-fixed">
-			<div class="container-fluid">
-				<div class="navbar-minimize">
-					<button id="minimizeSidebar" class="btn btn-warning btn-fill btn-round btn-icon">
-						<i class="fa fa-ellipsis-v visible-on-sidebar-regular"></i>
-						<i class="fa fa-navicon visible-on-sidebar-mini"></i>
-					</button>
-				</div>
-				<div class="navbar-header">					
-					<a class="navbar-brand">Frequência BCZM</a>
-				</div>
-				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav navbar-right">
-						<li>
-							<a href="{% url 'relatorios:relatorio_mensal' %}">
-								<i class="fa fa-line-chart"></i>
-								<p>{% now "F" %}</p>
-							</a>
-						</li>						
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+        {% block content%}
 
-						<!--li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<i class="fa fa-bell-o"></i>
-								<span class="notification">5</span>
-								<p class="hidden-md hidden-lg">
-									Notifications
-									<b class="caret"></b>
-								</p>
-							</a>
-							<ul class="dropdown-menu">
-								<li><a href="#">Notification 1</a></li>
-								<li><a href="#">Notification 2</a></li>
-								<li><a href="#">Notification 3</a></li>
-								<li><a href="#">Notification 4</a></li>
-								<li><a href="#">Another notification</a></li>
-							</ul>
-						</li-->
+        {% endblock %}
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small> © Biblioteca Central Zila Mamede - {% now "Y" %}</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+  </div>
 
-						<li class="dropdown dropdown-with-icons">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<i class="fa fa-list"></i>
-								<p class="hidden-md hidden-lg">
-									More
-									<b class="caret"></b>
-								</p>
-							</a>
-							<ul class="dropdown-menu dropdown-with-icons">
-								
-								<!--li class="divider"></li-->
-								<li>
-									<a href="{% url "accounts:edit_password" %}">
-										<i class="pe-7s-key"></i> Alterar senha
-									</a>
-								</li>
-								<li>
-									<a href="{% url 'accounts:logout' %}" class="text-danger">
-										<i class="pe-7s-close-circle"></i>
-										Log out
-									</a>
-								</li>
-							</ul>
-						</li>
-
-					</ul>
-				</div>
-			</div>
-		</nav>
-		<div class="main-panel">
-	        <div class="content">
-	            <div class="container-fluid">
-	            {% block content%}
-
-	            {% endblock %}
-	                
-	            </div>            
-	        </div>
-	    </div>
-        <footer class="footer">
-            <div class="container-fluid">
-                <p class="copyright pull-right">
-                    &copy; {% now "Y" %} <a href="http://bczm.ufrn.br">Coordenadoria de Apoio Tecnológico</a>, Biblioteca Central Zila Mamede
-                </p>
-            </div>
-        </footer>
-
-    
-</div>
-
-
+  {% block scripts %}
+        {% include "script.html" %}
+  {% endblock %}
 
 </body>
-
-{% block script %}
-	{% include "script.html" %}
-{% endblock %}
 
 </html>

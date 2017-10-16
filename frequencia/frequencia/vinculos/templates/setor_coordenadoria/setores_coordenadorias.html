@@ -3,76 +3,64 @@
 
 {% block content %}
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
+<div class="card mb-3">
             
-            <div class="content">
+    <div class="card-body">
 
-                <ul role="tablist" class="nav nav-tabs">
-                    <li role="presentation" class="active">
-                        <a href="#setores" data-toggle="tab" aria-expanded="true">Setores</a>
-                    </li>
-                    <li class="">
-                        <a href="#coordenadorias" data-toggle="tab" aria-expanded="false">Coordenadorias</a>
-                    </li>
-                </ul>
+        <ul role="tablist" class="nav nav-tabs">
+            <li role="presentation">
+                <a href="#setores" data-toggle="tab" class="nav-link active" aria-expanded="true">Setores</a>
+            </li>
+            <li class="">
+                <a href="#coordenadorias" data-toggle="tab" class="nav-link" aria-expanded="false">Coordenadorias</a>
+            </li>
+        </ul>
 
-                <div class="tab-content">
-                    <div id="setores" class="tab-pane active">
-                        <div class="col-md-9">
-                            <h3>Setores</h3>
-                            <p>Veja os setores que compõem esta unidade.</p>
-                        </div>
-                        <div class="col-md-3">
-                        <a class="btn btn-warning btn-fill pull-right " href="{% url 'vinculos:setor_create' %}">Novo setor</a>
-                        </div>
-                        <table class="table">
-                            <thead>
-                                <tr>                          
-                                    <th>Nome</th>                          
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for setor in object_list %}
-                                    <tr>
-                                        <td>{{ setor }}</td>
-                                        <td><a href="{% url 'vinculos:setor_edit' setor.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="coordenadorias" class="tab-pane">
-                        <div class="col-md-9">
-                           <h3>Coordernadorias</h3>
-                            <p>Veja as coordenadorias que compõem esta unidade.</p>
-                        </div>
-                        <div class="col-md-3">
-                            <a class="btn btn-warning btn-fill pull-right " href="{% url 'vinculos:coordenadoria_create' %}">Nova coordenadoria</a>
-                        </div>
-                        <table class="table">
-                            <thead>
-                                <tr>                          
-                                    <th>Nome</th>                          
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for coordenadoria in coordenadorias %}
-                                    <tr>
-                                        <td>{{ coordenadoria }}</td>
-                                        <td><a href="{% url 'vinculos:coordenadoria_edit' coordenadoria.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-               </div>
-
+        <div class="tab-content">
+            <div id="setores" class="tab-pane active">                               
+                <table class="table">
+                    <thead>
+                        <tr>                          
+                            <th>Setor</th>                          
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for setor in object_list %}
+                            <tr>
+                                <td>{{ setor }}</td>
+                                <td><a href="{% url 'vinculos:setor_edit' setor.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="text-center">                    
+                    <a class="btn btn-info" href="{% url 'vinculos:setor_create' %}">Novo setor</a>
+                </div>
             </div>
-        </div>
+            <div id="coordenadorias" class="tab-pane">                
+                <table class="table">
+                    <thead>
+                        <tr>                          
+                            <th>Coordenadoria</th>                          
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for coordenadoria in coordenadorias %}
+                            <tr>
+                                <td>{{ coordenadoria }}</td>
+                                <td><a href="{% url 'vinculos:coordenadoria_edit' coordenadoria.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="text-center">                    
+                    <a class="btn btn-info" href="{% url 'vinculos:coordenadoria_create' %}">Nova coordenadoria</a>
+                </div>
+            </div>
+       </div>
+
     </div>
 </div>
 

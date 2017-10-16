@@ -4,42 +4,36 @@
 
 {% block content %}
 
-	{% load widget_tweaks %}
-	<div class="row">
-		<div class="col-md-12">
-            <div class="card">
-            	<div class="header">
-            	<h4 class="title">Tipo de justificativa</h4>
-                
-                <p class="category">Preencha os dados do tipo de justificativa</p>
+{% load widget_tweaks %}
+<div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-table"></i> Gerenciar tipo de justificativa
+    </div>
+    <div class="card-body">
+        <form method="post">
+             {% csrf_token %}
+             {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
                 </div>
-                <div class="content">
-                    <form method="post">
-                         {% csrf_token %}
-                         {% if form.non_field_errors %}
-                            <div class="alert alert-danger">
-                                {% for error in form.non_field_errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-	                    <div class="form-group col-md-12">
-                            <label>{{ form.nome.label }}</label>
-                            {% render_field form.nome class="form-control" %}
-                            {% if form.nome.errors %}
-                                <label class="error">{{ form.nome.errors.0 }}</label>
-                            {% endif %}
-                        </div>		
-                        <div class="row">
-                            <div class="text-center">
-    					    	<a class="btn btn-warning btn-simple" href="{% url 'justificativas:tipo_justificativa' %}" type="button">Voltar</a>
-    						    <button class="btn btn-warning btn-fill" type="submit">Salvar</button>
-    						</div>
-                        </div>      
-                    </form>
-                </div>
-            </div> 
-        </div>
-	</div>
+            {% endif %}
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label>{{ form.nome.label }}</label>
+                    {% render_field form.nome class="form-control" %}
+                    {% if form.nome.errors %}
+                        <label class="error">{{ form.nome.errors.0 }}</label>
+                    {% endif %}
+                </div>      
+            </div>      
+            <div class="text-center">
+                <a class="btn text-info" href="{% url 'justificativas:tipo_justificativa' %}">Voltar</a>
+                <button class="btn btn-info" type="submit">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div> 
 
 {% endblock %}
