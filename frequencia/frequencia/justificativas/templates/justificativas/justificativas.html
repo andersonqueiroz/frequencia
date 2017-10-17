@@ -8,7 +8,7 @@
 
 <div class="card mb-3">
     <div class="card-header">
-      <i class="fa fa-table"></i> Justificativas de falta cadastradas
+      <i class="fa fa-commenting-o"></i> Justificativas de falta cadastradas
 
       <form url="#" method="GET" class="pull-right">
 		<div class="input-group">
@@ -29,7 +29,7 @@
                         <h5 class="mb-0">
                             <a data-target="#setor{{setor.grouper.pk}}" href="#" data-toggle="collapse" class="collapsed" aria-expanded="false">
                                 {{ setor.grouper }}
-                                <b class="caret"></b>
+                                <span class="badge badge-pill badge-secondary pull-right">{{setor.list|length}}</span>
                             </a>
                         </h5>
                     </div>

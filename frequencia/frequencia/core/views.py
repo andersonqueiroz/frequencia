@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
 def index(request):
-	return HttpResponseRedirect(reverse('registro:registro'))
+	return redirect('registro:registro')
 
 def home(request):
 	return render(request, 'home.html')

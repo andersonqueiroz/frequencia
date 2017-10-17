@@ -2,8 +2,9 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import CreateView
+
+from frequencia.core.messages import SuccessMessageMixin
 
 from .calendar import FeriadosRioGrandeDoNorte
 from .models import FeriadoCalendarioAcademico
@@ -39,7 +40,7 @@ def feriado_remove(request, pk):
 
 	feriado = get_object_or_404(FeriadoCalendarioAcademico, pk=pk)
 	feriado.delete()
-	messages.success(request, 'Feriado <b>%s</b> excluído com sucesso!' % feriado)
+	messages.info(request, 'Feriado <b>%s</b> excluído com sucesso!' % feriado)
 	return redirect(request.META.get('HTTP_REFERER'))
 
 

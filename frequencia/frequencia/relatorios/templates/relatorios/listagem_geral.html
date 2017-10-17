@@ -5,23 +5,30 @@
 {% load static %}
 {% load timedelta_filter %}
 
+<div class="mb-0 mt-4">
+    <i class="fa fa-file-o"></i> Listagem geral
+</div>
+<hr class="mt-2">
+
+{% for dia in object_list %}
 <div class="card mb-3">
     <div class="card-header">
-      <i class="fa fa-user"></i> Listagem geral
+      <i class="fa fa-calendar"></i> {{ dia.data }}
     </div>
     <div class="card-body">	  	            	
         <div class="table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="table table-hover">
                 <thead>
                     <tr>
 						<th>Bolsista</th>
 						<th>Setor</th>
 						<th>Registros</th>
 						<th>Horas trabalhadas</th>
+						<th></th>
 					</tr>
                 </thead>
                 <tbody>
-                {% for bolsista in bolsistas %}	                    	
+                {% for bolsista in dia.bolsistas %}               	
 					<tr>
 					  	<td>{{ bolsista.user.name }}</td>
 					  	<td>{{ bolsista.setor }}</td>
@@ -39,6 +46,8 @@
 							{% endif %}
 						</td>
 						<td>{{ bolsista.horas_trabalhadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</td>
+						<td><a href="{% url 'relatorios:relatorio_mensal' bolsista.pk %}#{{dia.data|date:'d-m-Y'}}"><i class="fa fa-search"></i></a></td>
+						<!--  -->
 					</tr>
 					{% endfor %}
                 </tbody>
@@ -46,6 +55,7 @@
         </div>        
     </div>
 </div>
+{% endfor %}
 
 {% endblock %}
 

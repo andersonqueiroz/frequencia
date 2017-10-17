@@ -8,10 +8,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView, CreateView
-from django.contrib.messages.views import SuccessMessageMixin
 from django.forms import formset_factory, inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 
+from frequencia.core.messages import SuccessMessageMixin
 from frequencia.vinculos.forms import AdicionarVinculoForm, EditarVinculoForm
 from frequencia.vinculos.models import Vinculo
 

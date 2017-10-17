@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 from rules.contrib.views import PermissionRequiredMixin
 
@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
 from django.views.generic import FormView
+from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -149,23 +149,33 @@ class RelatorioSetorDetailView(DetailView):
 		context['periodo'] = self.periodo
 		return context
 
-class ListagemGeralTemplateView(TemplateView):
+class ListagemGeralListView(ListView):
 
-	template_name = 'relatorios/listagem_geral.html'	
+	template_name = 'relatorios/listagem_geral.html'
+	model = Vinculo
+	numero_dias = 7
 
-	def get_context_data(self, **kwargs):
-		context = super(ListagemGeralTemplateView, self).get_context_data(**kwargs)
+	def get_queryset(self):
 		bolsistas = get_bolsistas(self.request.user)
+		dias = []
 
-		if bolsistas:
-			for bolsista in bolsistas:
-				bolsista.horas_trabalhadas = get_total_horas_trabalhadas(bolsista.registros_dia())
+		for i in range(0, self.numero_dias):
+			dia = datetime.now().date() - timedelta(days=i)		
+			bolsistas_dia = bolsistas.filter(registros__created_at__date=dia).distinct()					
 
-		context['bolsistas'] = bolsistas
-		return context
+			if not bolsistas_dia:
+				continue
+
+			for bolsista in bolsistas_dia:
+				bolsista.registros_dia = bolsista.registros_dia(dia)
+				bolsista.horas_trabalhadas = get_total_horas_trabalhadas(bolsista.registros_dia)
+
+			dias.append({'data':dia, 'bolsistas':bolsistas_dia})
+
+		return dias
 
 relatorio_mensal = RelatorioMensalDetailView.as_view()
 busca_relatorio = BuscaRelatorioMensalTemplateView.as_view()
 busca_setor = BuscaRelatorioSetorTemplateView.as_view()
-listagem_geral = ListagemGeralTemplateView.as_view()
+listagem_geral = ListagemGeralListView.as_view()
 relatorio_setor = RelatorioSetorDetailView.as_view()

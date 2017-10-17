@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib import messages
 from django.views.generic import ListView
-from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import CreateView, UpdateView
+
+from frequencia.core.messages import SuccessMessageMixin
 
 from .models import Setor, Coordenadoria
 from .forms import EditSetorForm, EditCoordenadoriaForm
@@ -27,7 +28,7 @@ class SetorCreateView(SuccessMessageMixin, CreateView):
 	form_class = EditSetorForm
 	template_name = 'setor_coordenadoria/setor_create_edit.html'
 
-	success_message = 'Setor <b>%(nome)s</b> cadastrada com sucesso!'
+	success_message = 'Setor <b>%(nome)s</b> cadastrado com sucesso!'
 
 	def get_success_url(self):
 		return reverse('vinculos:setores_coordenadorias')
@@ -39,7 +40,7 @@ class SetorUpdateView(SuccessMessageMixin, UpdateView):
 	form_class = EditSetorForm
 	template_name = 'setor_coordenadoria/setor_create_edit.html'	
 	
-	success_message = 'Setor <b>%(nome)s</b> atualizada com sucesso!'
+	success_message = 'Setor <b>%(nome)s</b> atualizado com sucesso!'
 
 	def get_success_url(self):
 		return reverse('vinculos:setores_coordenadorias')

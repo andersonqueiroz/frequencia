@@ -10,7 +10,7 @@
 	
 	<div class="card mb-3">
 	    <div class="card-header">
-	      <i class="fa fa-table"></i> Relatório de frequência mensal
+	      <i class="fa fa-file-o"></i> Relatório de frequência mensal
 	    </div>
 	    <div class="card-body">
             <form action="#" method="post">
@@ -30,7 +30,7 @@
 							<label class="control-label">{{form.bolsista.label}}</label>
 							{% render_field form.bolsista class="form-control select2" required="" %}
 							{% if form.bolsista.errors %}
-	                            <label class="error">{{ form.bolsista.errors.0 }}</label>
+	                            <label class="text-danger">{{ form.bolsista.errors.0 }}</label>
 	                        {% endif %}
 						</div>
 					{% endif %}
