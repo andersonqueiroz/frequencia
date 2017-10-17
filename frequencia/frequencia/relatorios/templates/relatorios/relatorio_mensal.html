@@ -84,12 +84,8 @@
 			</p>
 
 			<div class="progress">
-                <div class="progress-bar bg-success" style="width: {{ porcentagem_horas_trabalhadas }}%">
-                	{{ porcentagem_horas_trabalhadas }}%
-                </div>
-                <div class="progress-bar bg-primary" style="width: {{ porcentagem_horas_abonadas }}%">
-                	{{ porcentagem_horas_abonadas }}%	                    	
-                </div>
+                <div class="progress-bar bg-success" id="horasTrabalhadas" data-toggle="tooltip" title="Horas trabalhadas"></div>
+                <div class="progress-bar bg-primary" id="horasAbonadas" data-toggle="tooltip" title="Horas abonadas" class="text-danger"></div>
             </div>        
             <hr>
             <div class="text-center">
@@ -103,9 +99,28 @@
 
 {% block scripts %}
 	{{block.super}}
+	{% load l10n %}
+
 	<script>
-	$(document).ready(function(){
-	    $('[data-toggle="tooltip"]').tooltip();
-	});
+		$(document).ready(function(){
+		    $('[data-toggle="tooltip"]').tooltip();	    
+
+			{% localize off %}
+				var horas_trabalhar = {{total_horas_trabalhar.total_seconds}};			
+				var horas_trabalhadas = {{horas_trabalhadas_periodo.total_seconds}};		
+				var saldo_mes_anterior = {{saldo_mes_anterior.total_seconds}};
+				var horas_abonadas = {{horas_abonadas_periodo.total_seconds}};
+			{% endlocalize %}
+
+			var porcentagem_horas_trabalhadas = (horas_trabalhadas * 100) / (horas_trabalhar + saldo_mes_anterior);
+			var porcentagem_horas_abonadas = (horas_abonadas * 100) / (horas_trabalhar + saldo_mes_anterior);			
+
+			porcentagem_horas_trabalhadas = Math.floor(porcentagem_horas_trabalhadas);
+			porcentagem_horas_abonadas = Math.floor(porcentagem_horas_abonadas);
+
+			$('#horasTrabalhadas').css('width', porcentagem_horas_trabalhadas + '%');
+			$('#horasAbonadas').css('width', porcentagem_horas_abonadas + '%');
+		});
+
 	</script>
 {% endblock %}

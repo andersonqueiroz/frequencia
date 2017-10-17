@@ -118,16 +118,6 @@ class RelatorioMensalDetailView(PermissionRequiredMixin, DetailView):
 		if context['saldo_atual_mes'].days < 0:
 			 context['credito_horas'] = context['saldo_atual_mes'] * -1
 
-		porcentagem_horas_trabalhadas = int(self.relatorio['horas_trabalhadas_periodo'] * 100 / (self.relatorio['total_horas_trabalhar'] + context['saldo_mes_anterior']))
-		porcentagem_horas_abonadas = int(self.relatorio['horas_abonadas_periodo'] * 100 / (self.relatorio['total_horas_trabalhar'] + context['saldo_mes_anterior']))
-
-		context['porcentagem_horas_trabalhadas'] = porcentagem_horas_trabalhadas
-
-		if porcentagem_horas_abonadas > 100 - porcentagem_horas_trabalhadas:
-			context['porcentagem_horas_abonadas'] = 100 - porcentagem_horas_trabalhadas
-		else:
-			context['porcentagem_horas_abonadas'] = porcentagem_horas_abonadas
-
 		return context
 
 	def render_to_response(self, context):

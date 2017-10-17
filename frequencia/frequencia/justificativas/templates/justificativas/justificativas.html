@@ -33,7 +33,7 @@
                             </a>
                         </h5>
                     </div>
-                    <div id="setor{{setor.grouper.pk}}" class="peteca panel-collapse collapse" aria-expanded="true" style="height: 0px;">
+                    <div id="setor{{setor.grouper.pk}}" class="collapse justificativas" aria-expanded="true" style="height: 0px;">
                         <div class="panel-body">
                             <table class="table">
 			                    <thead>
@@ -83,7 +83,7 @@
 {{block.super}}
 <script type="text/javascript">
     $(document).ready(function(){
-        
+        $('.justificativas:first').collapse("show");
     });
 </script>
 {% endblock %}

@@ -16,25 +16,25 @@
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
           <a class="nav-link" href="{% url 'core:home' %}">
-            <i class="fa fa-fw fa-dashboard"></i>
+            <i class="fa fa-fw fa-home"></i>
             <span class="nav-link-text">Home</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'vinculos:setores_coordenadorias' %}">
-            <i class="fa fa-fw fa-area-chart"></i>
+            <i class="fa fa-fw fa-cubes"></i>
             <span class="nav-link-text">Setores</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'registro:maquinas' %}">
-            <i class="fa fa-fw fa-table"></i>
+            <i class="fa fa-fw fa fa-desktop"></i>
             <span class="nav-link-text">Máquinas</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseUsuarios" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-wrench"></i>
+            <i class="fa fa-fw fa-users"></i>
             <span class="nav-link-text">Usuários</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseUsuarios">
@@ -44,7 +44,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseJustificativas" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-file"></i>
+            <i class="fa fa-fw fa-commenting-o"></i>
             <span class="nav-link-text">Justificativas</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseJustificativas">
@@ -56,7 +56,7 @@
 
         <li class="nav-item">
           <a class="nav-link" href="{% url 'calendario:feriados' %}">
-            <i class="fa fa-fw fa-table"></i>
+            <i class="fa fa-fw fa-calendar"></i>
             <span class="nav-link-text">Calendário</span>
           </a>
         </li>
@@ -115,6 +115,18 @@
   </nav>
   <div class="content-wrapper">
     <div class="container-fluid">
+        {% if messages %}     
+            {% for message in messages %}                
+            <div id="alertMessages" style="display: none;">
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %} alert-dismissible fade show" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message|safe }}
+                </div>
+            </div>
+            {% endfor %}       
+        {% endif %}
         {% block content%}
 
         {% endblock %}
