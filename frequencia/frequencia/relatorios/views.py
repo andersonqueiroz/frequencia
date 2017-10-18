@@ -113,9 +113,6 @@ class RelatorioMensalDetailView(PermissionRequiredMixin, DetailView):
 									 - self.relatorio['horas_trabalhadas_periodo'] \
 									 - self.relatorio['horas_abonadas_periodo']	
 
-		if context['saldo_atual_mes'].days < 0:
-			 context['credito_horas'] = context['saldo_atual_mes'] * -1
-
 		return context
 
 	def render_to_response(self, context):

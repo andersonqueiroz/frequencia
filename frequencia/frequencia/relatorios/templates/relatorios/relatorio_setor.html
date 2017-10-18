@@ -20,7 +20,7 @@
     </div>
     <div class="card-body">	  	            	
 	    <div class="table-responsive">
-	        <table class="table table-hover">
+	        <table class="table">
 	            <thead>
 	                <tr>
 						<th>Bolsista</th>
@@ -40,7 +40,7 @@
 						<tr class="bolsista-setor">
 						  	<td>{{bolsista.bolsista.user}}</td>
 
-						  	{% with atual=bolsista.balanco_mes_atual.saldo_mes antes=bolsista.balanco_mes_anterior total=bolsista.balanco_geral trabalhadas=bolsista.balanco_mes_atual.horas_trabalhadas%}	
+						  	{% with atual=bolsista.balanco_mes_atual.saldo_mes antes=bolsista.balanco_mes_anterior total=bolsista.balanco_geral %}
 							  	<td>
 							  		{% if atual.days > 0 %}
 							  			-{{atual|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
@@ -49,7 +49,11 @@
 							  		{% endif %}
 							  	</td>
 							  	<td>
-							  		{% if antes.days > 0 %}-{% endif %}{{antes|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
+							  		{% if antes.days > 0 %}
+							  			-{{antes|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
+							  		{% else %}
+							  			{{antes|inverso|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
+							  		{% endif %}
 							  	</td>
 							  	<td>
 							  		{% if total.days > 0 %}
@@ -60,14 +64,18 @@
 							  	</td>
 							  	<td class="align-middle" style="width: 10%">
 							  		<div class="progress">
-									  <div class="progress-bar" role="progressbar" style="height: 10px;"></div>
+									  <div class="progress-bar" role="progressbar" style="height: 10px;" data-toggle="tooltip"></div>
 									</div>
 							  	</td>
 								<td class="text-center"><a href="{% url 'relatorios:relatorio_mensal' bolsista.bolsista.pk %}?mes={{ periodo.month }}&ano={{ periodo.year }}"><i class="fa fa-search"></i></a></td>	
 
 								{% localize off %}
-						  			<input type="hidden" name="total" class="total" value="{{ total.total_seconds }}">
-						  			<input type="hidden" name="trabalhadas" class="trabalhadas" value="{{ trabalhadas.total_seconds }}">
+						  			<input type="hidden" name="trabalhar" class="trabalhar" value="{{ bolsista.balanco_mes_atual.horas_trabalhar.total_seconds }}">
+
+						  			<input type="hidden" name="mes_anterior" class="mes_anterior" value="{{ antes.total_seconds }}">
+
+						  			<input type="hidden" name="trabalhadas" class="trabalhadas" value="{{ bolsista.balanco_mes_atual.horas_trabalhadas.total_seconds }}">
+						  			<input type="hidden" name="abonadas" class="abonadas" value="{{ bolsista.balanco_mes_atual.horas_abonadas_periodo.total_seconds }}">
 					  			{% endlocalize %}
 							{% endwith %}							
 						</tr>
@@ -92,15 +100,18 @@
 {% block scripts %}
 	{{block.super}}
 	<script>
-	$(document).ready(function(){
-	    $('[data-toggle="tooltip"]').tooltip();
+	$(document).ready(function(){	    
 
 	    $('.bolsista-setor').each(function(){
-	    	var total = $('tr.bolsista-setor>input.total').val();
-	    	var trabalhadas = $('tr.bolsista-setor>input.trabalhadas').val();	    	
-	    	var porcentagem = trabalhadas * 100 / total;
-	    	$('.progress-bar').css({ 'width': porcentagem+'%' });
+	    	var trabalhar = parseFloat($(this).find('.trabalhar').val());
+	    	var trabalhadas = parseFloat($(this).find('.trabalhadas').val());	    	
+	    	var abonadas = parseFloat($(this).find('.abonadas').val());	    	
+	    	var mes_anterior = parseFloat($(this).find('.mes_anterior').val());	    	
+	    	var porcentagem = Math.floor((trabalhadas + abonadas) * 100 / (trabalhar + mes_anterior));
+	    	$(this).find('.progress-bar').css({ 'width': porcentagem+'%' }).attr('data-original-title', porcentagem+'%');
 	    });
+
+	    $('[data-toggle="tooltip"]').tooltip();
 	});
 	</script>
 {% endblock %}

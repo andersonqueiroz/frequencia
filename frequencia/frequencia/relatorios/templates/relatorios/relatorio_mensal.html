@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% load filtros %}
+
 {% load static %}
 {% load widget_tweaks %}
 {% load timedelta_filter %}
@@ -76,10 +78,11 @@
 				{% endif %}
 
 				<legend></legend>
-				{% if credito_horas %}
-					Saldo atual do mês: <strong>{{ credito_horas|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
+				Saldo atual do mês:
+				{% if saldo_atual_mes.days > 0 %}
+					 <strong>-{{ saldo_atual_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
 				{% else %}
-					Débito atual do mês: <strong>-{{ saldo_atual_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
+					<strong>{{ saldo_atual_mes|inverso|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
 				{% endif %}
 			</p>
 

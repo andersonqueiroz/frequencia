@@ -1,3 +1,4 @@
+import calendar, datetime
 from datetime import timedelta
 
 from workalendar.america import Brazil
@@ -65,3 +66,10 @@ class FeriadosRioGrandeDoNorte(Brazil):
 		for day in (start_date + timedelta(n) for n in range(day_count)):
 			workday_count += 1 if super(FeriadosRioGrandeDoNorte, self).is_working_day(day) and not feriados.filter(data=day).exists() else 0
 		return workday_count
+
+	def count_working_days_month(self, month, year):
+		days_count = calendar.monthrange(year, month)[1]
+		start_date = datetime.date(year, month, 1)
+		end_date = datetime.date(year, month, days_count)
+
+		return self.count_working_days(start_date, end_date)
