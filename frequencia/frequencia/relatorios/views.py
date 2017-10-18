@@ -106,9 +106,7 @@ class RelatorioMensalDetailView(PermissionRequiredMixin, DetailView):
 		context['horas_trabalhadas_periodo'] = self.relatorio['horas_trabalhadas_periodo']	
 		context['horas_abonadas_periodo'] = self.relatorio['horas_abonadas_periodo']
 
-		context['saldo_mes_anterior'] = timedelta()
-		if self.relatorio['saldo_mes_anterior'].days > 0:
-			context['saldo_mes_anterior'] = self.relatorio['saldo_mes_anterior']		
+		context['saldo_mes_anterior'] = self.relatorio['saldo_mes_anterior']			
 		
 		context['saldo_atual_mes'] = self.relatorio['total_horas_trabalhar'] \
 									 + context['saldo_mes_anterior'] \

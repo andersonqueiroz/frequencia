@@ -47,7 +47,7 @@ def get_total_horas_trabalhadas(registros):
 Retorna o cálculo:
 Total de horas a trabalhar - horas trabalhadas - horas abonadas
 """
-def get_balanco_mes(vinculo, mes, ano):
+def get_balanco_mes(vinculo, mes, ano, detalhado=False):
 	calendario = FeriadosRioGrandeDoNorte()
 	num_dias_mes = calendar.monthrange(ano, mes)[1]
 
@@ -65,6 +65,15 @@ def get_balanco_mes(vinculo, mes, ano):
 	horas_abonadas_periodo = get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim)
 
 	saldo_mes = horas_trabalhar - horas_trabalhadas - horas_abonadas_periodo
+
+	if detalhado:		
+		return {
+			'saldo_mes': saldo_mes,
+			'horas_trabalhar': horas_trabalhar,
+			'horas_trabalhadas': horas_trabalhadas,
+			'horas_abonadas_periodo': horas_abonadas_periodo,
+		}
+
 	return saldo_mes
 
 def get_balanco_mes_anterior(vinculo, mes_atual, ano_atual):
@@ -75,11 +84,12 @@ def get_balanco_mes_anterior(vinculo, mes_atual, ano_atual):
 		primeiro_dia_trabalho = get_primeiro_dia_trabalho(vinculo).created_at
 		if primeiro_dia_trabalho.month is not mes_atual and primeiro_dia_trabalho.year is not ano_atual:
 			mes_ano_anterior = datetime.date(ano_atual, mes_atual, 1) - timedelta(days=1)
-			saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)
-	except:
-		return saldo_mes_anterior
+			saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)	
 	finally:
-		return saldo_mes_anterior
+		if saldo_mes_anterior.days < 0:
+			saldo_mes_anterior = timedelta()
+
+	return saldo_mes_anterior
 	
 
 def get_relatorio_mes(vinculo, mes, ano):
@@ -144,13 +154,13 @@ def get_relatorio_mensal_setor(setor, mes, ano):
 	relatorio = []	
 	for bolsista in bolsistas:
 
-		balanco_mes = get_balanco_mes(bolsista, mes, ano)
+		balanco_mes = get_balanco_mes(bolsista, mes, ano, detalhado=True)
 		balanco_mes_anterior = get_balanco_mes_anterior(bolsista, mes, ano)
 		relatorio.append({
 			'bolsista': bolsista,
 			'balanco_mes_atual': balanco_mes,
 			'balanco_mes_anterior': balanco_mes_anterior,
-			'balanco_geral': balanco_mes + balanco_mes_anterior,		
+			'balanco_geral': balanco_mes['saldo_mes'] + balanco_mes_anterior,	
 		})
 
 	return relatorio

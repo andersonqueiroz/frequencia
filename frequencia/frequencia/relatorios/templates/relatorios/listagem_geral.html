@@ -46,7 +46,7 @@
 							{% endif %}
 						</td>
 						<td>{{ bolsista.horas_trabalhadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</td>
-						<td><a href="{% url 'relatorios:relatorio_mensal' bolsista.pk %}#{{dia.data|date:'d-m-Y'}}"><i class="fa fa-search"></i></a></td>
+						<td><a href="{% url 'relatorios:relatorio_mensal' bolsista.pk %}#{{dia.data|date:'d-m-Y'}}"><i class="fa fa-chevron-right"></i></a></td>
 						<!--  -->
 					</tr>
 					{% endfor %}
