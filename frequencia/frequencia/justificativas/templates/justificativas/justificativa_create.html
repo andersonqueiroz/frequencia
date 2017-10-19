@@ -13,7 +13,7 @@
       <i class="fa fa-commenting-o"></i> Nova justificativa
     </div>
     <div class="card-body">     
-        <form action="#" method="post">
+        <form enctype="multipart/form-data" action="#" method="post">
              {% csrf_token %}
                  {% if form.non_field_errors %}
 					<div class="alert alert-danger">
@@ -49,6 +49,16 @@
 					{% render_field form.termino class="form-control" data-toggle="datepicker" %}
 					{% if form.termino.errors %}
 	                    <label class="text-danger">{{ form.termino.errors.0 }}</label>
+	                {% endif %}
+				</div>
+				<div class="form-group col-md-12">
+					<label class="control-label">
+						{{form.comprovante.label}}
+						<a href="#" data-toggle="tooltip" title="Arquivo de no máximo 5MB com extensão pdf, doc, docx, jpg ou png"><i class="fa fa-question-circle"></i></a>
+					</label>
+					{% render_field form.comprovante class="form-control" %}
+					{% if form.comprovante.errors %}
+	                    <label class="text-danger">{{ form.comprovante.errors.0 }}</label>
 	                {% endif %}
 				</div>
             </div>

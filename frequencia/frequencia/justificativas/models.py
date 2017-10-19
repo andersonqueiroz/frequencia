@@ -7,6 +7,8 @@ from frequencia.core.basemodel import basemodel
 from frequencia.vinculos.models import Vinculo
 from frequencia.calendario.calendar import FeriadosRioGrandeDoNorte
 
+from .validators import validate_file_extension
+
 class TipoJustificativaFalta(basemodel):
 
 	nome = models.CharField('Tipo', max_length=100)
@@ -44,6 +46,7 @@ class JustificativaFalta(basemodel):
 	descricao = models.TextField('Descrição')
 	inicio = models.DateField('Data de início')
 	termino = models.DateField('Data de término')
+	comprovante = models.FileField('Comprovante', blank=True, upload_to='anexos_justificativas/', validators=[validate_file_extension])
 
 	parecer = models.TextField('Parecer da chefia', blank=True)
 	horas_abonadas = models.DurationField('Tempo abonado', blank=True, null=True)

@@ -2,6 +2,7 @@ import re
 
 from django import forms
 from django.db.models import Q
+from django.conf import settings
 
 from .models import TipoJustificativaFalta, JustificativaFalta
 
@@ -16,7 +17,7 @@ class CreateJustificativaForm(forms.ModelForm):
 
 	class Meta:
 		model = JustificativaFalta
-		fields = ['tipo', 'descricao', 'inicio', 'termino']
+		fields = ['tipo', 'descricao', 'inicio', 'termino', 'comprovante']
 		widgets = {
           'descricao': forms.Textarea(attrs={'rows':3}),
         }
@@ -25,12 +26,21 @@ class CreateJustificativaForm(forms.ModelForm):
 		super(CreateJustificativaForm, self).__init__(*args, **kwargs)
 		self.fields['tipo'].empty_label = ""
 
+	def clean_comprovante(self):
+		comprovante = self.cleaned_data.get('comprovante', False)	
+		max_upload_size = settings.MAX_UPLOAD_SIZE
+
+		if comprovante and comprovante.size > max_upload_size:
+			raise forms.ValidationError(['O tamanho do arquivo excede o limite máximo',])
+
+		return comprovante
+
 	def clean(self):
 		cleaned_data = super(CreateJustificativaForm, self).clean()
-		data_inicio = cleaned_data.get("inicio")
-		data_termino = cleaned_data.get("termino")
+		data_inicio = cleaned_data.get("inicio", '')
+		data_termino = cleaned_data.get("termino", '')
 
-		if data_inicio and data_termino and data_inicio > data_termino:
+		if data_inicio > data_termino:
 			raise forms.ValidationError("Data de termino deve ser posterior à data de inicio")
 
 		return cleaned_data
