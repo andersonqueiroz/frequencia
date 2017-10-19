@@ -28,7 +28,7 @@ class SetorCreateView(SuccessMessageMixin, CreateView):
 	form_class = EditSetorForm
 	template_name = 'setor_coordenadoria/setor_create_edit.html'
 
-	success_message = 'Setor <b>%(nome)s</b> cadastrado com sucesso!'
+	success_message = 'Setor cadastrado com sucesso!'
 
 	def get_success_url(self):
 		return reverse('vinculos:setores_coordenadorias')
@@ -40,10 +40,19 @@ class SetorUpdateView(SuccessMessageMixin, UpdateView):
 	form_class = EditSetorForm
 	template_name = 'setor_coordenadoria/setor_create_edit.html'	
 	
-	success_message = 'Setor <b>%(nome)s</b> atualizado com sucesso!'
+	success_message = 'Setor atualizado com sucesso!'
 
 	def get_success_url(self):
 		return reverse('vinculos:setores_coordenadorias')
+
+	def get_context_data(self, **kwargs):
+		context = super(SetorUpdateView, self).get_context_data(**kwargs)
+
+		context['coordenadores'] = self.object.coordenadoria.vinculos.filter(group__name='Coordenador', ativo=True)
+		context['chefes'] = self.object.vinculos.filter(group__name='Chefe de setor', ativo=True)
+		context['bolsistas'] = self.object.vinculos.filter(group__name='Bolsista', ativo=True)
+
+		return context
 
 
 class CoordenadoriaCreateView(SuccessMessageMixin, CreateView):
@@ -52,7 +61,7 @@ class CoordenadoriaCreateView(SuccessMessageMixin, CreateView):
 	form_class = EditCoordenadoriaForm
 	template_name = 'setor_coordenadoria/coordenadoria_create_edit.html'
 
-	success_message = 'Coordenadoria <b>%(nome)s</b> cadastrada com sucesso!'
+	success_message = 'Coordenadoria cadastrada com sucesso!'
 
 	def get_success_url(self):
 		return reverse('vinculos:setores_coordenadorias')
@@ -64,10 +73,17 @@ class CoordenadoriaUpdateView(SuccessMessageMixin, UpdateView):
 	form_class = EditCoordenadoriaForm
 	template_name = 'setor_coordenadoria/coordenadoria_create_edit.html'
 	
-	success_message = 'Coordenadoria <b>%(nome)s</b> atualizada com sucesso!'
+	success_message = 'Coordenadoria atualizada com sucesso!'
 
 	def get_success_url(self):
 		return reverse('vinculos:setores_coordenadorias')
+
+	def get_context_data(self, **kwargs):
+		context = super(CoordenadoriaUpdateView, self).get_context_data(**kwargs)
+
+		context['setores'] = self.object.setores.all()
+
+		return context
 
 # setores = SetoresListView.as_view()
 setor_create = SetorCreateView.as_view()

@@ -7,7 +7,7 @@
 
 <div class="card mb-3">
     <div class="card-header">
-      <i class="fa fa-table"></i> Gerenciar coordenadoria
+      <i class="fa fa-edit"></i> Gerenciar coordenadoria
     </div>
     <div class="card-body">
         <form method="post">
@@ -34,6 +34,38 @@
             </div>
         </form>
     </div>
-</div> 
+</div>
+
+{% if object %} 
+     <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-cubes"></i> Setores da coordenadoria
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Setor{{setores|pluralize:"es"}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if setores %}
+                        {% for setor in setores %}
+                            <tr>
+                                <td>{{ setor }}</td>
+                                <td><a href="{% url 'vinculos:setor_edit' setor.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="2">Nenhum setor associado a este setor</td></tr>
+                    {% endif %}
+                    </tbody>
+                </table>                
+            </div>
+        </div>        
+    </div>
+{% endif %} 
 
 {% endblock %}

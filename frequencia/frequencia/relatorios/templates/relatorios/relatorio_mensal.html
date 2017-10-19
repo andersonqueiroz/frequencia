@@ -49,6 +49,9 @@
 								<td>{{ dia.feriado.1 }}</td>
 							{% elif dia.ausencia %}
 								<td>
+									{% if dia.registros %}
+										{{ dia.horas_trabalhadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }} -
+									{% endif %}
 									Falta justificada
 									<a href="{% url 'justificativas:justificativa_edit' dia.ausencia.0.pk %}"><i class="fa fa-search"></i></a>
 								</td>

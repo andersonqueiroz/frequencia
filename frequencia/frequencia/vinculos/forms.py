@@ -17,6 +17,16 @@ class AdicionarVinculoForm(forms.ModelForm):
 		self.fields['group'].empty_label = ""
 		self.fields['coordenadoria'].empty_label = ""
 
+	def clean(self):
+		cleaned_data = super(AdicionarVinculoForm, self).clean()
+		grupo = cleaned_data.get("group")
+		carga_horaria_diaria = cleaned_data.get("carga_horaria_diaria")
+
+		if grupo == 'Bolsista' and not carga_horaria_diaria:
+			raise forms.ValidationError("Informe a carga horária diária do bolsista")
+
+		return cleaned_data
+
 	def save(self, user, commit=True):
 		vinculo = super(AdicionarVinculoForm, self).save(commit=False)
 		vinculo.user = user
@@ -36,6 +46,16 @@ class EditarVinculoForm(forms.ModelForm):
 		self.fields['setor'].empty_label = ""
 		self.fields['group'].empty_label = ""
 		self.fields['coordenadoria'].empty_label = ""
+
+	def clean(self):
+		cleaned_data = super(EditarVinculoForm, self).clean()
+		grupo = cleaned_data.get("group")
+		carga_horaria_diaria = cleaned_data.get("carga_horaria_diaria")
+
+		if grupo.name == 'Bolsista' and not carga_horaria_diaria:
+			raise forms.ValidationError({"carga_horaria_diaria": ["Informe a carga horária diária do bolsista",]})
+
+		return cleaned_data
 
 class EditSetorForm(forms.ModelForm):
 

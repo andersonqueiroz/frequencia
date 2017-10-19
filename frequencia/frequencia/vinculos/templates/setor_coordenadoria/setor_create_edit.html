@@ -7,7 +7,7 @@
 
 <div class="card mb-3">
     <div class="card-header">
-      <i class="fa fa-table"></i> Gerenciar setor
+      <i class="fa fa-edit"></i> Gerenciar setor
     </div>
     <div class="card-body">
         <form method="post">
@@ -44,5 +44,79 @@
         </form>
     </div>        
 </div>
+
+{% if object %}
+    <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-users"></i> Usuários relacionados
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Coordenador{{coordenadores|pluralize:"es"}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if coordenadores %}
+                        {% for coordenador in coordenadores %}
+                            <tr>
+                                <td>{{ coordenador.user }}</td>
+                                <td><a href="{% url 'accounts:accounts_edit' coordenador.user.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="2">Nenhum coordenador associado a este setor</td></tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+
+                <table class="table" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Chefe{{chefes|pluralize}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if chefes %}
+                        {% for chefe in  chefes %}
+                            <tr>
+                                <td>{{ chefe.user }}</td>
+                                <td><a href="{% url 'accounts:accounts_edit' chefe.user.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="2">Nenhum chefe associado a este setor</td></tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+
+                <table class="table" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Bolsista{{bolsistas|pluralize}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if bolsistas %}
+                        {% for bolsista in  bolsistas %}
+                            <tr>
+                                <td>{{ bolsista.user }}</td>
+                                <td><a href="{% url 'accounts:accounts_edit' bolsista.user.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="2">Nenhum bolsista associado a este setor</td></tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>        
+    </div>
+{% endif %}
 
 {% endblock %}

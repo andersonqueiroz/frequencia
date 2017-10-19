@@ -1,8 +1,8 @@
-from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, get_object_or_404, redirect
 
 from frequencia.core.messages import SuccessMessageMixin
 
@@ -11,7 +11,7 @@ from .models import FeriadoCalendarioAcademico
 from .forms import CreateFeriadoForm
 
 
-class FeriadoCreateListView(SuccessMessageMixin, CreateView):
+class FeriadoCreateListView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 	model = FeriadoCalendarioAcademico
 

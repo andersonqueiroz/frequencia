@@ -80,9 +80,9 @@
             </ul>
             {{vinculos_formset.management_form}}
             <div id="tab-content" class="tab-content">
-				{% for form in vinculos_formset %}
+				{% for form in vinculos_formset %}					
                   	<div id="{{form.prefix}}" class="tab-pane {% if form.prefix == 'vinculos-0' %} active{% endif %}">		  
-						<div class="row">													
+						<div class="row">
 						{% for field in form %}							
 							{% if field.name == "ativo" %}
 								<div class="col-md-12">
@@ -93,6 +93,9 @@
 								</div>
 							{% elif field.name == "id" or field.name == "user" %}
 								{% render_field field %}
+								{% if field.errors %}
+				                    <label class="text-danger">{{ field.errors.0 }}</label>
+				                {% endif %}
 							{% elif field.name == "group" %}
          						<div class="col-md-6">
 									<div class="form-group">
@@ -105,6 +108,9 @@
 									<div class="form-group">
 										<label class="control-label">{{field.label}}</label>
 										{% render_field field class="form-control" %}
+										{% if field.errors %}
+						                    <label class="text-danger">{{ field.errors.0 }}</label>
+						                {% endif %}
 									</div>
 								</div>
 							{% endif %}

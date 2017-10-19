@@ -35,6 +35,6 @@ def get_bolsistas(user):
 		setores = get_setores(user)
 		bolsistas = bolsistas.filter(setor__in=setores)
 	else:
-		bolsistas = None
+		bolsistas = bolsistas.filter(user=user)
 
 	return bolsistas
