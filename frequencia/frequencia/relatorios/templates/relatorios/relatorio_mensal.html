@@ -8,18 +8,25 @@
 {% load widget_tweaks %}
 {% load timedelta_filter %}
 
-<div class="mb-0 mt-4">
-    <i class="fa fa-file-o"></i> Relatório mensal de frequência - {{periodo|date:"F/Y"}}
+<link href="{% static 'css/print.css' %}" type="text/css" rel="stylesheet"></link>
+
+<div class="mb-0 mt-4 hidden-print">
+    <i class="fa fa-file-o hidden-print"></i> Relatório mensal de frequência - {{periodo|date:"F/Y"}}
 </div>
-<hr class="mt-2">
+<hr class="mt-2 hidden-print">
 
 <div class="card mb-3">
-	    <div class="card-header">
+	    <div class="card-header hidden-print">
 	      <i class="fa fa-user"></i> <b>{{ bolsista.user }} <br> </b>{{ bolsista.setor }}
+	    </div>
+	    <div class="text-center print">
+	    	<strong>Biblioteca Central Zila Mamede</strong><br>
+	    	<strong>Relatório mensal de frequência - {{periodo|date:"F/Y"}}</strong><br>
+	    	<span>{{ bolsista }}</span><br><br>
 	    </div>
 	    <div class="card-body">	  
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover table-sm">
                     <thead>
                         <tr>
 							<th>Dia</th>
@@ -36,9 +43,9 @@
 								  	{% for registro in dia.registros %}	  		
 								  		{{registro.created_at|date:"H:i:s"}}
 									  		{% if registro.observacao %}
-											<a href="#" data-toggle="tooltip" title="{{ registro.observacao }}"><i class="fa fa-exclamation-circle"></i></a>
+											<a href="#" data-toggle="tooltip" title="{{ registro.observacao }}"><i class="fa fa-exclamation-circle hidden-print"></i></a>
 											{% endif %}
-								  		{% if registro.tipo %}<br>{% else %} - {% endif %}	  		
+								  		{% if registro.tipo %}<br>{% else %} - {% endif %}		
 								  	{% endfor %}
 							  	</td>
 							{% else %}
@@ -53,7 +60,7 @@
 										{{ dia.horas_trabalhadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }} -
 									{% endif %}
 									Falta justificada
-									<a href="{% url 'justificativas:justificativa_edit' dia.ausencia.0.pk %}"><i class="fa fa-search"></i></a>
+									<a href="{% url 'justificativas:justificativa_edit' dia.ausencia.0.pk %}"><i class="fa fa-search hidden-print"></i></a>
 								</td>
 							{% else %}
 								<td>
@@ -65,39 +72,45 @@
                     </tbody>
                 </table>	                
             </div>	            
-        	<hr>
-            <p>
-	            Horas a trabalhar ({{dias_uteis}} dias úteis): <strong>{{ total_horas_trabalhar|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
-	            {% if saldo_mes_anterior %}
-					<strong data-toggle="tooltip" title="Débito do mês anterior" class="text-danger">		
-						+ {{ saldo_mes_anterior|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}
-					</strong>
-				{% endif %}<br>
+        	<hr class="hidden-print">
+            <div class="row">
+            	<div class="col-md-12">
+		            Horas a trabalhar ({{dias_uteis}} dias úteis): <strong>{{ total_horas_trabalhar|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
+		            {% if saldo_mes_anterior %}
+						<strong data-toggle="tooltip" title="Débito do mês anterior" class="text-danger">		
+							+ {{ saldo_mes_anterior|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}
+						</strong>
+					{% endif %}<br>
+				</div>
 
-				Horas trabalhadas no período: <strong><span class="text-success">{{ horas_trabalhadas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</span></strong><br>
+				<div class="col-md-12">
+					Horas trabalhadas: <strong><span class="text-success">{{ horas_trabalhadas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</span></strong><br class="hidden-print">
+				
+					{% if horas_abonadas_periodo %}
+						Horas abonadas: <strong><span class="text-primary text-bold">{{ horas_abonadas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</span></strong><br>
+					{% endif %}
+				</div>
+				
+				<div class="col-md-12">
+					Saldo atual do mês:
+					{% if saldo_atual_mes.days > 0 %}
+						 <strong>-{{ saldo_atual_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
+					{% else %}
+						<strong>{{ saldo_atual_mes|inverso|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
+					{% endif %}
+				</div>
+			</div>
 
-				{% if horas_abonadas_periodo %}
-					Horas abonadas: <strong><span class="text-primary text-bold">{{ horas_abonadas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</span></strong><br>
-				{% endif %}
-
-				<legend></legend>
-				Saldo atual do mês:
-				{% if saldo_atual_mes.days > 0 %}
-					 <strong>-{{ saldo_atual_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
-				{% else %}
-					<strong>{{ saldo_atual_mes|inverso|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
-				{% endif %}
-			</p>
-
-			<div class="progress">
+			<div class="progress hidden-print">
                 <div class="progress-bar bg-success" id="horasTrabalhadas" data-toggle="tooltip" title="Horas trabalhadas"></div>
                 <div class="progress-bar bg-primary" id="horasAbonadas" data-toggle="tooltip" title="Horas abonadas" class="text-danger"></div>
             </div>        
-            <hr>
+            <hr class="hidden-print">
             <div class="text-center">
-            	<button class="btn btn-info" onclick="window.history.back()">Voltar</button>
+            	<a href="#" class="btn text-info hidden-print" onclick="window.history.back()">Voltar</a>
+            	<button class="btn btn-info hidden-print" id="print-relatorio">Imprimir</button>
             </div>
-
+            <div style="page-break-after: auto;"></div>
         </div>
     </div>
 
@@ -128,12 +141,28 @@
 			$('#horasAbonadas').css('width', porcentagem_horas_abonadas + '%');
 
 			if(window.location.hash) {				
-		        $(window.location.hash).addClass("table-secondary").delay(2000).queue(function(next){
-				    $(this).removeClass("table-secondary");
+		        $(window.location.hash).addClass("table-info").delay(2000).queue(function(next){
+				    $(this).removeClass("table-info");
 				    next();
 				});
 				$("html, body").animate({ scrollTop: $(window.location.hash).offset().top - 70}, 1000);
 		    }
+
+		    $('#print-relatorio').click(function(){
+		    	$('.card').removeClass('card');
+		    	$('.card-body').removeClass('card-body');		    	
+		    	$('.card-header').removeClass('card-header');		    	
+		    	$('.print').removeClass('print');		    	
+		    	$('.text-warning').removeClass('text-warning');			    	
+		    	$('td').css({'margin':'0px', 'padding':'0px'});
+		    	$('tr').css({'margin':'0px', 'padding':'0px'});
+		    	window.print();
+		    	$(window).on('afterprint', function () { 
+		    		window.location.reload(true);
+		    	});
+
+		    	window.location.reload(true);
+		    });
 		});
 
 	</script>

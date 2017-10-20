@@ -97,7 +97,7 @@ class JustificativaCreateView(PermissionRequiredMixin, SuccessMessageMixin, Crea
 
 	def form_valid(self, form):
 		form.save(self.request.user)
-		messages.success(self.request, self.success_message)		
+		messages.info(self.request, self.success_message)		
 		return HttpResponseRedirect(self.get_success_url())
 
 	def get_success_url(self):
@@ -117,7 +117,7 @@ class JustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, Upda
 		user = self.request.user
 		if user.has_perm('justificativa.can_analyse', self.object):
 			form.save(self.request.user)
-			messages.success(self.request, self.success_message)
+			messages.info(self.request, self.success_message)
 			return HttpResponseRedirect(self.get_success_url())
 		else:
 			raise PermissionDenied()

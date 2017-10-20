@@ -349,3 +349,11 @@ footer.sticky-footer {
   height: 30px;
   width: auto;
   margin-right: 10px; }
+
+.print {
+  display: none;
+}
+
+.print:last-child {
+  page-break-after: auto;
+}

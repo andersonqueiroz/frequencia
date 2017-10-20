@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 
 from frequencia.core.basemodel import basemodel
+from frequencia.core.mail import send_mail_template
 from frequencia.vinculos.models import Vinculo
 from frequencia.calendario.calendar import FeriadosRioGrandeDoNorte
 
@@ -65,3 +66,24 @@ class JustificativaFalta(basemodel):
 	class Meta:
 		verbose_name = 'Justificativa de falta'
 		verbose_name_plural = 'Justificativas de falta'
+
+
+def post_save_justificativa(instance, created, **kwargs):
+	if created:
+		subject = 'Nova justificativa de falta cadastrada'
+		context = { 'justificativa' : instance	}
+		template_name = 'justificativas/justificativa_mail.html'
+		
+		chefes = instance.vinculo.setor.vinculos.filter(group__name='Chefe de setor', ativo=True, user__is_active=True)
+		for chefe in chefes:
+			recipient_list = [chefe.user.email]
+			try:
+				send_mail_template(subject, template_name, context, recipient_list)
+			except:
+				pass
+
+models.signals.post_save.connect(
+	post_save_justificativa, 
+	sender=JustificativaFalta,
+	dispatch_uid='post_save_justificativa'
+)
