@@ -3,6 +3,7 @@ import re
 from django import forms
 from django.db.models import Q
 from django.conf import settings
+from django.core.validators import MaxLengthValidator
 
 from .models import TipoJustificativaFalta, JustificativaFalta
 
@@ -19,19 +20,20 @@ class CreateJustificativaForm(forms.ModelForm):
 		model = JustificativaFalta
 		fields = ['tipo', 'descricao', 'inicio', 'termino', 'comprovante']
 		widgets = {
-          'descricao': forms.Textarea(attrs={'rows':3}),
+          'descricao': forms.Textarea(attrs={'rows':3, 'maxlength':2000}),
         }
 
 	def __init__(self, *args, **kwargs):
 		super(CreateJustificativaForm, self).__init__(*args, **kwargs)
 		self.fields['tipo'].empty_label = ""
+		self.fields['descricao'].validators = [MaxLengthValidator(2000)]		
 
 	def clean_comprovante(self):
 		comprovante = self.cleaned_data.get('comprovante', False)	
 		max_upload_size = settings.MAX_UPLOAD_SIZE
 
 		if comprovante and comprovante.size > max_upload_size:
-			raise forms.ValidationError(['O tamanho do arquivo excede o limite máximo',])
+			raise forms.ValidationError(['O tamanho do arquivo excede o limite máximo de 5MB.',])
 
 		return comprovante
 
@@ -41,7 +43,7 @@ class CreateJustificativaForm(forms.ModelForm):
 		data_termino = cleaned_data.get("termino", '')
 
 		if data_inicio > data_termino:
-			raise forms.ValidationError("Data de termino deve ser posterior à data de inicio")
+			raise forms.ValidationError("Data de término deve ser posterior à data de inicio")
 
 		return cleaned_data
 
@@ -64,8 +66,12 @@ class EditJustificativaForm(forms.ModelForm):
 		model = JustificativaFalta
 		fields = ['status', 'parecer', 'horas_abonadas']
 		widgets = {
-          'parecer': forms.Textarea(attrs={'rows':3}),
-        }
+			'parecer': forms.Textarea(attrs={'rows':3, 'maxlength':2000}),
+		}
+
+	def __init__(self, *args, **kwargs):
+		super(EditJustificativaForm, self).__init__(*args, **kwargs)		
+		self.fields['parecer'].validators = [MaxLengthValidator(2000)]
 
 	def clean_horas_abonadas(self):
 		horas = self.data['horas_abonadas']

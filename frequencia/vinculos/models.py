@@ -1,5 +1,6 @@
+from datetime import datetime
+
 from django.db import models
-from django.utils import timezone
 from django.contrib.auth.models import Group
 
 from django import template
@@ -58,5 +59,5 @@ class Vinculo(basemodel):
 		verbose_name_plural = 'Vínculos'
 
 	def registros_dia(self, dia=None):
-		dia = dia or timezone.now().date()
+		dia = dia or datetime.now().date()
 		return self.registros.filter(created_at__date=dia)

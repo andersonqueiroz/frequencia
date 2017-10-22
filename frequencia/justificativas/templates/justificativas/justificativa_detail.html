@@ -18,7 +18,7 @@
             
             <div class="form-group col-md-12">
                 <label>Período</label>
-                <p>{{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} ({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</p>
+                <p>{{object.inicio|date:"d/m/Y"}} a {{object.termino|date:"d/m/Y"}} ({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</p>
             </div>
         
             <div class="col-md-6">
@@ -43,7 +43,7 @@
         
             <div class="col-md-12 text-justify">
                 <div class="form-group">
-                    <label>Descrição</label>
+                    <label>Descrição:</label>
                     <p>{{object.descricao}}</p>
                 </div>
             </div>
@@ -120,11 +120,12 @@
                                 <b>Bolsista:</b> {{object.vinculo.user}}<br>
                                 <b>Setor:</b> {{object.vinculo.setor}}<br>
                                 <b>Período:</b> {{object.inicio|date:"d/m/Y"}} à {{object.termino|date:"d/m/Y"}} <b class="text-danger">({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</b><br><br>
-                                Horas abonadas: <h5 class="text-danger" id="horas_abonadas_modal"></h5>
+                                Horas abonadas: <h5 class="text-danger" id="horas_abonadas_modal"></h5><br>
+                                <input type="checkbox" id="confirma_leitura"> Confirmo estar de acordo com as informações acima
                               </div>
                               <div class="modal-footer">
                                 <a href="#" class="btn text-info" data-dismiss="modal">Cancelar</a>
-                                <button type="submit button" class="btn btn-warning" class="text-danger">Confirmar</button>
+                                <button type="submit" id="botao_confirmar" class="btn btn-danger" disabled>Confirmar</button>
                               </div>
                             </div>
                           </div>
@@ -157,7 +158,7 @@
                 {% if object.parecer %}                    
                     <div class="col-md-8 text-justify">
                         <div class="form-group">
-                            <label>Parecer da chefia</label>
+                            <label>Parecer da chefia:</label>
                             <p>{{object.parecer}}</p>
                         </div>
                     </div>
@@ -182,6 +183,14 @@
          $('.confirm-modal').on('click', function(){
             var _horas = $('#id_horas_abonadas').val();
             $("#horas_abonadas_modal").text(_horas);
+         });
+
+         $("#confirma_leitura").change(function(){
+            if(this.checked){
+                $('#botao_confirmar').attr("disabled", false);                
+            } else {
+                $('#botao_confirmar').attr("disabled", true);  
+            }
          });
       });
     </script>

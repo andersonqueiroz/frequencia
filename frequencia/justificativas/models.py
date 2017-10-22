@@ -57,11 +57,21 @@ class JustificativaFalta(basemodel):
 		calendario = FeriadosRioGrandeDoNorte()
 		numero_dias_uteis = calendario.count_working_days(self.inicio, self.termino)
 		horas_sugeridas = self.vinculo.carga_horaria_diaria * numero_dias_uteis
-		return timedelta(hours=horas_sugeridas)
 
+		if not horas_sugeridas:
+			return timedelta()
+
+		horas_sugeridas = timedelta(hours=horas_sugeridas)
+		from frequencia.relatorios.calculos import get_total_horas_trabalhadas
+		registros = self.vinculo.registros.filter(created_at__date__gte=self.inicio, 
+												  created_at__date__lte=self.termino)
+		horas_trabalhadas = get_total_horas_trabalhadas(registros)
+
+		horas_sugeridas = horas_sugeridas - horas_trabalhadas
+		return horas_sugeridas if horas_sugeridas.days >= 0 else timedelta()
 
 	def __str__(self):
-		return '{0} - {1}'.format(self.vinculo.user.name, self.descricao)
+		return '{0} - {1}'.format(self.vinculo.user, self.descricao)
 
 	class Meta:
 		verbose_name = 'Justificativa de falta'

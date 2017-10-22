@@ -3,7 +3,6 @@ from datetime import date, datetime, timedelta
 from rules.contrib.views import PermissionRequiredMixin
 
 from django.urls import reverse
-from django.utils import timezone
 from django.contrib import messages
 from django.views.generic import FormView
 from django.views.generic.list import ListView
@@ -75,8 +74,8 @@ class RelatorioMensalDetailView(PermissionRequiredMixin, DetailView):
 
 	def dispatch(self, *args, **kwargs):
 		try:
-			mes = int(self.request.GET.get('mes', timezone.now().date().month))
-			ano = int(self.request.GET.get('ano', timezone.now().date().year))
+			mes = int(self.request.GET.get('mes', datetime.now().month))
+			ano = int(self.request.GET.get('ano', datetime.now().year))
 			self.periodo = date(day=1, month=mes, year=ano)
 		except ValueError:
 			messages.error(self.request, 'Data informada é inválida!')
@@ -129,8 +128,8 @@ class RelatorioSetorDetailView(DetailView):
 
 	def dispatch(self, *args, **kwargs):
 		try:
-			mes = int(self.request.GET.get('mes', timezone.now().date().month))
-			ano = int(self.request.GET.get('ano', timezone.now().date().year))
+			mes = int(self.request.GET.get('mes', datetime.now().month))
+			ano = int(self.request.GET.get('ano', datetime.now().year))
 			self.periodo = date(ano, mes, 1)
 		except ValueError:
 			messages.error(self.request, 'Data informada é inválida!')

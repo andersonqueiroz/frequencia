@@ -6,4 +6,4 @@ def validate_file_extension(value):
 	ext = os.path.splitext(value.name)[1]
 	valid_extensions = ['.pdf', '.doc', '.docx', '.jpg', '.png']
 	if not ext.lower() in valid_extensions:
-		raise ValidationError('Arquivo não suportado')
+		raise ValidationError('Arquivo não suportado. Envie um arquivo com extensão pdf, doc, docx, jpg ou png.')

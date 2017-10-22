@@ -49,12 +49,13 @@
           {% csrf_token %}
 
           <input type="hidden" name="next" value="{{ next }}">   
-
           {% if form.errors %}
-           <div class="alert alert-danger">
-                <button type="button" aria-hidden="true" class="close">×</button>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
                 <span>{{ form.non_field_errors.0 }}</span>
-            </div>
+              </div>
           {% endif %}
           <div class="form-group">
               <label>{{ form.username.label }}</label>

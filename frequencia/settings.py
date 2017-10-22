@@ -141,6 +141,10 @@ LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_URL = 'registro:registro'
 AUTH_USER_MODEL = 'accounts.User'
 
+#Sessions
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+#SESSION_COOKIE_AGE = 30 * 60
+
 #Media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

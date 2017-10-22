@@ -36,7 +36,10 @@
 
 <body class="bg-dark fixed-nav sticky-footer "> 
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="{% url 'core:index' %}">Frequência BCZM</a>
+    <a class="navbar-brand" href="{% url 'core:index' %}">
+        <img src="{% static 'images/bczm-logo.png' %}" class="logo-nav">
+        Frequência BCZM
+    </a>
     <ul class="navbar-nav ml-auto">  
         <i class="fa fa-sign-in" aria-hidden="true"></i>      
         <a class="nav-link" href="{% url 'accounts:login' %}">Entrar</a>
@@ -57,7 +60,7 @@
                     {{bolsista}}
                 </div>                
                 {% if bolsista %}
-                <table class="table text-center font-weight-bold">
+                <table class="table text-center font-weight-bold">                    
                     <tbody>
                     {% for registro in bolsista.registros_dia %}
                         <tr>

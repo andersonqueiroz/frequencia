@@ -1,4 +1,5 @@
-from django.utils import timezone
+from datetime import datetime
+
 from django.contrib import messages
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,7 +17,7 @@ class FeriadoCreateListView(LoginRequiredMixin, SuccessMessageMixin, CreateView)
 	model = FeriadoCalendarioAcademico
 
 	template_name = 'calendario/feriados.html'
-	ano = timezone.now().date().year
+	ano = datetime.now().year
 	form_class = CreateFeriadoForm
 
 	success_message = 'Feriado cadastrado com sucesso!'
@@ -24,7 +25,11 @@ class FeriadoCreateListView(LoginRequiredMixin, SuccessMessageMixin, CreateView)
 	def get_queryset(self):
 		self.ano = self.kwargs.get('ano', self.ano)
 		calendario = FeriadosRioGrandeDoNorte()
-		return calendario.get_calendar_holidays(year=int(self.ano), with_id=True)
+		try:
+			return calendario.get_calendar_holidays(year=int(self.ano), with_id=True)
+		except:
+			self.ano = datetime.now().year
+			return calendario.get_calendar_holidays(year=int(self.ano), with_id=True)
 
 	def get_context_data(self, **kwargs):
 		context = super(FeriadoCreateListView, self).get_context_data(**kwargs)

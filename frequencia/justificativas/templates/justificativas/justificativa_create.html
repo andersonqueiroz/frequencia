@@ -33,7 +33,7 @@
 				<div class="form-group col-md-12">
 					<label class="control-label">{{form.descricao.label}}</label>
 					{% render_field form.descricao class="form-control" %}
-					{% if form.tipodescricao.errors %}
+					{% if form.descricao.errors %}
 	                    <label class="text-danger">{{ form.descricao.errors.0 }}</label>
 	                {% endif %}
 				</div>

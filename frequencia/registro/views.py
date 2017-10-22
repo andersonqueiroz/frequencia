@@ -78,7 +78,7 @@ def registro(request):
 		frequencia = Frequencia(bolsista=bolsista, maquina=maquina, tipo=tipo, observacao=form.cleaned_data['observacao'])
 		frequencia.save()
 		
-		request.session['bolsista_pk'] = bolsista.pk
+		request.session['bolsista_pk'] = bolsista.pk			
 		return redirect(reverse('registro:registros_dia'))
 
 	context = {

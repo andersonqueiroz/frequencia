@@ -26,7 +26,9 @@ def get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim):
 		total_dias_ausencia = calendario.count_working_days(ausencia.inicio, ausencia.termino)
 		total_dias_ausencia_periodo = calendario.count_working_days(ausencia.inicio if ausencia.inicio >= data_inicio else data_inicio,
 																ausencia.termino if ausencia.termino <= data_fim else data_fim)
-		horas_abonadas += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo		
+		if total_dias_ausencia and total_dias_ausencia_periodo:
+			horas_abonadas += ausencia.horas_abonadas / total_dias_ausencia * total_dias_ausencia_periodo
+
 	return horas_abonadas
 
 def get_total_horas_trabalhadas(registros):
@@ -84,7 +86,9 @@ def get_balanco_mes_anterior(vinculo, mes_atual, ano_atual):
 		primeiro_dia_trabalho = get_primeiro_dia_trabalho(vinculo).created_at
 		if primeiro_dia_trabalho.month is not mes_atual and primeiro_dia_trabalho.year is not ano_atual:
 			mes_ano_anterior = datetime.date(ano_atual, mes_atual, 1) - timedelta(days=1)
-			saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)	
+			saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)
+	except:
+		pass	
 	finally:
 		if saldo_mes_anterior.days < 0:
 			saldo_mes_anterior = timedelta()

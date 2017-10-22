@@ -57,6 +57,12 @@
 </div>
 {% endfor %}
 
+{% if not object_list %}
+	<div class="alert alert-warning" role="alert">
+	  Não há registros de frequência cadastrados nos últimos dias.
+	</div>
+{% endif %}
+
 {% endblock %}
 
 {% block scripts %}

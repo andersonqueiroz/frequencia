@@ -25,13 +25,14 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 		self.data_atual = datetime.datetime.now()
 
 	def dispatch(self, request, *args, **kwargs):		
-		self.user = self.request.user
-		self.bolsistas = get_bolsistas(self.user)
+		self.user = self.request.user				
 		return super(HomeTemplateView, self).dispatch(request, *args, **kwargs)
 
 	def get_bolsistas_por_setor(self):
 		setores = get_setores(self.user)
-		return setores.filter(vinculos__group__name='Bolsista').annotate(bolsistas=Count('vinculos')).values('pk', 'nome', 'bolsistas')
+		return setores.filter(vinculos__group__name='Bolsista', 
+							  vinculos__ativo=True,
+							  vinculos__user__is_active=True).annotate(bolsistas=Count('vinculos')).values('pk', 'nome', 'bolsistas')
 
 	def get_justificativas_pendentes(self):
 		return JustificativaFalta.objects.filter(status=0, vinculo__in=self.bolsistas).count()
@@ -48,6 +49,8 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(HomeTemplateView, self).get_context_data(**kwargs)
+		self.bolsistas = get_bolsistas(self.user)
+		
 		context['dias_uteis'] = self.calendario.count_working_days_month(self.data_atual.month, self.data_atual.year)
 		context['ultimos_registros'] = self.get_ultimos_registros()
 		context['justificativas'] = self.get_justificativas_pendentes() or None
