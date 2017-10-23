@@ -1,19 +1,29 @@
 import rules
 
-from django.db.models import Q
-
-from .models import Coordenadoria, Setor
+from frequencia.vinculos.utils import get_setores
 
 @rules.predicate
 def is_vinculo_chefe(user, vinculo):
-	coordenadorias_user = Coordenadoria.objects.filter(vinculos__user=user)
-	setores_user = Setor.objects.filter(Q(vinculos__user=user) | Q(coordenadoria__in=coordenadorias_user))
-
-	return user.has_perm('accounts.is_coordenador_chefe') and vinculo.setor in setores_user
+	try:	
+		setores_user = get_setores(user)
+		return user.has_perm('accounts.is_coordenador_chefe') and vinculo.setor in setores_user
+	except:
+		return None
 
 @rules.predicate
 def is_vinculo_owner(user, vinculo):
-	return vinculo.user == user
+	try:
+		return vinculo.user == user
+	except:
+		return None
+
+@rules.predicate
+def is_setor_chefe(user, setor):
+	try:	
+		setores_user = get_setores(user)
+		return user.has_perm('accounts.is_servidor') and setor in setores_user
+	except:
+		return None
 
 #Rules
 rules.add_perm('vinculo.can_manage', is_vinculo_chefe)

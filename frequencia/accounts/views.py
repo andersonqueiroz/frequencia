@@ -1,3 +1,5 @@
+from rules.contrib.views import PermissionRequiredMixin, permission_required
+
 from django.urls import reverse
 from django.contrib import messages
 from django.views.generic import ListView
@@ -19,9 +21,10 @@ from .models import User
 from .forms import RegisterForm, EditAccountForm
 
 
-class AccountListView(ListView):
+class AccountListView(PermissionRequiredMixin, ListView):
 	model = User
 	template_name = 'accounts/accounts.html'
+	permission_required = 'accounts.is_gestor'
 
 	def get_queryset(self):
 		busca = self.request.GET.get('busca', '')
@@ -37,7 +40,7 @@ class AccountListView(ListView):
 		context['gestores'] = queryset.filter(vinculos__ativo=True, vinculos__group__name='Gestor de unidade')
 		return context
 
-
+@permission_required('accounts.is_gestor')
 def accounts_create(request):
 	template_name = 'accounts/accounts_create_edit.html'
 
@@ -60,7 +63,7 @@ def accounts_create(request):
 	}
 	return render(request, template_name, context)
 
-
+@permission_required('accounts.is_gestor')
 def accounts_edit(request, pk): 
 	template_name = 'accounts/accounts_create_edit.html'
 
@@ -97,7 +100,9 @@ def edit_password(request):
 	context['form'] = form
 	return render(request, template_name, context)
 
-class ResetPasswordRedirectView(RedirectView):
+class ResetPasswordRedirectView(PermissionRequiredMixin, RedirectView):
+
+	permission_required = 'accounts.is_gestor'
 
 	permanent = False
 	query_string = True

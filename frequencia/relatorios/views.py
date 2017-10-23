@@ -43,10 +43,11 @@ class BuscaRelatorioMensalTemplateView(LoginRequiredMixin, FormView):
 
 		return url + '?mes={0}&ano={1}'.format(self.mes, self.ano)
 
-class BuscaRelatorioSetorTemplateView(LoginRequiredMixin, FormView):
+class BuscaRelatorioSetorTemplateView(PermissionRequiredMixin, FormView):
 
 	template_name = 'relatorios/busca_setor.html'
 	form_class = BuscaRelatorioSetorForm
+	permission_required = 'accounts.is_servidor'
 
 	def get_form_kwargs(self):
 		kwargs = super(BuscaRelatorioSetorTemplateView, self).get_form_kwargs()
@@ -121,10 +122,11 @@ class RelatorioMensalDetailView(PermissionRequiredMixin, DetailView):
 		return super(RelatorioMensalDetailView, self).render_to_response(context)
 	
 
-class RelatorioSetorDetailView(DetailView):
+class RelatorioSetorDetailView(PermissionRequiredMixin, DetailView):
 
 	model = Setor
 	template_name = 'relatorios/relatorio_setor.html'
+	permission_required = 'relatorio.can_view_setor'
 
 	def dispatch(self, *args, **kwargs):
 		try:
@@ -143,10 +145,12 @@ class RelatorioSetorDetailView(DetailView):
 		context['periodo'] = self.periodo
 		return context
 
-class ListagemGeralListView(ListView):
+class ListagemGeralListView(PermissionRequiredMixin, ListView):
 
 	template_name = 'relatorios/listagem_geral.html'
 	model = Vinculo
+	permission_required = 'accounts.is_servidor'
+
 	numero_dias = 7
 
 	def get_queryset(self):

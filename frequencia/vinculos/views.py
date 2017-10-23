@@ -1,3 +1,5 @@
+from rules.contrib.views import PermissionRequiredMixin
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib import messages
@@ -10,23 +12,24 @@ from .models import Setor, Coordenadoria
 from .forms import EditSetorForm, EditCoordenadoriaForm
 
 #Views de setores
-class SetoresCoordenadoriasListView(ListView):
+class SetoresCoordenadoriasListView(PermissionRequiredMixin, ListView):
 
  	model = Setor
  	template_name = 'setor_coordenadoria/setores_coordenadorias.html'
+ 	permission_required = 'accounts.is_gestor'
 
  	def get_context_data(self, **kwargs):
  		context = super(SetoresCoordenadoriasListView, self).get_context_data(**kwargs)
  		context['coordenadorias'] = Coordenadoria.objects.all()
-
  		return context
 
 
-class SetorCreateView(SuccessMessageMixin, CreateView):
+class SetorCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
 
 	model = Setor
 	form_class = EditSetorForm
 	template_name = 'setor_coordenadoria/setor_create_edit.html'
+	permission_required = 'accounts.is_gestor'
 
 	success_message = 'Setor cadastrado com sucesso!'
 
@@ -34,11 +37,12 @@ class SetorCreateView(SuccessMessageMixin, CreateView):
 		return reverse('vinculos:setores_coordenadorias')
 
 
-class SetorUpdateView(SuccessMessageMixin, UpdateView):
+class SetorUpdateView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
 
 	model = Setor
 	form_class = EditSetorForm
-	template_name = 'setor_coordenadoria/setor_create_edit.html'	
+	template_name = 'setor_coordenadoria/setor_create_edit.html'
+	permission_required = 'accounts.is_gestor'	
 	
 	success_message = 'Setor atualizado com sucesso!'
 
@@ -55,11 +59,12 @@ class SetorUpdateView(SuccessMessageMixin, UpdateView):
 		return context
 
 
-class CoordenadoriaCreateView(SuccessMessageMixin, CreateView):
+class CoordenadoriaCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
 
 	model = Coordenadoria
 	form_class = EditCoordenadoriaForm
 	template_name = 'setor_coordenadoria/coordenadoria_create_edit.html'
+	permission_required = 'accounts.is_gestor'
 
 	success_message = 'Coordenadoria cadastrada com sucesso!'
 
@@ -67,11 +72,12 @@ class CoordenadoriaCreateView(SuccessMessageMixin, CreateView):
 		return reverse('vinculos:setores_coordenadorias')
 
 
-class CoordenadoriaUpdateView(SuccessMessageMixin, UpdateView):
+class CoordenadoriaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
 
 	model = Coordenadoria
 	form_class = EditCoordenadoriaForm
 	template_name = 'setor_coordenadoria/coordenadoria_create_edit.html'
+	permission_required = 'accounts.is_gestor'
 	
 	success_message = 'Coordenadoria atualizada com sucesso!'
 

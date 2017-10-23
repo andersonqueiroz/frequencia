@@ -3,20 +3,33 @@ import rules
 from frequencia.vinculos.models import Vinculo
 
 @rules.predicate
-def is_gestor(user):		
-	return user.vinculos.filter(ativo=True, group__name='Gestor de unidade').exists()
+def is_gestor(user):	
+	try:	
+		return user.vinculos.filter(ativo=True, group__name='Gestor de unidade').exists()
+	except:
+		return None
 
 @rules.predicate
-def is_coordenador(user):		
-	return user.vinculos.filter(ativo=True, group__name='Coordenador').exists()
+def is_coordenador(user):	
+	try:	
+		return user.vinculos.filter(ativo=True, group__name='Coordenador').exists()
+	except:
+		return None
 
 @rules.predicate
-def is_chefe(user):		
-	return user.vinculos.filter(ativo=True, group__name='Chefe de setor').exists()
+def is_chefe(user):	
+	try:	
+		return user.vinculos.filter(ativo=True, group__name='Chefe de setor').exists()
+	except:
+		return None
 
 @rules.predicate
-def is_bolsista(user):		
-	return user.vinculos.filter(ativo=True, group__name='Bolsista').exists()
+def is_bolsista(user):	
+	try:	
+		return user.vinculos.filter(ativo=True, group__name='Bolsista').exists()
+	except:
+		return None
+				
 
 rules.add_perm('accounts.is_gestor', is_gestor)
 rules.add_perm('accounts.is_coordenador', is_coordenador)

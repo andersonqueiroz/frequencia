@@ -16,7 +16,7 @@ def get_setores(user):
 		vinculos = vinculos.filter(Q(group__name='Coordenador') | Q(group__name='Chefe de setor'))
 
 		coordenadorias = Coordenadoria.objects.filter(vinculos__in=vinculos)
-		setores = Setor.objects.filter(Q(coordenadoria__in=coordenadorias) | Q(vinculos__in=vinculos))		
+		setores = Setor.objects.filter(Q(coordenadoria__in=coordenadorias) | Q(vinculos__in=vinculos)).distinct()		
 	else:
 		setores = None
 

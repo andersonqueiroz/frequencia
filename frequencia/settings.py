@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from decouple import config, Csv
+from dj_database_url import parse as dburl
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#=l74&h@i@7qd_dbes7@+!8urll+tmr1%86hr%+kia#h11%_x6'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 
 # Application definition
 
@@ -89,12 +91,16 @@ WSGI_APPLICATION = 'frequencia.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.frequencia')
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.frequencia'),
-    }
+    'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.frequencia'),
+#     }
+# }
 
 
 # Password validation
@@ -142,8 +148,9 @@ LOGOUT_URL = 'registro:registro'
 AUTH_USER_MODEL = 'accounts.User'
 
 #Sessions
-#SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-#SESSION_COOKIE_AGE = 30 * 60
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_AGE = 30 * 60
 
 #Media
 MEDIA_URL = '/media/'
@@ -152,5 +159,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MAX_UPLOAD_SIZE = 5242880
 
 #Mail
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#DEFAULT_FROM_EMAIL = 'Frequência BCZM <naoresponda@webmaster.local>'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+
+#Messages
+from django.contrib import messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'debug',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',
+}
