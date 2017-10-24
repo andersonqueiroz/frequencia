@@ -26,8 +26,8 @@ class JustificativaFaltaManager(models.Manager):
 	def buscar(self, query):
 		if not query:
 			return self
-		return self.filter(Q(vinculo__user__name__contains=query) | 
-						   Q(descricao__contains=query))
+		return self.filter(Q(vinculo__user__name__icontains=query) | 
+						   Q(descricao__icontains=query))
 
 class JustificativaFalta(basemodel):
 

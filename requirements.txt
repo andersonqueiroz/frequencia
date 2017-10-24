@@ -1,4 +1,3 @@
-dj-database-url==0.4.2
 Django==1.11.3
 django-annoying==0.10.3
 django-timedeltatemplatefilter==0.1.2
@@ -6,11 +5,15 @@ django-widget-tweaks==1.4.1
 ephem==3.7.6.0
 icalendar==3.11.6
 lunardate==0.1.5
-pkg-resources==0.0.0
 pyCalverter==1.6.1
 python-dateutil==2.6.1
-python-decouple==3.1
 pytz==2017.2
 rules==1.2.1
 six==1.10.0
+static3==0.7.0
 workalendar==2.3.1
+
+dj-database-url==0.4.2
+dj-static==0.0.6
+psycopg2==2.7.3.1
+python-decouple==3.1
