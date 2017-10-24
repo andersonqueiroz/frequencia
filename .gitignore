@@ -109,3 +109,4 @@ db.sqlite3
 
 #Files
 media/
+staticfiles/
