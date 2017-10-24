@@ -10,7 +10,7 @@ from frequencia.core.basemodel import basemodel
 
 class CustomUserManager(UserManager):
 	def buscar(self, query):
-		return self.filter(Q(name__contains=query) | Q(username__contains=query))
+		return self.filter(Q(name__icontains=query) | Q(username__icontains=query))
 
 class User(basemodel, AbstractBaseUser, PermissionsMixin):
 
@@ -19,9 +19,9 @@ class User(basemodel, AbstractBaseUser, PermissionsMixin):
 		validators=[validators.RegexValidator(re.compile('^[\w.@+-]+$'),
 			'O nome de usuário so pode conter letras, digitos ou os seguintes caracteres: @/./+/-/_', 'invalid')]
 	)
-	email = models.EmailField('E-mail', unique=True)
+	email = models.EmailField('E-mail', unique=True, blank=True)
 	name = models.CharField('Nome', max_length=100, blank=True)
-	cpf = models.CharField('CPF', max_length=15)
+	cpf = models.CharField('CPF', max_length=15, unique=True)
 	is_active = models.BooleanField('Está ativo', blank=True, default=True)
 	is_staff = models.BooleanField('Acesso ao admin do projeto', blank=True, default=False)
 
