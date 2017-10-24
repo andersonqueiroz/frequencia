@@ -19,7 +19,7 @@ class User(basemodel, AbstractBaseUser, PermissionsMixin):
 		validators=[validators.RegexValidator(re.compile('^[\w.@+-]+$'),
 			'O nome de usuário so pode conter letras, digitos ou os seguintes caracteres: @/./+/-/_', 'invalid')]
 	)
-	email = models.EmailField('E-mail', unique=True, blank=True)
+	email = models.EmailField('E-mail', blank=True)
 	name = models.CharField('Nome', max_length=100, blank=True)
 	cpf = models.CharField('CPF', max_length=15, unique=True)
 	is_active = models.BooleanField('Está ativo', blank=True, default=True)
