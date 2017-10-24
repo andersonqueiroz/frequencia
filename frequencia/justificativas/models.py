@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.db import models
 from django.db.models import Q
+from django.conf import settings
 
 from frequencia.core.basemodel import basemodel
 from frequencia.core.mail import send_mail_template
@@ -81,13 +82,13 @@ class JustificativaFalta(basemodel):
 def post_save_justificativa(instance, created, **kwargs):
 	if created:
 		subject = 'Nova justificativa de falta cadastrada'
-		context = { 'justificativa' : instance	}
+		context = { 'justificativa' : instance	, 'base_url': settings.BASE_URL_SERVER }
 		template_name = 'justificativas/justificativa_mail.html'
 		
-		chefes = instance.vinculo.setor.vinculos.filter(group__name='Chefe de setor', ativo=True, user__is_active=True)
+		chefes = instance.vinculo.setor.vinculos.filter(group__name='Chefe de setor', ativo=True, user__is_active=True)		
 		for chefe in chefes:
 			recipient_list = [chefe.user.email]
-			try:
+			try:				
 				send_mail_template(subject, template_name, context, recipient_list)
 			except:
 				pass

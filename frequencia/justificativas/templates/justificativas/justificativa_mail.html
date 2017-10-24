@@ -6,5 +6,5 @@
 
 <p><strong>Descrição da justificativa:</strong> {{ justificativa.descricao|linebreaks }}</p>
 
-<p>Para visualizar o item, acesse: {{ request.get_host }}{% url 'justificativas:justificativa_edit' justificativa.pk %}</p>
+<p>Para visualizar o item, acesse: {{ base_url }}{% url 'justificativas:justificativa_edit' justificativa.pk %}</p>
 
