@@ -162,7 +162,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MAX_UPLOAD_SIZE = 5242880
 
 #Mail
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = config('EMAIL_BACKEND')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 #Messages
