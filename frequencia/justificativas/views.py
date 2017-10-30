@@ -9,9 +9,9 @@ from django.views.generic.detail import DetailView
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, get_object_or_404, redirect
 
-from frequencia.core.messages import SuccessMessageMixin
 from frequencia.vinculos.models import Coordenadoria, Setor
 from frequencia.vinculos.utils import get_setores
 

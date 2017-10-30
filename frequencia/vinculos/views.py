@@ -1,12 +1,12 @@
 from rules.contrib.views import PermissionRequiredMixin
 
-from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib import messages
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import render, get_object_or_404, redirect
 
-from frequencia.core.messages import SuccessMessageMixin
 
 from .models import Setor, Coordenadoria
 from .forms import EditSetorForm, EditCoordenadoriaForm

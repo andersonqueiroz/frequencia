@@ -7,9 +7,9 @@ from django.db.models import ProtectedError
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, CreateView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, get_object_or_404, redirect
 
-from frequencia.core.messages import SuccessMessageMixin
 from frequencia.vinculos.models import Vinculo
 
 from .forms import FrequenciaForm, EditMaquinaForm

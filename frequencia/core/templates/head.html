@@ -1,4 +1,5 @@
 {% load static %}
+{% load compress %} 
 
 <head>
   <meta charset="utf-8">
@@ -8,6 +9,7 @@
   <meta name="author" content="Biblioteca Central Zila Mamede">
   <title>Frequência BCZM</title>
 
+  {% compress css %}
   <!-- Bootstrap core CSS-->
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
 
@@ -24,4 +26,5 @@
   <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
 
   <link href="{% static 'css/datepicker.css' %}" rel="stylesheet">
+  {% endcompress %}
 </head> 

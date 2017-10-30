@@ -1,5 +1,7 @@
 {% load static %}
+{% load compress %} 
 
+{% compress js %}
 <!-- Bootstrap core JavaScript-->
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
@@ -29,3 +31,4 @@
        $("#alertMessages").show(300);
     });
 </script>
+{% endcompress %}

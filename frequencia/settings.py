@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'rules.apps.AutodiscoverRulesConfig',
     'timedeltatemplatefilter',
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -171,7 +172,7 @@ from django.contrib import messages
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',
     messages.INFO: 'info',
-    messages.SUCCESS: 'success',
+    messages.SUCCESS: 'info',
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',
 }

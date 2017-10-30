@@ -5,9 +5,9 @@ from django.contrib import messages
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, get_object_or_404, redirect
 
-from frequencia.core.messages import SuccessMessageMixin
 
 from .calendar import FeriadosRioGrandeDoNorte
 from .models import FeriadoCalendarioAcademico
