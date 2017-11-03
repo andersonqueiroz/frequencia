@@ -10,7 +10,7 @@ from frequencia.core.basemodel import basemodel
 
 class CustomUserManager(UserManager):
 	def buscar(self, query):
-		return self.filter(Q(name__icontains=query) | Q(username__icontains=query))
+		return self.filter(Q(name__icontains=query) | Q(username__icontains=query) | Q(cpf__icontains=query))
 
 class User(basemodel, AbstractBaseUser, PermissionsMixin):
 

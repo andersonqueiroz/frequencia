@@ -52,7 +52,7 @@ class TipoJustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, 
 		return reverse('justificativas:tipo_justificativa')
 
 
-@permission_required('tipo_justificativa.can_manage', fn=objectgetter(TipoJustificativaFalta, 'pk'))
+@permission_required('tipo_justificativa.can_manage')
 def tipo_justificativa_remove(request, pk):
 
 	tipo_justificativa = get_object_or_404(TipoJustificativaFalta, pk=pk)
@@ -129,6 +129,19 @@ class JustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, Upda
 		context = super(JustificativaUpdateView, self).get_context_data(**kwargs)
 		context['numero_dias_falta'] = abs((self.object.inicio - self.object.termino).days) + 1
 		return context
+
+@permission_required('justificativas.can_reabrir', fn=objectgetter(JustificativaFalta, 'pk'))
+def justificativa_reabrir(request, pk):
+	justificativa = get_object_or_404(JustificativaFalta, pk=pk)
+
+	justificativa.status = 0
+	justificativa.usuario_analise = None
+	justificativa.horas_abonadas = None
+	justificativa.save()
+
+	messages.info(request, 'Justificativa reaberta com sucesso')
+	return redirect('justificativas:justificativa_edit', pk=pk)
+
 
 #Tipos de justificativa
 tipo_justificativa = TipoJustificativaListView.as_view()

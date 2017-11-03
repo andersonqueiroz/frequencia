@@ -168,6 +168,12 @@
 	        $('[id*=-group]').each(function() {
 				getOption($(this));
 			});
+
+            $('[data-toggle="datepicker"]').datepicker({
+                autoHide: true, 
+                language: 'pt',
+                format: 'dd/mm/yyyy'
+            });
 		});
 
 		function getOption(form) {
@@ -189,24 +195,33 @@
 		    if (option == "Bolsista") {
 
 		        $('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true).val('');
+		        $('input#id_vinculos-'+id+'-inicio_vigencia').prop('disabled', false).val('');
+		    	$('input#id_vinculos-'+id+'-termino_vigencia').prop('disabled', false).val('');
 
 		    } else if (option == "Chefe de setor") {
 
 		    	$('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true).val('');
 		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true).val('');
 		    	$('select#id_vinculos-'+id+'-turno').prop('disabled', true).val('');
+		    	$('select#id_vinculos-'+id+'-turno').prop('disabled', true).val('');
+		    	$('input#id_vinculos-'+id+'-inicio_vigencia').prop('disabled', true).val('');
+		    	$('input#id_vinculos-'+id+'-termino_vigencia').prop('disabled', true).val('');
 
 		    } else if (option == "Coordenador") {
 
 		    	$('select#id_vinculos-'+id+'-setor').prop('disabled', true).val('');
 		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true).val('');
 		    	$('select#id_vinculos-'+id+'-turno').prop('disabled', true).val('');
+		    	$('input#id_vinculos-'+id+'-inicio_vigencia').prop('disabled', true).val('');
+		    	$('input#id_vinculos-'+id+'-termino_vigencia').prop('disabled', true).val('');
 
 		    } else if (option == "Gestor de unidade") {
 		    	$('select#id_vinculos-'+id+'-setor').prop('disabled', true).val('');
 		    	$('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true).val('');
 		    	$('input#id_vinculos-'+id+'-carga_horaria_diaria').prop('disabled', true).val('');
 		    	$('select#id_vinculos-'+id+'-turno').prop('disabled', true).val('');
+		    	$('input#id_vinculos-'+id+'-inicio_vigencia').prop('disabled', true).val('');
+		    	$('input#id_vinculos-'+id+'-termino_vigencia').prop('disabled', true).val('');
 		    };
 		};
 	</script>

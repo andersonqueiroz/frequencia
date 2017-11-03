@@ -2,12 +2,15 @@
 {% load static %}
 {% load filtros %}
 
+{% load rules %}
+
+
 {% block content %}
 
     {% load widget_tweaks %}
-
-    {% load rules %}
+    {% load timedelta_filter %}
     {% has_perm 'justificativa.can_analyse' user object as can_analyse %}
+    {% has_perm 'accounts.is_gestor' user object as is_gestor %}
 
 <div class="card mb-3">
     <div class="card-header">
@@ -89,7 +92,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>{{ form.horas_abonadas.label }}</label>
-                                {% render_field form.horas_abonadas class="form-control" value=object.horas_sugeridas %}
+                                {% render_field form.horas_abonadas class="form-control" %}
                                 {% if form.horas_abonadas.errors %}
                                     <label class="text-danger">{{ form.horas_abonadas.errors.0 }}</label>
                                 {% endif %}
@@ -163,10 +166,33 @@
                         </div>
                     </div>
                 {% endif %}  
-                </div>                
-                    <div class="text-center">
-                        <a href="#" class="btn text-info" onclick="window.history.back()">Voltar</a>
+                </div>  
+
+                <div class="text-center">
+                    <a href="#" class="btn text-info" onclick="window.history.back()">Voltar</a>
+                    {% if is_gestor %}
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#confirmar_reabertura">Reabrir justificativa</button>                        
+                    {% endif %}
+                </div>
+
+                {% if is_gestor %}
+                <div class="modal fade" id="confirmar_reabertura" tabindex="-1" role="dialog" style="display: none;">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">                                
+                        <h4 class="modal-title" id="myModalLabel">Reabertura de justificativa de falta</h4>
+                      </div>
+                      <div class="modal-body">
+                        Você deseja realmente reabrir a justificativa de falta? A justificativa deverá ser reavaliada pela chefia do bolsista.
+                      </div>
+                      <div class="modal-footer">
+                        <a href="#" class="btn text-info" data-dismiss="modal">Cancelar</a>
+                        <a href="{% url 'justificativas:justificativa_reabrir' object.pk %}" class="btn btn-danger">Confirmar</a>
+                      </div>
                     </div>
+                  </div>
+                </div>
+                {% endif %}
             </div>
         {%endif%}
     </div>    
@@ -177,21 +203,29 @@
 {% block scripts %}
     {{ block.super }}
     <script src="{% static 'js/jquery.mask.js' %}"></script>
-    <script type="text/javascript">
-      $(document).ready(function(){
-         $('#id_horas_abonadas').mask('00:00:00', {reverse: true});
-         $('.confirm-modal').on('click', function(){
-            var _horas = $('#id_horas_abonadas').val();
-            $("#horas_abonadas_modal").text(_horas);
-         });
 
-         $("#confirma_leitura").change(function(){
-            if(this.checked){
-                $('#botao_confirmar').attr("disabled", false);                
-            } else {
-                $('#botao_confirmar').attr("disabled", true);  
-            }
-         });
-      });
-    </script>
+    {% has_perm 'justificativa.can_analyse' user object as can_analyse %}
+
+    {% if can_analyse and not object.usuario_analise %}
+        <script type="text/javascript">
+          $(document).ready(function(){
+             $('#id_horas_abonadas').mask('00:00:00', {reverse: true});
+
+             $('#id_horas_abonadas').val('{{object.horas_sugeridas|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}');
+
+             $('.confirm-modal').on('click', function(){
+                var _horas = $('#id_horas_abonadas').val();
+                $("#horas_abonadas_modal").text(_horas);
+             });
+
+             $("#confirma_leitura").change(function(){
+                if(this.checked){
+                    $('#botao_confirmar').attr("disabled", false);                
+                } else {
+                    $('#botao_confirmar').attr("disabled", true);  
+                }
+             });
+          });
+        </script>
+    {% endif %}
 {% endblock %}

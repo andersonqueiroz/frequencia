@@ -50,6 +50,8 @@ class Vinculo(basemodel):
 	carga_horaria_diaria = models.IntegerField(null=True, verbose_name='Carga horária diária', blank=True)
 	turno = models.IntegerField('Turno', choices=TURNO_CHOICES, blank=True, null=True)
 	ativo = models.BooleanField(verbose_name='Vínculo ativo', default=True)
+	inicio_vigencia = models.DateField(verbose_name='Data de início da bolsa', blank=True, null=True)
+	termino_vigencia = models.DateField(verbose_name='Data de término da bolsa', blank=True, null=True)
 
 	def __str__(self):
 		return '{0} - {1}'.format((self.user.name or self.user.username), (self.setor or self.coordenadoria))

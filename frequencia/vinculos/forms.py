@@ -9,13 +9,15 @@ class AdicionarVinculoForm(forms.ModelForm):
 
 	class Meta:
 		model = Vinculo
-		fields = ['group', 'setor', 'coordenadoria', 'carga_horaria_diaria', 'turno']
+		fields = ['group', 'setor', 'coordenadoria', 'carga_horaria_diaria', 'inicio_vigencia', 'termino_vigencia', 'turno']
 
 	def __init__(self, *args, **kwargs):
 		super(AdicionarVinculoForm, self).__init__(*args, **kwargs)
 		self.fields['setor'].empty_label = ""
 		self.fields['group'].empty_label = None
 		self.fields['coordenadoria'].empty_label = ""
+		self.fields['inicio_vigencia'].widget = forms.TextInput(attrs={'data-toggle':'datepicker'})
+		self.fields['termino_vigencia'].widget = forms.TextInput(attrs={'data-toggle':'datepicker'})
 
 	def clean(self):
 		cleaned_data = super(AdicionarVinculoForm, self).clean()
@@ -39,13 +41,15 @@ class EditarVinculoForm(forms.ModelForm):
 
 	class Meta:
 		model = Vinculo
-		fields = ['ativo', 'group', 'setor', 'coordenadoria', 'carga_horaria_diaria', 'turno']
+		fields = ['ativo', 'group', 'setor', 'coordenadoria', 'carga_horaria_diaria', 'inicio_vigencia', 'termino_vigencia', 'turno']
 
 	def __init__(self, *args, **kwargs):
 		super(EditarVinculoForm, self).__init__(*args, **kwargs)
 		self.fields['setor'].empty_label = ""
 		self.fields['group'].empty_label = ""
 		self.fields['coordenadoria'].empty_label = ""
+		self.fields['inicio_vigencia'].widget = forms.TextInput(attrs={'data-toggle':'datepicker'})
+		self.fields['termino_vigencia'].widget = forms.TextInput(attrs={'data-toggle':'datepicker'})
 
 	def clean(self):
 		cleaned_data = super(EditarVinculoForm, self).clean()

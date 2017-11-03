@@ -115,13 +115,14 @@
             }
         });
 
-        setTimeout(function () {
+        refreshTime = setTimeout(function () {
            window.location.reload();
         }, 60000);
 
         $('#addObservacao').click(function(){
             $(this).toggle();
             $('#observacao').toggle();
+            clearTimeout(refreshTime);
         });
     });
     

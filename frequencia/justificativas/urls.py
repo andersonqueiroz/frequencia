@@ -13,4 +13,5 @@ urlpatterns = [
 	url(r'^$', views.justificativas, name='justificativas'),	
 	url(r'^novo/$', views.justificativa_create, name='justificativa_create'),
 	url(r'^detalhes/(?P<pk>\d+)/$', views.justificativa_edit, name='justificativa_edit'),
+	url(r'^reabrir/(?P<pk>\d+)/$', views.justificativa_reabrir, name='justificativa_reabrir'),
 ]
