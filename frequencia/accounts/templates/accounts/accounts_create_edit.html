@@ -172,7 +172,7 @@
             $('[data-toggle="datepicker"]').datepicker({
                 autoHide: true, 
                 language: 'pt',
-                format: 'dd/mm/yyyy'
+                format: 'dd/mm/yyyy',               
             });
 		});
 
@@ -195,8 +195,8 @@
 		    if (option == "Bolsista") {
 
 		        $('select#id_vinculos-'+id+'-coordenadoria').prop('disabled', true).val('');
-		        $('input#id_vinculos-'+id+'-inicio_vigencia').prop('disabled', false).val('');
-		    	$('input#id_vinculos-'+id+'-termino_vigencia').prop('disabled', false).val('');
+		        $('input#id_vinculos-'+id+'-inicio_vigencia').prop('disabled', false);
+		    	$('input#id_vinculos-'+id+'-termino_vigencia').prop('disabled', false);
 
 		    } else if (option == "Chefe de setor") {
 

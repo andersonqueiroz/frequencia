@@ -48,8 +48,8 @@ class EditarVinculoForm(forms.ModelForm):
 		self.fields['setor'].empty_label = ""
 		self.fields['group'].empty_label = ""
 		self.fields['coordenadoria'].empty_label = ""
-		self.fields['inicio_vigencia'].widget = forms.TextInput(attrs={'data-toggle':'datepicker'})
-		self.fields['termino_vigencia'].widget = forms.TextInput(attrs={'data-toggle':'datepicker'})
+		self.fields['inicio_vigencia'].widget = forms.DateInput(format='%d/%m/%Y', attrs={'data-toggle':'datepicker'})
+		self.fields['termino_vigencia'].widget = forms.DateInput(format='%d/%m/%Y', attrs={'data-toggle':'datepicker'})
 
 	def clean(self):
 		cleaned_data = super(EditarVinculoForm, self).clean()
