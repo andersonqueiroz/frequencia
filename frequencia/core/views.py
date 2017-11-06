@@ -1,5 +1,6 @@
 import datetime
 
+from django.conf import settings
 from django.db.models import Count
 from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
@@ -51,6 +52,8 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 		context = super(HomeTemplateView, self).get_context_data(**kwargs)
 		self.bolsistas = get_bolsistas(self.user)
 		
+		context['versao'] = settings.VERSION
+
 		context['dias_uteis'] = self.calendario.count_working_days_month(self.data_atual.month, self.data_atual.year)
 		context['ultimos_registros'] = self.get_ultimos_registros()
 		context['justificativas'] = self.get_justificativas_pendentes() or None

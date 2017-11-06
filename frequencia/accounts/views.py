@@ -96,6 +96,7 @@ def edit_password(request):
 		messages.info(request, 'Senha alterada com sucesso!')
 		#Reautenticando usuário com nova senha		
 		update_session_auth_hash(request, form.user)
+		return redirect('core:home')
 	
 	context['form'] = form
 	return render(request, template_name, context)
