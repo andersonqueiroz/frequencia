@@ -81,10 +81,10 @@
                       <tbody>
                           {% for setor in bolsistas_por_setor %}
                               <tr>
-                                  <td>{{ setor.nome }}</td>
+                                  <td>{{ setor.setor__nome }}</td>
                                   <td>{{ setor.bolsistas }}</td>
                                   {% if is_gestor %}
-                                    <td><a href="{% url 'vinculos:setor_edit' setor.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                    <td><a href="{% url 'vinculos:setor_edit' setor.setor__pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
                                   {% endif %}
                               </tr>   
                           {% endfor %}                        

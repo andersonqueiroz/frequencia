@@ -31,9 +31,12 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 
 	def get_bolsistas_por_setor(self):
 		setores = get_setores(self.user)
-		return setores.filter(vinculos__group__name='Bolsista', 
-							  vinculos__ativo=True,
-							  vinculos__user__is_active=True).annotate(bolsistas=Count('vinculos')).values('pk', 'nome', 'bolsistas')
+
+		return Vinculo.objects.filter(group__name="Bolsista", 
+						ativo=True, 
+						user__is_active=True, 
+						setor__in=setores).values('setor').annotate(bolsistas=Count('setor')).values('setor__pk', 'setor__nome', 'bolsistas')
+
 
 	def get_justificativas_pendentes(self):
 		return JustificativaFalta.objects.filter(status=0, vinculo__in=self.bolsistas).count()
