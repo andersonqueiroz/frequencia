@@ -98,6 +98,7 @@
                     <thead>
                         <tr>
                             <th>Bolsista{{bolsistas|pluralize}}</th>
+                            <th>Vigência da bolsa</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -106,6 +107,7 @@
                         {% for bolsista in  bolsistas %}
                             <tr>
                                 <td>{{ bolsista.user }}</td>
+                                <td>{{ bolsista.inicio_vigencia|date:"d/m/Y" }} - {{ bolsista.termino_vigencia|date:"d/m/Y" }}</td>
                                 <td><a href="{% url 'accounts:accounts_edit' bolsista.user.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
                             </tr>
                         {% endfor %}

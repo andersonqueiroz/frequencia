@@ -79,7 +79,10 @@
               <strong>CPF:</strong> {{ dados_bolsista.user.cpf }}<br>          
               <strong>Setor:</strong> {{ dados_bolsista.setor }}<br>              
               <strong>Turno:</strong> {{ dados_bolsista.get_turno_display }}<br>            
-              <strong>Carga horária diária:</strong> {{ dados_bolsista.carga_horaria_diaria }}h<br>              
+              <strong>Carga horária diária:</strong> {{ dados_bolsista.carga_horaria_diaria }}h<br>
+              {% if dados_bolsista.inicio_vigencia and dados_bolsista.termino_vigencia %}            
+                <strong>Vigência da bolsa:</strong> {{ dados_bolsista.inicio_vigencia|date:"d/m/Y" }} - {{ dados_bolsista.termino_vigencia|date:"d/m/Y" }}<br>  
+              {% endif %}            
           </div>        
         </div>    
     </div>

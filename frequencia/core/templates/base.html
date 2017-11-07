@@ -1,4 +1,5 @@
 {% load static %}
+{% load simpletags %}
 
 {% load rules %}
 {% has_perm 'accounts.is_servidor' user as is_servidor %}
@@ -158,7 +159,7 @@
     <footer class="sticky-footer">
       <div class="container">
         <div class="text-center">
-          <small> © Biblioteca Central Zila Mamede - {% now "Y" %} - Versão {{ versao }}</small>
+          <small> © Biblioteca Central Zila Mamede - {% now "Y" %} - Versão {% current_version %}</small>
         </div>
       </div>
     </footer>
