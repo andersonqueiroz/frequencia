@@ -57,6 +57,7 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 		print(dia_final)
 		return self.bolsistas.filter(group__name='Bolsista', 
 									 ativo=True,
+									 user__is_active=True,
 									 termino_vigencia__lte=dia_final)
 
 	def get_context_data(self, **kwargs):
