@@ -20,13 +20,20 @@
                 </div>
             {% endif %}
             <div class="row">
+                <div class="col-md-12">
+                    <label class="custom-control custom-checkbox">
+                        {% render_field form.comprovante_obrigatorio class="custom-control-input" %}                   
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">{{ form.comprovante_obrigatorio.label }}</span>
+                    </label>
+                </div>
                 <div class="form-group col-md-12">
                     <label>{{ form.nome.label }}</label>
                     {% render_field form.nome class="form-control" %}
                     {% if form.nome.errors %}
                         <label class="error">{{ form.nome.errors.0 }}</label>
                     {% endif %}
-                </div>      
+                </div>                    
             </div>      
             <div class="text-center">
                 <a class="btn text-info" href="{% url 'justificativas:tipo_justificativa' %}">Voltar</a>

@@ -11,7 +11,7 @@ class EditTipoJustificativaForm(forms.ModelForm):
 
 	class Meta:
 		model = TipoJustificativaFalta
-		fields = ['nome']
+		fields = ['nome', 'comprovante_obrigatorio']
 
 
 class CreateJustificativaForm(forms.ModelForm):
@@ -44,6 +44,11 @@ class CreateJustificativaForm(forms.ModelForm):
 
 		if data_inicio > data_termino:
 			raise forms.ValidationError("Data de término deve ser posterior à data de inicio")
+
+		tipo = cleaned_data.get("tipo", '')
+		comprovante = self.cleaned_data.get('comprovante', False)
+		if tipo.comprovante_obrigatorio and not comprovante:
+			raise forms.ValidationError("Este tipo de justificativa exige o cadastro do comprovante de ausência")
 
 		return cleaned_data
 

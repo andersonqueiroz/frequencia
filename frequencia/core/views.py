@@ -1,4 +1,5 @@
 import datetime
+from datetime import timedelta
 
 from django.db.models import Count
 from django.shortcuts import redirect
@@ -50,6 +51,14 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 													  bolsista__in=self.bolsistas).count()
 		return num_bolsistas_dia
 
+	def get_bolsas_expirando(self):
+		hoje = datetime.datetime.now().date()
+		dia_final = hoje + timedelta(days=90)
+		print(dia_final)
+		return self.bolsistas.filter(group__name='Bolsista', 
+									 ativo=True,
+									 termino_vigencia__lte=dia_final)
+
 	def get_context_data(self, **kwargs):
 		context = super(HomeTemplateView, self).get_context_data(**kwargs)
 		self.bolsistas = get_bolsistas(self.user)
@@ -61,6 +70,7 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 		if self.user.has_perm('accounts.is_servidor'):		
 			self.template_name = 'home/home_servidor.html'	
 			context['num_bolsistas_trabalhando'] = self.get_num_bolsistas_trabalhando()
+			context['bolsas_expirando'] = self.get_bolsas_expirando()
 
 			if self.user.has_perm('accounts.is_gestor_coordenador'):				
 				context['bolsistas_por_setor'] = self.get_bolsistas_por_setor()

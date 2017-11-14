@@ -65,7 +65,7 @@
       {% if is_gestor_coordenador %}
         <div class="card mb-3">
           <div class="card-header">
-            <i class="fa fa-bar-chart"></i> Distribuição de bolsistas por setor</div>
+            <i class="fa fa-pie-chart"></i> Distribuição de bolsistas por setor</div>
           <div class="card-body">
               <div class="table-responsive">
                   <table class="table table-hover">
@@ -155,6 +155,44 @@
         
     </div>
   </div>
+
+  {% if bolsas_expirando %}
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card mb-3">
+          <div class="card-header">
+            <i class="fa fa-user-times"></i> Bolsas expirando nos próximos 90 dias</div>
+          <div class="card-body">
+              <div class="table-responsive">
+                  <table class="table table-hover">
+                      <thead>
+                          <tr>
+                              <th>Bolsista</th>
+                              <th>Vigência da bolsa</th>
+                              {% if is_gestor %}
+                                <th></th>
+                              {% endif %}
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for bolsista in bolsas_expirando %}
+                              <tr {% if bolsista.bolsa_expirada %} class="text-danger" {% endif %}>
+                                  <td>{{ bolsista.user.name }}</td>
+                                  <td>{{ bolsista.inicio_vigencia|date:"d/m/Y" }} - {{ bolsista.termino_vigencia|date:"d/m/Y" }}</td>
+                                  {% if is_gestor %}
+                                    <td><a href="{% url 'accounts:accounts_edit' bolsista.user.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                  {% endif %}
+                              </tr>   
+                          {% endfor %}                        
+                      </tbody>                    
+                  </table>
+              </div>
+          </div>        
+        </div>     
+      </div>
+    </div>
+  </div>
+  {% endif %}
 
 {% endblock %}
 

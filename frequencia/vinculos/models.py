@@ -63,3 +63,6 @@ class Vinculo(basemodel):
 	def registros_dia(self, dia=None):
 		dia = dia or datetime.now().date()
 		return self.registros.filter(created_at__date=dia)
+
+	def bolsa_expirada(self):
+		return self.termino_vigencia < datetime.now().date()

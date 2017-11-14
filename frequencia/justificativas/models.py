@@ -14,6 +14,7 @@ from .validators import validate_file_extension
 class TipoJustificativaFalta(basemodel):
 
 	nome = models.CharField('Tipo', max_length=100)
+	comprovante_obrigatorio = models.BooleanField('Comprovante obrigatório', blank=True, default=False)
 
 	def __str__(self):
 		return self.nome
