@@ -126,7 +126,7 @@ def get_relatorio_mes(vinculo, mes, ano):
 		relatorio_dia['ausencia'] = ausencia if ausencia.exists() else False
 
 		registros_dia = frequencias.filter(created_at__date=dia)
-		relatorio_dia['registros'] = registros_dia
+		relatorio_dia['registros'] = registros_dia.order_by('pk')
 		horas_trabalhadas = get_total_horas_trabalhadas(registros_dia)
 		relatorio_dia['horas_trabalhadas'] = horas_trabalhadas
 		horas_trabalhadas_periodo += horas_trabalhadas		
