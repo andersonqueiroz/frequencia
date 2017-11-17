@@ -32,7 +32,7 @@
           <div class="card-body-icon">
             <i class="fa fa-fw fa-comment"></i>
           </div>
-          <div class="mr-5">{{justificativas|default_if_none:"Nenhuma"}} justificativa{{justificativas|pluralize}} de falta pendente{{justificativas|pluralize}}</div>
+          <div class="mr-5">{{justificativas|default_if_none:"Nenhuma"}} {{justificativas|pluralize:"j, J"}}ustificativa{{justificativas|pluralize}} de falta pendente{{justificativas|pluralize}} de homologação</div>
         </div>
         <a class="card-footer text-white clearfix small z-1" href="{% url 'justificativas:justificativas' %}">
           <span class="float-left">Justificativas</span>

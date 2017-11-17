@@ -13,7 +13,7 @@
           <div class="card-body-icon">
             <i class="fa fa-fw fa-calendar"></i>
           </div>
-          <div class="mr-5">{{dias_uteis}} dias úteis no mês de {% now "F" %}</div>
+          <div class="mr-5">{{dias_uteis}} Dias úteis no mês de {% now "F" %}</div>
         </div>
         <a class="card-footer text-white clearfix small z-1" href="{% url 'calendario:feriados' %}">
           <span class="float-left">Calendário</span>
@@ -30,7 +30,7 @@
           <div class="card-body-icon">
             <i class="fa fa-fw fa-comment"></i>
           </div>
-          <div class="mr-5">{{justificativas|default_if_none:"Nenhuma"}} justificativa{{justificativas|pluralize}} de falta pendente{{justificativas|pluralize}}</div>
+          <div class="mr-5">{{justificativas|default_if_none:"Nenhuma"}} {{justificativas|pluralize:"j, J"}}ustificativa{{justificativas|pluralize}} de falta pendente{{justificativas|pluralize}} de homologação</div>
         </div>
         <a class="card-footer text-white clearfix small z-1" href="{% url 'justificativas:justificativas' %}">
           <span class="float-left">Ver detalhes</span>
@@ -47,7 +47,7 @@
           <div class="card-body-icon">
             <i class="fa fa-fw fa-users"></i>
           </div>
-          <div class="mr-5">{{num_bolsistas_trabalhando}} registro{{num_bolsistas_trabalhando|pluralize}} de frequência hoje</div>
+          <div class="mr-5">{{num_bolsistas_trabalhando}} Registro{{num_bolsistas_trabalhando|pluralize}} de frequência hoje</div>
         </div>
         <a class="card-footer text-white clearfix small z-1" href="{% url 'relatorios:listagem_geral' %}">
           <span class="float-left">Listagem geral</span>
