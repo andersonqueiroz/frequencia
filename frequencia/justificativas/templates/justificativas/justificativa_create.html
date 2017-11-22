@@ -56,10 +56,17 @@
 						{{form.comprovante.label}}
 						<a href="#" data-toggle="tooltip" title="Arquivo de no máximo 5MB com extensão pdf, doc, docx, jpg ou png"><i class="fa fa-question-circle"></i></a>
 					</label>
-					{% render_field form.comprovante class="form-control" %}
+					<div class="input-group">
+						{% render_field form.comprovante class="form-control" %}
+						<span class="input-group-btn">
+					       <a class="btn btn-link" id="remover_anexo" href="#"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
+					    </span>
+				    </div>
+
 					{% if form.comprovante.errors %}
 	                    <label class="text-danger">{{ form.comprovante.errors.0 }}</label>
 	                {% endif %}
+	                
 				</div>
             </div>
 			
@@ -86,7 +93,11 @@
 	                autoHide: true, 
 	                language: 'pt',
 	                format: 'dd/mm/yyyy'
-	            });   
+	            }); 
+
+	            $('#remover_anexo').click(function() {
+	            	$('#id_comprovante').val('');
+	            });
 	    });
 	</script>
 {% endblock %}

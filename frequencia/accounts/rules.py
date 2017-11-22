@@ -30,6 +30,7 @@ def is_bolsista(user):
 	except:
 		return None
 				
+is_servidor = is_chefe | is_coordenador | is_gestor
 
 rules.add_perm('accounts.is_gestor', is_gestor)
 rules.add_perm('accounts.is_coordenador', is_coordenador)
@@ -38,4 +39,4 @@ rules.add_perm('accounts.is_bolsista', is_bolsista)
 
 rules.add_perm('accounts.is_coordenador_chefe', is_chefe | is_coordenador)
 rules.add_perm('accounts.is_gestor_coordenador', is_gestor | is_coordenador)
-rules.add_perm('accounts.is_servidor', ~is_bolsista)
+rules.add_perm('accounts.is_servidor', is_servidor)

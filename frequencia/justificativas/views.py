@@ -130,7 +130,7 @@ class JustificativaUpdateView(PermissionRequiredMixin, SuccessMessageMixin, Upda
 		context['numero_dias_falta'] = abs((self.object.inicio - self.object.termino).days) + 1
 		return context
 
-@permission_required('justificativas.can_reabrir', fn=objectgetter(JustificativaFalta, 'pk'))
+@permission_required('justificativa.can_reabrir', fn=objectgetter(JustificativaFalta, 'pk'))
 def justificativa_reabrir(request, pk):
 	justificativa = get_object_or_404(JustificativaFalta, pk=pk)
 
@@ -141,6 +141,14 @@ def justificativa_reabrir(request, pk):
 
 	messages.info(request, 'Justificativa reaberta com sucesso')
 	return redirect('justificativas:justificativa_edit', pk=pk)
+
+@permission_required('justificativa.can_delete', fn=objectgetter(JustificativaFalta, 'pk'))
+def justificativa_excluir(request, pk):
+	justificativa = get_object_or_404(JustificativaFalta, pk=pk)		
+	justificativa.delete()
+
+	messages.info(request, 'Justificativa removida com sucesso')
+	return redirect('justificativas:justificativas')
 
 
 #Tipos de justificativa

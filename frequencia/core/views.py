@@ -77,7 +77,8 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 				context['bolsistas_por_setor'] = self.get_bolsistas_por_setor()
 			elif self.user.has_perm('accounts.is_chefe'):						
 				context['bolsistas_setor'] = self.bolsistas
-		else:
+
+		elif self.user.has_perm('accounts.is_bolsista'):
 			self.template_name = 'home/home_bolsista.html'
 			bolsista = self.bolsistas.first()
 			balanco_mes = get_balanco_mes(bolsista, self.data_atual.month, self.data_atual.year)
@@ -86,6 +87,9 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 			context['dados_bolsista'] = bolsista
 			context['balanco_mes'] = balanco_mes + balanco_mes_anterior
 			context['ultimos_registros'] = context['ultimos_registros'][:6]
+
+		else:
+			self.template_name = 'home/home_externo.html'
 		
 		return context
 

@@ -11,6 +11,7 @@
     {% load timedelta_filter %}
     {% has_perm 'justificativa.can_analyse' user object as can_analyse %}
     {% has_perm 'accounts.is_gestor' user object as is_gestor %}
+    {% has_perm 'justificativa.justificativa_author' user object as justificativa_author %}
 
 <div class="card mb-3">
     <div class="card-header">
@@ -139,9 +140,31 @@
             {% else %}
                 <div class="content">
                     <div class="alert alert-warning">
-                            <span>Aguardando análise da chefia</span>
+                        <span>Aguardando análise da chefia</span>
                     </div>
                 </div>
+                {% if justificativa_author %}
+                    <div class="text-center">
+                        <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#confirmar_exclusao">Cancelar justificativa</a>
+                    </div>
+
+                    <div class="modal fade" id="confirmar_exclusao" tabindex="-1" role="dialog" style="display: none;">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">                                
+                            <h4 class="modal-title" id="myModalLabel">Cancelamento de justificativa</h4>
+                          </div>
+                          <div class="modal-body">
+                            Você deseja realmente cancelar a justificativa de falta? Esta operação é irreversível.
+                          </div>
+                          <div class="modal-footer">
+                            <a href="#" class="btn text-info" data-dismiss="modal">Cancelar</a>
+                            <a href="{% url 'justificativas:justificativa_excluir' object.pk %}" class="btn btn-danger">Confirmar</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                {% endif %}
             {%endif%}
         {% else %}                    
             <div class="content">
