@@ -148,12 +148,12 @@ def get_relatorio_mes(vinculo, mes, ano):
 		    }
 
 def get_relatorio_mensal_setor(setor, mes, ano):
+	dia = datetime.datetime.now().day
 
 	bolsistas = setor.vinculos.filter(group__name='Bolsista', 
 									  ativo=True, 
 									  user__is_active=True, 
-									  created_at__month__lte=mes, 
-									  created_at__year__lte=ano)
+									  created_at__lte=datetime.date(ano, mes, dia))
 
 	relatorio = []	
 	for bolsista in bolsistas:
