@@ -54,7 +54,6 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 	def get_bolsas_expirando(self):
 		hoje = datetime.datetime.now().date()
 		dia_final = hoje + timedelta(days=90)
-		print(dia_final)
 		return self.bolsistas.filter(group__name='Bolsista', 
 									 ativo=True,
 									 user__is_active=True,
