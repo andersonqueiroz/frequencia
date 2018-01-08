@@ -112,7 +112,7 @@ class RelatorioMensalDetailView(PermissionRequiredMixin, DetailView):
 									 + context['saldo_mes_anterior'] \
 									 - self.relatorio['horas_trabalhadas_periodo'] \
 									 - self.relatorio['horas_abonadas_periodo']	
-
+	
 		return context
 
 	def render_to_response(self, context):

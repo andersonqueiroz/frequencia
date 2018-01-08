@@ -137,7 +137,7 @@ def get_relatorio_mes(vinculo, mes, ano):
 
 		registros.append(relatorio_dia)
 
-	dias_uteis = calendario.count_working_days(data_inicio, data_fim)	
+	dias_uteis = calendario.count_working_days(data_inicio, data_fim)		
 	
 	return  {'registros': registros,
 			 'dias_uteis': dias_uteis,

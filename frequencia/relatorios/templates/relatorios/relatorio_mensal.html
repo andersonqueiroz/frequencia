@@ -93,8 +93,8 @@
 				
 				<div class="col-md-12">
 					Saldo atual do mês:
-					{% if saldo_atual_mes.days > 0 %}
-						 <strong>-{{ saldo_atual_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
+					{% if saldo_atual_mes.total_seconds > 0 %}						
+						<strong>-{{ saldo_atual_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
 					{% else %}
 						<strong>{{ saldo_atual_mes|inverso|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong>
 					{% endif %}
