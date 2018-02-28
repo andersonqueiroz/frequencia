@@ -110,32 +110,55 @@
           <div class="card-header">
             <i class="fa fa-pie-chart"></i> Distribuição de bolsistas por setor</div>
           <div class="card-body">
-              <div class="table-responsive">
-                  <table class="table table-hover">
-                      <thead>
-                          <tr>
-                              <th>Setor</th>
-                              <th>Número de bolsistas ativos</th>
-                              {% if is_gestor %}
-                                <th></th>
-                              {% endif %}
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {% for setor in bolsistas_por_setor %}
-                              <tr>
-                                  <td>{{ setor.setor__nome }}</td>
-                                  <td>{{ setor.bolsistas }}</td>
-                                  {% if is_gestor %}
-                                    <td><a href="{% url 'vinculos:setor_edit' setor.setor__pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
-                                  {% endif %}
-                              </tr>   
-                          {% endfor %}                        
-                      </tbody>                    
-                  </table>
+              {% regroup bolsistas_por_setor by setor as setores %}             
+
+              <div id="accordion-bolsistas"> 
+                {% for setor, bolsistas in setores %}
+                  <div class="card">
+                    <div class="card-header" id="headingOne">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#s{{setor.pk}}" aria-expanded="true" aria-controls="collapseOne">
+                            {{ setor }}
+                        </button>
+                        <span class="badge badge-pill badge-secondary float-right">{{ bolsistas|length }}</span>
+                      </h5>
+                    </div>
+                    
+                    <div id="s{{setor.pk}}" class="collapse bolsistas" data-parent="#accordion-bolsistas">
+                      <div class="card-body">
+                          <table class="table">
+                              <thead>
+                                  <tr>                          
+                                      <th>Nome</th>                          
+                                      <th>Login</th>                          
+                                      <th>CPF</th>                           
+                                      <th>E-mail</th>                          
+                                      {% if is_gestor %}
+                                        <th></th>
+                                      {% endif %}
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {% for bolsista in bolsistas %}
+                                      <tr>
+                                          <td>{{ bolsista.user.name }}</td>                       
+                                          <td>{{ bolsista.user.username }}</td>
+                                          <td>{{ bolsista.user.cpf }}</td>
+                                          <td>{{ bolsista.user.email }}</td>
+                                          {% if is_gestor %}
+                                            <td><a href="{% url 'accounts:accounts_edit' bolsista.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                          {% endif %}
+                                      </tr>
+                                  {% endfor %}
+                              </tbody>
+                          </table>                        
+                      </div>
+                    </div>
+                  </div>                
+                {% endfor %}
               </div>
           </div>        
-        </div>
+        </div>        
       {% else %}
         <div class="card mb-3">
           <div class="card-header">
@@ -205,7 +228,7 @@
     {{block.super}}
     <script type="text/javascript">
         $(document).ready(function(){
-            
+          $('.bolsistas:first').collapse("show");
         });
     </script>
 {% endblock %}

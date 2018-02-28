@@ -32,11 +32,11 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 	def get_bolsistas_por_setor(self):
 		setores = get_setores(self.user)
 
-		return Vinculo.objects.filter(group__name="Bolsista", 
+		return Vinculo.objects.filter(
+						group__name="Bolsista", 
 						ativo=True, 
 						user__is_active=True, 
-						setor__in=setores).values('setor').annotate(bolsistas=Count('setor')).values('setor__pk', 'setor__nome', 'bolsistas')
-
+						setor__in=setores).annotate(numero_bolsistas=Count('setor')).order_by('setor')
 
 	def get_justificativas_pendentes(self):
 		return JustificativaFalta.objects.filter(status=0, vinculo__in=self.bolsistas).count()
@@ -54,7 +54,7 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 	def get_bolsas_expirando(self):
 		hoje = datetime.datetime.now().date()
 		dia_final = hoje + timedelta(days=90)
-		return self.bolsistas.filter(group__name='Bolsista', 
+		return self.bolsistas.filter(group__name='Bolsista',
 									 ativo=True,
 									 user__is_active=True,
 									 termino_vigencia__lte=dia_final)
