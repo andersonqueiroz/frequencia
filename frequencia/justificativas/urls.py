@@ -1,18 +1,19 @@
-from django.conf.urls import url, include
+from django.urls import path
 
 from frequencia.justificativas import views
 
+app_name = 'justificativas'
 urlpatterns = [
 	#Tipos de justificativa
-	url(r'^tipos/$', views.tipo_justificativa, name='tipo_justificativa'),
-	url(r'^tipo/novo/$', views.tipo_justificativa_create, name='tipo_justificativa_create'),
-	url(r'^tipo/editar/(?P<pk>\d+)/$', views.tipo_justificativa_edit, name='tipo_justificativa_edit'),
-	url(r'^tipo/remover/(?P<pk>\d+)/$', views.tipo_justificativa_remove, name='tipo_justificativa_remove'),
+	path('tipos/', views.tipo_justificativa, name='tipo_justificativa'),
+	path('tipo/novo/', views.tipo_justificativa_create, name='tipo_justificativa_create'),
+	path('tipo/editar/<int:pk>/', views.tipo_justificativa_edit, name='tipo_justificativa_edit'),
+	path('tipo/remover/<int:pk>/', views.tipo_justificativa_remove, name='tipo_justificativa_remove'),
 
 	#Justificativa de falta
-	url(r'^$', views.justificativas, name='justificativas'),	
-	url(r'^novo/$', views.justificativa_create, name='justificativa_create'),
-	url(r'^detalhes/(?P<pk>\d+)/$', views.justificativa_edit, name='justificativa_edit'),
-	url(r'^reabrir/(?P<pk>\d+)/$', views.justificativa_reabrir, name='justificativa_reabrir'),
-	url(r'^excluir/(?P<pk>\d+)/$', views.justificativa_excluir, name='justificativa_excluir'),
+	path('', views.justificativas, name='justificativas'),	
+	path('novo/', views.justificativa_create, name='justificativa_create'),
+	path('detalhes/<int:pk>/', views.justificativa_edit, name='justificativa_edit'),
+	path('reabrir/<int:pk>/', views.justificativa_reabrir, name='justificativa_reabrir'),
+	path('excluir/<int:pk>/', views.justificativa_excluir, name='justificativa_excluir'),
 ]

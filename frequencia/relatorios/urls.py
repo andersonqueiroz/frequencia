@@ -1,13 +1,14 @@
-from django.conf.urls import url, include
+from django.urls import path
 
 from frequencia.relatorios import views
 
+app_name = 'relatorios'
 urlpatterns = [
 	#Tipos de justificativa
-	url(r'^$', views.busca_relatorio, name='busca_relatorio'),
-	url(r'^mensal/$', views.relatorio_mensal, name='relatorio_mensal'),
-	url(r'^mensal/(?P<pk>\d+)/$', views.relatorio_mensal, name='relatorio_mensal'),
-	url(r'^geral/$', views.listagem_geral, name='listagem_geral'),
-	url(r'^setor/$', views.busca_setor, name='busca_setor'),
-	url(r'^setor/(?P<pk>\d+)/$', views.relatorio_setor, name='relatorio_setor'),
+	path('', views.busca_relatorio, name='busca_relatorio'),
+	path('mensal/', views.relatorio_mensal, name='relatorio_mensal'),
+	path('mensal/<int:pk>/', views.relatorio_mensal, name='relatorio_mensal'),
+	path('geral/', views.listagem_geral, name='listagem_geral'),
+	path('setor/', views.busca_setor, name='busca_setor'),
+	path('setor/<int:pk>/', views.relatorio_setor, name='relatorio_setor'),
 ]

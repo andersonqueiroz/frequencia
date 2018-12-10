@@ -41,9 +41,9 @@ class JustificativaFalta(basemodel):
 		(2, 'Deferida'),
 	)
 
-	tipo = models.ForeignKey(TipoJustificativaFalta, verbose_name='Tipo de justificativa', related_name='justificativas')
-	vinculo = models.ForeignKey(Vinculo, verbose_name='Vínculo', related_name='justificativas')
-	usuario_analise = models.ForeignKey(Vinculo, verbose_name='Analisado por', related_name='justificativas_homologadas', blank=True, null=True)
+	tipo = models.ForeignKey(TipoJustificativaFalta, verbose_name='Tipo de justificativa', related_name='justificativas', on_delete=models.PROTECT)
+	vinculo = models.ForeignKey(Vinculo, verbose_name='Vínculo', related_name='justificativas', on_delete=models.CASCADE)
+	usuario_analise = models.ForeignKey(Vinculo, verbose_name='Analisado por', related_name='justificativas_homologadas', on_delete=models.PROTECT, blank=True, null=True)
 
 	status = models.IntegerField('Status da justificativa', choices=JUSTIFICATIVA_STATUS_CHOICES, default=0)
 	descricao = models.TextField('Descrição')

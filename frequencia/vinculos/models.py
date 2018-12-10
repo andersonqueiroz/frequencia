@@ -22,7 +22,7 @@ class Coordenadoria(basemodel):
 
 class Setor(basemodel):
 	
-	coordenadoria = models.ForeignKey(Coordenadoria, verbose_name='Coordenadoria', related_name='setores')
+	coordenadoria = models.ForeignKey(Coordenadoria, verbose_name='Coordenadoria', related_name='setores', on_delete=models.PROTECT)
 
 	nome = models.CharField('Nome', max_length=50)
 
@@ -42,10 +42,10 @@ class Vinculo(basemodel):
 		(2, 'Noturno')
 	)
 
-	group = models.ForeignKey(Group, verbose_name='Papel', related_name='vinculos')
-	user = models.ForeignKey(User, verbose_name='Usuário', related_name='vinculos')
-	setor = models.ForeignKey(Setor, verbose_name='Setor', related_name='vinculos', null=True, blank=True)
-	coordenadoria = models.ForeignKey(Coordenadoria, verbose_name='Coordenadoria', related_name='vinculos', null=True, blank=True)
+	group = models.ForeignKey(Group, verbose_name='Papel', related_name='vinculos', on_delete=models.PROTECT)
+	user = models.ForeignKey(User, verbose_name='Usuário', related_name='vinculos', on_delete=models.PROTECT)
+	setor = models.ForeignKey(Setor, verbose_name='Setor', related_name='vinculos', null=True, blank=True, on_delete=models.PROTECT)
+	coordenadoria = models.ForeignKey(Coordenadoria, verbose_name='Coordenadoria', related_name='vinculos', on_delete=models.PROTECT, null=True, blank=True)
 
 	carga_horaria_diaria = models.IntegerField(null=True, verbose_name='Carga horária diária', blank=True)
 	turno = models.IntegerField('Turno', choices=TURNO_CHOICES, blank=True, null=True)

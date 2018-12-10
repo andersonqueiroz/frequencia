@@ -24,8 +24,9 @@ class FeriadosRioGrandeDoNorte(Brazil):
         (11, 2, "Finados"),
         (11, 15, "Proclamação da República"),
         (11, 21, "Padroeira de Natal"),
+        (12, 24, "Suspensão das atividades administrativas e acadêmicas"),
         (12, 25, "Natal"),
-        (12, 31, "Ano Novo"),
+        (12, 31, "Suspensão das atividades administrativas e acadêmicas"),
 	)
 
 	def get_calendar_holidays(self, year, with_id=False):

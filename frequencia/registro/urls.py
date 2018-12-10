@@ -1,15 +1,16 @@
-from django.conf.urls import url, include
+from django.urls import path
 
 from frequencia.registro import views
 
+app_name = 'registro'
 urlpatterns = [
 	#Máquinas
-	url(r'^maquinas/$', views.maquinas, name='maquinas'),
-	url(r'^maquina/novo/$', views.maquina_create, name='maquina_create'),
-	url(r'^maquina/editar/(?P<pk>\d+)/$', views.maquina_edit, name='maquina_edit'),
-	url(r'^maquina/remover/(?P<pk>\d+)/$', views.maquina_remove, name='maquina_remove'),
+	path('maquinas/', views.maquinas, name='maquinas'),
+	path('maquina/novo/', views.maquina_create, name='maquina_create'),
+	path('maquina/editar/<int:pk>/', views.maquina_edit, name='maquina_edit'),
+	path('maquina/remover/<int:pk>/', views.maquina_remove, name='maquina_remove'),
 
 	#Registro
-	url(r'^$', views.registro, name='registro'),
-	url(r'^registros_dia/$', views.registros_dia, {'Bolsista': None}, name='registros_dia'),
+	path('', views.registro, name='registro'),
+	path('registros_dia/', views.registros_dia, {'Bolsista': None}, name='registros_dia'),
 ]

@@ -1,8 +1,9 @@
-from django.conf.urls import url, include
+from django.urls import path
 
 from frequencia.core import views
 
+app_name = 'core'
 urlpatterns = [
-	url(r'^$', views.index, name='index'),
-	url(r'^home/$', views.home, name='home'),
+	path('', views.index, name='index'),
+	path('home/', views.home, name='home'),
 ]
