@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% load static %}
+	{% load widget_tweaks %}
+	
+	<div class="card mb-3">
+	    <div class="card-header">
+				<i class="fas fa-bullhorn"></i> Enviar mensagem via email para os bolsistas do setor
+	    </div>
+	    <div class="card-body">
+            <form action="#" method="post">
+                 {% csrf_token %}
+
+                 {% if form.non_field_errors %}
+					<div class="alert alert-danger">
+						{% for error in form.non_field_errors %}
+							{{ error }}
+						{% endfor %}
+					</div>
+				{% endif %}
+				
+				<div class="row">				
+					<div class="form-group col-md-12">
+						<label class="control-label">{{form.setores.label}}</label>
+						{% render_field form.setores class="form-control" required="" %}					
+						{% if form.setores.errors %}
+	                        <label class="text-danger">{{ form.setores.errors.0 }}</label>
+	                    {% endif %}
+					</div>
+
+					<div class="form-group col-md-12">
+						<label class="control-label">{{form.texto.label}}</label>
+						{% render_field form.texto class="form-control" required="" %}
+						{% if form.texto.errors %}
+							<label class="text-danger">{{ form.texto.errors.0 }}</label>
+						{% endif %}
+					</div>
+									
+                </div>
+			    <div class="text-center">
+				    <button class="btn btn-info" type="submit">Enviar</button>
+				</div>		
+            </form>
+        </div>
+    </div> 
+
+{% endblock %}
+
+{% block scripts %}
+	{{block.super}}
+	<script type="text/javascript">
+		$('select').select2({
+			width: '100%',
+			placeholder: "{{ form.setores.help_text }}",
+		});
+	</script>
+{% endblock %}

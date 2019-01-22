@@ -32,7 +32,7 @@
                         {% for setor in object_list %}
                             <tr>
                                 <td>{{ setor }}</td>
-                                <td><a href="{% url 'vinculos:setor_edit' setor.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                <td><a href="{% url 'vinculos:setor_edit' setor.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -53,7 +53,7 @@
                         {% for coordenadoria in coordenadorias %}
                             <tr>
                                 <td>{{ coordenadoria }}</td>
-                                <td><a href="{% url 'vinculos:coordenadoria_edit' coordenadoria.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                <td><a href="{% url 'vinculos:coordenadoria_edit' coordenadoria.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                             </tr>
                         {% endfor %}
                     </tbody>

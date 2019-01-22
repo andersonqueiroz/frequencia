@@ -38,3 +38,13 @@ def get_bolsistas(user):
 		bolsistas = bolsistas.filter(user=user)
 
 	return bolsistas
+
+"""
+Retorna os bolsistas vinculados aos setores
+"""
+def get_bolsistas_setor(setores=[]):
+	return Vinculo.objects.filter(
+					group__name='Bolsista', 
+					ativo=True, 
+					user__is_active=True, 
+					setor__in=setores).order_by('setor')

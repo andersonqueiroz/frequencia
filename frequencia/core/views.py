@@ -1,17 +1,27 @@
 import datetime
 from datetime import timedelta
 
+from rules.contrib.views import PermissionRequiredMixin
+
+from django.urls import reverse
 from django.db.models import Count
 from django.shortcuts import redirect
+from django.views.generic import FormView
 from django.views.generic.base import TemplateView
+from django.core.exceptions import PermissionDenied
+from rules.contrib.views import permission_required
+from django.http.response import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 
 from frequencia.calendario.calendar import FeriadosRioGrandeDoNorte
-from frequencia.vinculos.utils import get_bolsistas, get_setores
+from frequencia.vinculos.utils import get_bolsistas, get_setores, get_bolsistas_setor
 from frequencia.vinculos.models import Vinculo
 from frequencia.justificativas.models import JustificativaFalta
 from frequencia.registro.models import Frequencia
+from frequencia.core.mail import send_mail_text
 from frequencia.relatorios.calculos import get_balanco_mes, get_balanco_mes_anterior
+from .forms import NovaMensagemForm
 
 def index(request):
 	return redirect('registro:registro')
@@ -92,4 +102,39 @@ class HomeTemplateView(LoginRequiredMixin, TemplateView):
 		
 		return context
 
+class EnviarMensagemTemplateView(PermissionRequiredMixin, SuccessMessageMixin, FormView):
+
+	template_name = 'nova_mensagem.html'
+	form_class = NovaMensagemForm
+	permission_required = 'accounts.is_servidor'
+	success_message = 'Mensagem enviada com sucesso para todos os bolsistas dos seguintes setores: %s'
+
+	def get_form_kwargs(self):
+		kwargs = super(EnviarMensagemTemplateView, self).get_form_kwargs()
+		kwargs.update({'setores' : get_setores(self.request.user)})
+		return kwargs
+
+	def form_valid(self, form):
+		self.setores = form.cleaned_data['setores']
+		self.texto = form.cleaned_data['texto']
+
+		for setor in self.setores:				
+			if not self.request.user.has_perm('vinculo.is_setor_chefe', setor):
+				raise PermissionDenied()
+
+		emails_bolsistas = get_bolsistas_setor(self.setores).values_list('user__email', flat=True)
+		subject = f'Nova mensagem de {self.request.user}'
+
+		send_mail_text(subject, self.texto, emails_bolsistas)
+
+		return super(EnviarMensagemTemplateView, self).form_valid(form)
+
+	def get_success_url(self):		
+		url = reverse('core:nova_mensagem')
+		return url
+
+	def get_success_message(self, cleaned_data):
+		return self.success_message % ', '.join(self.setores.values_list('nome', flat=True))
+
 home = HomeTemplateView.as_view()
+nova_mensagem = EnviarMensagemTemplateView.as_view()

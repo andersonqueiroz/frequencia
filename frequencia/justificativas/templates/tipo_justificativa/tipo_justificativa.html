@@ -7,7 +7,7 @@
 
 <div class="card mb-3">
     <div class="card-header">
-      <i class="fa fa-comment-o"></i> Tipos de justificativa
+        <i class="far fa-comment"></i> Tipos de justificativa
     </div>
     <div class="card-body">               
         
@@ -26,7 +26,7 @@
                         <tr>
                             <td>{{ tipo }}</td>
                             <td>{{ tipo.comprovante_obrigatorio|translate_boolean }}</td>
-                            <td><a href="{% url 'justificativas:tipo_justificativa_edit' tipo.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                            <td><a href="{% url 'justificativas:tipo_justificativa_edit' tipo.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

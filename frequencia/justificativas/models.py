@@ -90,7 +90,7 @@ def post_save_justificativa(instance, created, **kwargs):
 		for chefe in chefes:
 			recipient_list = [chefe.user.email]
 			try:				
-				send_mail_template(subject, template_name, context, recipient_list)
+				send_mail_template(subject=subject, template_name=template_name, context=context, recipient_list=recipient_list)
 			except:
 				pass
 

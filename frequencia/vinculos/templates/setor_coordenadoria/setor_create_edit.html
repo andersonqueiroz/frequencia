@@ -64,7 +64,7 @@
                         {% for coordenador in coordenadores %}
                             <tr>
                                 <td>{{ coordenador.user }}</td>
-                                <td><a href="{% url 'accounts:accounts_edit' coordenador.user.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                <td><a href="{% url 'accounts:accounts_edit' coordenador.user.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                             </tr>
                         {% endfor %}
                     {% else %}
@@ -85,7 +85,7 @@
                         {% for chefe in  chefes %}
                             <tr>
                                 <td>{{ chefe.user }}</td>
-                                <td><a href="{% url 'accounts:accounts_edit' chefe.user.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                <td><a href="{% url 'accounts:accounts_edit' chefe.user.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                             </tr>
                         {% endfor %}
                     {% else %}
@@ -108,7 +108,7 @@
                             <tr>
                                 <td>{{ bolsista.user }}</td>
                                 <td>{{ bolsista.inicio_vigencia|date:"d/m/Y" }} - {{ bolsista.termino_vigencia|date:"d/m/Y" }}</td>
-                                <td><a href="{% url 'accounts:accounts_edit' bolsista.user.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                <td><a href="{% url 'accounts:accounts_edit' bolsista.user.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                             </tr>
                         {% endfor %}
                     {% else %}

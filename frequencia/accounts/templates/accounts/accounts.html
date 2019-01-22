@@ -5,15 +5,20 @@
 
 
 <div class="card mb-3">
-
     <div class="card-header">
-      <i class="fa fa-users"></i> Usuários
-      <form url="#" method="GET" class="pull-right">
-        <div class="input-group">
-            <input type="text" name="busca" placeholder="Buscar usuário" class="form-control">
-            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        <div class="row">
+            <div class="col-md-9">
+                <i class="fa fa-users"></i> Usuários
+            </div>
+            <div class="col-md-3">
+                <form url="#" method="GET" class="pull-right">
+                    <div class="input-group">
+                        <input type="text" name="busca" placeholder="Buscar usuário" class="form-control">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </form>
+            </div>
         </div>
-      </form>
     </div>
             
     <div class="card-body">
@@ -52,7 +57,7 @@
                                     <td>{{ account.username }}</td>
                                     <td>{{ account.cpf }}</td>
                                     <td>{{ account.email }}</td>
-                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -76,7 +81,7 @@
                                     <td>{{ account.username }}</td>
                                     <td>{{ account.cpf }}</td>
                                     <td>{{ account.email }}</td>
-                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -100,7 +105,7 @@
                                     <td>{{ account.username }}</td>
                                     <td>{{ account.cpf }}</td>                                            
                                     <td>{{ account.email }}</td>
-                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -124,7 +129,7 @@
                                     <td>{{ account.username }}</td>
                                     <td>{{ account.cpf }}</td>                                            
                                     <td>{{ account.email }}</td>
-                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                                    <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -155,7 +160,7 @@
                             <td>Inativo</td>
                             {% endif %}
                             <td>{{ account.email }}</td>
-                            <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fa fa-pencil pull-right"></i></a></td>
+                            <td><a href="{% url 'accounts:accounts_edit' account.pk %}"><i class="fas fa-pencil-alt pull-right"></i></a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

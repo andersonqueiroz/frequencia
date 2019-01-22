@@ -25,7 +25,7 @@ class BuscaMixin(forms.Form):
 		super(BuscaMixin, self).__init__(*args, **kwargs)		
 
 		#Prepopular listagem de anos
-		for ano in range(2017, date.today().year + 1):
+		for ano in range(2017, date.today().year + 2):
 			self.ANOS_CHOICES += (((str(ano), str(ano))),)
 
 		self.fields['ano'] = forms.ChoiceField(
