@@ -13,7 +13,7 @@
       <i class="far fa-comment"></i> Nova justificativa
     </div>
     <div class="card-body">     
-        <form enctype="multipart/form-data" action="#" method="post">
+        <form enctype="multipart/form-data" autocomplete="off" action="#" method="post">
              {% csrf_token %}
                  {% if form.non_field_errors %}
 					<div class="alert alert-danger">
@@ -39,14 +39,14 @@
 				</div>
 				<div class="form-group col-md-6">
 					<label class="control-label">{{form.inicio.label}}</label>
-					{% render_field form.inicio class="form-control" data-toggle="datepicker" %}
+					{% render_field form.inicio class="form-control" data-toggle="datepicker" autocomplete="off" %}
 					{% if form.inicio.errors %}
 	                    <label class="text-danger">{{ form.inicio.errors.0 }}</label>
 	                {% endif %}
 				</div>
 				<div class="form-group col-md-6">
 					<label class="control-label">{{form.termino.label}}</label>
-					{% render_field form.termino class="form-control" data-toggle="datepicker" %}
+					{% render_field form.termino class="form-control" data-toggle="datepicker" autocomplete="off" %}
 					{% if form.termino.errors %}
 	                    <label class="text-danger">{{ form.termino.errors.0 }}</label>
 	                {% endif %}
