@@ -97,21 +97,20 @@
 
 {% endblock %}
 
-{% block scripts %}
-	{{block.super}}
+{% block extra-scripts %}
 	<script>
-	$(document).ready(function(){	    
+		$(document).ready(function(){	    
 
-	    $('.bolsista-setor').each(function(){
-	    	var trabalhar = parseFloat($(this).find('.trabalhar').val());
-	    	var trabalhadas = parseFloat($(this).find('.trabalhadas').val());	    	
-	    	var abonadas = parseFloat($(this).find('.abonadas').val());	    	
-	    	var mes_anterior = parseFloat($(this).find('.mes_anterior').val());	    	
-	    	var porcentagem = Math.floor((trabalhadas + abonadas) * 100 / (trabalhar + mes_anterior));
-	    	$(this).find('.progress-bar').css({ 'width': porcentagem+'%' }).attr('data-original-title', porcentagem+'%');
-	    });
+			$('.bolsista-setor').each(function(){
+				var trabalhar = parseFloat($(this).find('.trabalhar').val());
+				var trabalhadas = parseFloat($(this).find('.trabalhadas').val());	    	
+				var abonadas = parseFloat($(this).find('.abonadas').val());	    	
+				var mes_anterior = parseFloat($(this).find('.mes_anterior').val());	    	
+				var porcentagem = Math.floor((trabalhadas + abonadas) * 100 / (trabalhar + mes_anterior));
+				$(this).find('.progress-bar').css({ 'width': porcentagem+'%' }).attr('data-original-title', porcentagem+'%');
+			});
 
-	    $('[data-toggle="tooltip"]').tooltip();
-	});
+			$('[data-toggle="tooltip"]').tooltip();
+		});
 	</script>
 {% endblock %}

@@ -1,12 +1,20 @@
 {% extends "base.html" %}
 
+{% load static %}
+{% load rules %}
+{% load widget_tweaks %}
+
+{% block extra-css %}
+	<link href="{% static 'vendor/summernote/summernote-lite.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-	{% load static %}
-	{% load widget_tweaks %}
+	
+	{% has_perm 'accounts.is_gestor' user as is_gestor %}
 	
 	<div class="card mb-3">
 	    <div class="card-header">
-				<i class="fas fa-bullhorn"></i> Enviar mensagem via email para os bolsistas do setor
+				<i class="fas fa-bullhorn"></i> Enviar email para os bolsistas do setor
 	    </div>
 	    <div class="card-body">
             <form action="#" method="post">
@@ -20,8 +28,16 @@
 					</div>
 				{% endif %}
 				
-				<div class="row">				
-					<div class="form-group col-md-12">
+				<div class="row">
+					{% if is_gestor %}	
+					<div class="col-md-12">
+							<div class="form-check form-check-inline">
+								<input type="checkbox" id="todos_bolsistas" name="todos_bolsistas">
+								<label for="todos_bolsistas">Todos os setores</label>
+							</div>		
+					</div>
+					{% endif %}
+					<div class="form-group col-md-12" id="select_setores">
 						<label class="control-label">{{form.setores.label}}</label>
 						{% render_field form.setores class="form-control" required="" %}					
 						{% if form.setores.errors %}
@@ -31,7 +47,7 @@
 
 					<div class="form-group col-md-12">
 						<label class="control-label">{{form.texto.label}}</label>
-						{% render_field form.texto class="form-control" required="" %}
+						{% render_field form.texto class="form-control" required="" id="html-editor" %}
 						{% if form.texto.errors %}
 							<label class="text-danger">{{ form.texto.errors.0 }}</label>
 						{% endif %}
@@ -39,7 +55,7 @@
 									
                 </div>
 			    <div class="text-center">
-				    <button class="btn btn-info" type="submit">Enviar</button>
+				    <button class="btn btn-info" class="enviar_mensagem">Enviar</button>
 				</div>		
             </form>
         </div>
@@ -47,12 +63,34 @@
 
 {% endblock %}
 
-{% block scripts %}
-	{{block.super}}
+{% block extra-scripts %}
+	<script src="{% static 'vendor/summernote/summernote-lite.js' %}"></script>
+	<script src="{% static 'vendor/summernote/lang/summernote-pt-BR.min.js' %}"></script>
 	<script type="text/javascript">
 		$('select').select2({
 			width: '100%',
 			placeholder: "{{ form.setores.help_text }}",
 		});
+		$('#html-editor').summernote({
+			lang: 'pt-BR',
+			height: 350,
+			toolbar: [				
+				['style', ['bold', 'italic', 'underline', 'clear']],				
+				['fontsize', ['fontsize']],			
+				['color', ['color']],
+				['para', ['ul', 'ol', 'paragraph']]
+			]
+		});
+		$('#todos_bolsistas').change(function() {
+			var selectedItems = [];			
+        	if($(this).is(":checked")) {				
+				var allOptions = $("#id_setores option");
+				allOptions.each(function() {
+					selectedItems.push( $(this).val() );
+				});						
+			}
+			$("#id_setores").val(selectedItems).trigger("change");
+		});
+		
 	</script>
 {% endblock %}

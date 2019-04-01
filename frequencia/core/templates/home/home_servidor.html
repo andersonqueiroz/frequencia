@@ -169,7 +169,8 @@
                       <thead>
                           <tr>
                               <th>Bolsista</th>
-                              <th>Vigência da bolsa</th>
+                              <th>Email</th>
+                              <th class="text-center">Vigência da bolsa</th>
                               <th>Turno</th>
                           </tr>
                       </thead>
@@ -177,7 +178,8 @@
                           {% for bolsista in bolsistas_setor %}
                               <tr>
                                   <td>{{ bolsista.user.name }}</td>
-                                  <td>{{ bolsista.inicio_vigencia|date:"d/m/Y" }} - {{ bolsista.termino_vigencia|date:"d/m/Y" }}</td>
+                                  <td>{{ bolsista.user.email }}</td>
+                                  <td class="text-center">{{ bolsista.inicio_vigencia|date:"d/m/Y" }} <br> {{ bolsista.termino_vigencia|date:"d/m/Y" }}</td>
                                   <td>{{ bolsista.get_turno_display }}</td>
                               </tr>   
                           {% endfor %}                        
@@ -224,8 +226,7 @@
 
 {% endblock %}
 
-{% block scripts %}
-    {{block.super}}
+{% block extra-scripts %}
     <script type="text/javascript">
         $(document).ready(function(){
           $('.bolsistas:first').collapse("show");

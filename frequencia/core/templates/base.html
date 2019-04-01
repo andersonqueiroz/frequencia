@@ -1,5 +1,6 @@
 {% load static %}
 {% load simpletags %}
+{% load compress %}
 
 {% load rules %}
 {% has_perm 'accounts.is_servidor' user as is_servidor %}
@@ -9,7 +10,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{% include "head.html" %}
+  {% compress css %}
+    {% include "head.html" %}
+
+    {% block extra-css %}
+    {% endblock %} 
+  {% endcompress %}
+  
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
   <!-- SIDENAV -->
@@ -178,10 +185,13 @@
     </a>
   </div>
 
-  {% block scripts %}
-        {% include "script.html" %}
-  {% endblock %}
+  {% compress js %}
+    {% include "script.html" %}
+    
+    {% block extra-scripts %}
 
+    {% endblock %}
+  {% endcompress %}
 </body>
 
 </html>

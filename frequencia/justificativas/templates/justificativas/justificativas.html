@@ -84,8 +84,7 @@
     
 {% endblock %}
 
-{% block scripts %}
-{{block.super}}
+{% block extra-scripts %}
 <script type="text/javascript">
     $(document).ready(function(){
         $('.justificativas:first').collapse("show");

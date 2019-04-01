@@ -107,7 +107,7 @@ class EnviarMensagemTemplateView(PermissionRequiredMixin, SuccessMessageMixin, F
 	template_name = 'nova_mensagem.html'
 	form_class = NovaMensagemForm
 	permission_required = 'accounts.is_servidor'
-	success_message = 'Mensagem enviada com sucesso para todos os bolsistas dos seguintes setores: %s'
+	success_message = 'Mensagem enviada com sucesso para todos os bolsistas do(s) seguinte(s) setor(es): %s'
 
 	def get_form_kwargs(self):
 		kwargs = super(EnviarMensagemTemplateView, self).get_form_kwargs()

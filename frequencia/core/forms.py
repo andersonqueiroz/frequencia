@@ -5,7 +5,7 @@ from django import forms
 class NovaMensagemForm(forms.Form):
 
 	texto = forms.CharField(widget=forms.Textarea, max_length=2000)
-
+	
 	def __init__(self, setores, *args, **kwargs):
 		super(NovaMensagemForm, self).__init__(*args, **kwargs)
 

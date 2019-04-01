@@ -16,19 +16,17 @@ class EmailThread(threading.Thread):
 		self.fail_silently = fail_silently
 		threading.Thread.__init__(self)
 		
-	def run(self):		
+	def run(self):	
+		email = EmailMultiAlternatives(
+				subject=self.subject, body=striptags(self.body), from_email=self.from_email, to=self.recipient_list)
+
 		if self.template_name:
 			message_html = render_to_string(self.template_name, self.context)
-			self.body = striptags(message_html)
-		
-			email = EmailMultiAlternatives(
-				subject=self.subject, body=self.body, from_email=self.from_email, to=self.recipient_list)
-
+			email.body = striptags(message_html)
 			email.attach_alternative(message_html, "text/html")
 		else:
-			email = EmailMultiAlternatives(
-				subject=self.subject, body=self.body, from_email=self.from_email, to=self.recipient_list)
-
+			email.attach_alternative(self.body, "text/html")
+			
 		email.send(fail_silently=self.fail_silently)
 
 

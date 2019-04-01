@@ -92,9 +92,7 @@
 
 {% endblock %}
 
-{% block scripts %}
-    {{ block.super }}
-
+{% block extra-scripts %}
     <script src="{% static 'js/jquery.mask.js' %}"></script>
     <script type="text/javascript">
         $(document).ready(function(){

@@ -1,14 +1,16 @@
 {% extends "base.html" %}
 
-{% block content %}
-
-{% load filtros %}
-
 {% load static %}
 {% load widget_tweaks %}
 {% load timedelta_filter %}
 
-<link href="{% static 'css/print.css' %}" type="text/css" rel="stylesheet"></link>
+{% block extra-css %}
+	<link href="{% static 'css/print.css' %}" type="text/css" rel="stylesheet"></link>
+{% endblock %}
+
+{% block content %}
+
+{% load filtros %}
 
 <div class="mb-0 mt-4 hidden-print">
     <i class="far fa-file-alt hidden-print"></i> Relatório mensal de frequência - {{periodo|date:"F/Y"}}
@@ -116,8 +118,7 @@
 
 {% endblock %}
 
-{% block scripts %}
-	{{block.super}}
+{% block extra-scripts %}
 	{% load l10n %}
 
 	<script>
