@@ -1,4 +1,5 @@
 {% load static %}
+{% load compress %}
 
 <head>
 
@@ -10,6 +11,7 @@
   <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
   <title>Frequência BCZM</title>
 
+  {% compress css %}
   <!-- Bootstrap core CSS-->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
@@ -26,5 +28,6 @@
   <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
 
   <link href="{% static 'css/datepicker.css' %}" rel="stylesheet">
+  {% endcompress %}
 
 </head> 
