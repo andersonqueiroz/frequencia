@@ -13,8 +13,7 @@
   {% compress css %}
     {% include "head.html" %}
 
-    {% block extra-css %}
-    {% endblock %} 
+    {% block extra-css %}{% endblock %} 
   {% endcompress %}
   
 
@@ -188,9 +187,7 @@
   {% compress js %}
     {% include "script.html" %}
     
-    {% block extra-scripts %}
-
-    {% endblock %}
+    {% block extra-scripts %}{% endblock %}
   {% endcompress %}
 </body>
 

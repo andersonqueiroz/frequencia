@@ -14,12 +14,14 @@ import os
 from decouple import config, Csv
 from dj_database_url import parse as dburl
 
+from django.contrib import messages
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 BASE_URL_SERVER = config('BASE_URL_SERVER', default='http://localhost')
 
-VERSION = '2.1.0'
+VERSION = '2.1.1'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -170,9 +172,6 @@ MAX_UPLOAD_SIZE = 5242880
 #Mail
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
-
-#Messages
-from django.contrib import messages
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',
