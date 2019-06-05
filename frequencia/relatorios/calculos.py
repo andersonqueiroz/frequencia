@@ -2,6 +2,7 @@ import datetime, calendar
 from datetime import timedelta
 
 from django.db.models import Q
+from django.conf import settings
 
 from frequencia.registro.models import Frequencia
 from frequencia.justificativas.models import JustificativaFalta
@@ -31,8 +32,12 @@ def get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim):
 
 	return horas_abonadas
 
-def get_total_horas_trabalhadas(registros):
-	horas_trabalhadas = timedelta()
+def get_total_horas_registradas_contabilizadas(registros):
+	ch_maxima_dia = timedelta(hours=settings.CH_MAXIMA_DIARIA)
+	data_inicial_limitacao_ch = datetime.datetime.strptime(settings.DATA_INICIAL_LIMITACAO_CH_MAXIMA, '%Y-%m-%d').date()
+
+	horas_registradas = timedelta()
+	horas_contabilizadas = timedelta()
 
 	dias = registros.extra({'data': "date(created_at)"}).values('data').distinct()
 
@@ -40,14 +45,21 @@ def get_total_horas_trabalhadas(registros):
 		entradas = registros.filter(tipo=0, created_at__date=dia['data'])
 		saidas = registros.filter(tipo=1, created_at__date=dia['data'])
 
+		_horas_registradas_dia = timedelta()
 		for i, saida in enumerate(saidas):
-			horas_trabalhadas += saida.created_at - entradas[i].created_at
-
-	return horas_trabalhadas
+			_horas_registradas_dia += saida.created_at - entradas[i].created_at
+		
+		horas_registradas += _horas_registradas_dia
+		if dia["data"] > data_inicial_limitacao_ch:
+			horas_contabilizadas += _horas_registradas_dia if _horas_registradas_dia <= ch_maxima_dia else ch_maxima_dia
+		else:
+			horas_contabilizadas += _horas_registradas_dia
+			
+	return horas_registradas, horas_contabilizadas
 
 """
 Retorna o cálculo:
-Total de horas a trabalhar - horas trabalhadas - horas abonadas
+Total de horas a trabalhar - horas registradas - horas abonadas
 """
 def get_balanco_mes(vinculo, mes, ano, detalhado=False):
 	calendario = FeriadosRioGrandeDoNorte()
@@ -63,16 +75,17 @@ def get_balanco_mes(vinculo, mes, ano, detalhado=False):
 	frequencias = get_registros_bolsista(vinculo, data_inicio, data_fim)
 	ausencias = get_ausencias_bolsista(vinculo, data_inicio, data_fim)
 
-	horas_trabalhadas = get_total_horas_trabalhadas(frequencias)
+	horas_registradas, horas_contabilizadas = get_total_horas_registradas_contabilizadas(frequencias)
 	horas_abonadas_periodo = get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim)
 
-	saldo_mes = horas_trabalhar - horas_trabalhadas - horas_abonadas_periodo
+	saldo_mes = horas_trabalhar - horas_contabilizadas - horas_abonadas_periodo
 
 	if detalhado:		
 		return {
 			'saldo_mes': saldo_mes,
 			'horas_trabalhar': horas_trabalhar,
-			'horas_trabalhadas': horas_trabalhadas,
+			'horas_registradas': horas_registradas,
+			'horas_contabilizadas': horas_contabilizadas,
 			'horas_abonadas_periodo': horas_abonadas_periodo,
 		}
 
@@ -88,7 +101,7 @@ def get_balanco_mes_anterior(vinculo, mes_atual, ano_atual):
 			mes_ano_anterior = datetime.date(ano_atual, mes_atual, 1) - timedelta(days=1)
 			saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)
 	except:
-		pass	
+		pass
 	finally:
 		if saldo_mes_anterior.days < 0:
 			saldo_mes_anterior = timedelta()
@@ -99,7 +112,8 @@ def get_balanco_mes_anterior(vinculo, mes_atual, ano_atual):
 def get_relatorio_mes(vinculo, mes, ano):
 
 	registros = []
-	horas_trabalhadas_periodo = timedelta()
+	horas_registradas_periodo = timedelta()
+	horas_contabilizadas_periodo = timedelta()
 
 	calendario = FeriadosRioGrandeDoNorte()
 	feriados = calendario.holidays(ano)
@@ -127,9 +141,11 @@ def get_relatorio_mes(vinculo, mes, ano):
 
 		registros_dia = frequencias.filter(created_at__date=dia)
 		relatorio_dia['registros'] = registros_dia.order_by('pk')
-		horas_trabalhadas = get_total_horas_trabalhadas(registros_dia)
-		relatorio_dia['horas_trabalhadas'] = horas_trabalhadas
-		horas_trabalhadas_periodo += horas_trabalhadas		
+		horas_registradas, horas_contabilizadas = get_total_horas_registradas_contabilizadas(registros_dia)
+		relatorio_dia['horas_registradas'] = horas_registradas		
+		relatorio_dia['horas_contabilizadas'] = horas_contabilizadas
+		horas_registradas_periodo += horas_registradas		
+		horas_contabilizadas_periodo += horas_contabilizadas
 
 		relatorio_dia['is_util'] = not relatorio_dia['feriado'] \
 								   and not relatorio_dia['ausencia'] \
@@ -142,7 +158,8 @@ def get_relatorio_mes(vinculo, mes, ano):
 	return  {'registros': registros,
 			 'dias_uteis': dias_uteis,
 			 'total_horas_trabalhar': timedelta(hours=vinculo.carga_horaria_diaria) * dias_uteis,
-			 'horas_trabalhadas_periodo': horas_trabalhadas_periodo,
+			 'horas_registradas_periodo': horas_registradas_periodo,
+			 'horas_contabilizadas_periodo': horas_contabilizadas_periodo,
 			 'horas_abonadas_periodo': get_horas_abonadas_periodo(ausencias, calendario, data_inicio, data_fim),
 			 'saldo_mes_anterior': get_balanco_mes_anterior(vinculo, mes, ano),
 		    }

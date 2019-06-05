@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from datetime import datetime
 from decouple import config, Csv
 from dj_database_url import parse as dburl
 
@@ -187,3 +188,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+
+#BCZM
+CH_MAXIMA_DIARIA = config('CH_MAXIMA_DIARIA', default=6, cast=int)
+DATA_INICIAL_LIMITACAO_CH_MAXIMA = config('DATA_INICIAL_LIMITACAO_CH_MAXIMA', default=datetime(2100,1,1))

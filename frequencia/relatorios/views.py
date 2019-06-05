@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from frequencia.vinculos.models import Vinculo, Setor
 from frequencia.vinculos.utils import get_bolsistas, get_setores
 
-from .calculos import get_relatorio_mes, get_relatorio_mensal_setor, get_total_horas_trabalhadas
+from .calculos import get_relatorio_mes, get_relatorio_mensal_setor, get_total_horas_registradas_contabilizadas
 from .forms import BuscaRelatorioForm, BuscaRelatorioSetorForm
 
 class BuscaRelatorioMensalTemplateView(LoginRequiredMixin, FormView):
@@ -103,14 +103,15 @@ class RelatorioMensalDetailView(PermissionRequiredMixin, DetailView):
 		context['lista_dias'] = self.relatorio['registros']
 		context['dias_uteis'] = self.relatorio['dias_uteis']		
 		context['total_horas_trabalhar'] = self.relatorio['total_horas_trabalhar']
-		context['horas_trabalhadas_periodo'] = self.relatorio['horas_trabalhadas_periodo']	
+		context['horas_registradas_periodo'] = self.relatorio['horas_registradas_periodo']	
+		context['horas_contabilizadas_periodo'] = self.relatorio['horas_contabilizadas_periodo']	
 		context['horas_abonadas_periodo'] = self.relatorio['horas_abonadas_periodo']
 
 		context['saldo_mes_anterior'] = self.relatorio['saldo_mes_anterior']			
 		
 		context['saldo_atual_mes'] = self.relatorio['total_horas_trabalhar'] \
 									 + context['saldo_mes_anterior'] \
-									 - self.relatorio['horas_trabalhadas_periodo'] \
+									 - self.relatorio['horas_contabilizadas_periodo'] \
 									 - self.relatorio['horas_abonadas_periodo']	
 	
 		return context
@@ -166,7 +167,9 @@ class ListagemGeralListView(PermissionRequiredMixin, ListView):
 
 			for bolsista in bolsistas_dia:
 				bolsista.registros_dia = bolsista.registros_dia(dia)
-				bolsista.horas_trabalhadas = get_total_horas_trabalhadas(bolsista.registros_dia)
+				bolsista.horas_registradas, bolsista.horas_contabilizadas = get_total_horas_registradas_contabilizadas(
+					bolsista.registros_dia
+				)
 
 			dias.append({'data':dia, 'bolsistas':bolsistas_dia})
 

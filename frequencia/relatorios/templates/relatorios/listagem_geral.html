@@ -23,7 +23,7 @@
 						<th>Bolsista</th>
 						<th>Setor</th>
 						<th>Registros</th>
-						<th>Horas trabalhadas</th>
+						<th>Horas contabilizadas</th>
 						<th></th>
 					</tr>
                 </thead>
@@ -45,7 +45,7 @@
 								Nenhum registro
 							{% endif %}
 						</td>
-						<td>{{ bolsista.horas_trabalhadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</td>
+						<td>{{ bolsista.horas_contabilizadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }}</td>
 						<td><a href="{% url 'relatorios:relatorio_mensal' bolsista.pk %}?mes={{ dia.data|date:'n' }}&ano={{dia.data|date:'Y'}}#{{dia.data|date:'d-m-Y'}}"><i class="fa fa-chevron-right"></i></a></td>
 						<!--  -->
 					</tr>

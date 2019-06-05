@@ -64,7 +64,7 @@
 							  	</td>
 							  	<td class="align-middle" style="width: 10%">
 							  		<div class="progress">
-									  <div class="progress-bar" role="progressbar" style="height: 10px;" data-toggle="tooltip"></div>
+									  <div class="progress-bar" role="progressbar" data-toggle="tooltip"></div>
 									</div>
 							  	</td>
 								<td class="text-center"><a href="{% url 'relatorios:relatorio_mensal' bolsista.bolsista.pk %}?mes={{ periodo.month }}&ano={{ periodo.year }}"><i class="fa fa-search"></i></a></td>	
@@ -74,7 +74,7 @@
 
 						  			<input type="hidden" name="mes_anterior" class="mes_anterior" value="{{ antes.total_seconds }}">
 
-						  			<input type="hidden" name="trabalhadas" class="trabalhadas" value="{{ bolsista.balanco_mes_atual.horas_trabalhadas.total_seconds }}">
+						  			<input type="hidden" name="contabilizadas" class="contabilizadas" value="{{ bolsista.balanco_mes_atual.horas_contabilizadas.total_seconds }}">
 						  			<input type="hidden" name="abonadas" class="abonadas" value="{{ bolsista.balanco_mes_atual.horas_abonadas_periodo.total_seconds }}">
 					  			{% endlocalize %}
 							{% endwith %}							
@@ -103,10 +103,10 @@
 
 			$('.bolsista-setor').each(function(){
 				var trabalhar = parseFloat($(this).find('.trabalhar').val());
-				var trabalhadas = parseFloat($(this).find('.trabalhadas').val());	    	
+				var contabilizadas = parseFloat($(this).find('.contabilizadas').val());	    	
 				var abonadas = parseFloat($(this).find('.abonadas').val());	    	
 				var mes_anterior = parseFloat($(this).find('.mes_anterior').val());	    	
-				var porcentagem = Math.floor((trabalhadas + abonadas) * 100 / (trabalhar + mes_anterior));
+				var porcentagem = Math.floor((contabilizadas + abonadas) * 100 / (trabalhar + mes_anterior));
 				$(this).find('.progress-bar').css({ 'width': porcentagem+'%' }).attr('data-original-title', porcentagem+'%');
 			});
 

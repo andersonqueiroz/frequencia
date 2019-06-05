@@ -33,7 +33,8 @@
                         <tr>
 							<th>Dia</th>
 							<th>Registros</th>
-							<th>Horas trabalhadas</th>
+							<th>Horas registradas</th>
+							<th>Horas contabilizadas</th>
 						</tr>
                     </thead>
                     <tbody>
@@ -59,16 +60,19 @@
 							{% elif dia.ausencia %}
 								<td>
 									{% if dia.registros %}
-										{{ dia.horas_trabalhadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }} -
+										{{ dia.horas_registradas|timedelta:"{hours2}:{minutes2}:{seconds2}" }} -
 									{% endif %}
 									Falta justificada
 									<a href="{% url 'justificativas:justificativa_edit' dia.ausencia.0.pk %}"><i class="fa fa-search hidden-print"></i></a>
 								</td>
 							{% else %}
 								<td>
-									{{ dia.horas_trabalhadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }}
-								</td>			
+									{{ dia.horas_registradas|timedelta:"{hours2}:{minutes2}:{seconds2}" }}
+								</td>											
 							{% endif %}
+							<td>
+								{{ dia.horas_contabilizadas|timedelta:"{hours2}:{minutes2}:{seconds2}" }}
+							</td>
 						</tr>
 						{% endfor %}
                     </tbody>
@@ -86,7 +90,9 @@
 				</div>
 
 				<div class="col-md-12">
-					Horas trabalhadas: <strong><span class="text-success">{{ horas_trabalhadas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</span></strong><br class="hidden-print">
+					Horas registradas: <strong>{{ horas_registradas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</strong><br class="hidden-print">
+
+					Horas contabilizadas: <strong><span class="text-success">{{ horas_contabilizadas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</span></strong><br class="hidden-print">		
 				
 					{% if horas_abonadas_periodo %}
 						Horas abonadas: <strong><span class="text-primary text-bold">{{ horas_abonadas_periodo|timedelta:"{hours_total}:{minutes2}:{seconds2}" }}</span></strong><br>
@@ -104,8 +110,8 @@
 			</div>
 
 			<div class="progress hidden-print">
-                <div class="progress-bar bg-success" id="horasTrabalhadas" data-toggle="tooltip" title="Horas trabalhadas"></div>
-                <div class="progress-bar bg-primary" id="horasAbonadas" data-toggle="tooltip" title="Horas abonadas" class="text-danger"></div>
+                <div class="progress-bar bg-success" id="horas-contabilizadas" data-toggle="tooltip" title="Horas registradas"></div>
+                <div class="progress-bar bg-primary" id="horas-abonadas" data-toggle="tooltip" title="Horas abonadas" class="text-danger"></div>
             </div>        
             <hr class="hidden-print">
             <div class="text-center">
@@ -127,19 +133,19 @@
 
 			{% localize off %}
 				var horas_trabalhar = {{total_horas_trabalhar.total_seconds}};			
-				var horas_trabalhadas = {{horas_trabalhadas_periodo.total_seconds}};		
+				var contabilizadas = {{horas_contabilizadas_periodo.total_seconds}};		
 				var saldo_mes_anterior = {{saldo_mes_anterior.total_seconds}};
 				var horas_abonadas = {{horas_abonadas_periodo.total_seconds}};
 			{% endlocalize %}
 
-			var porcentagem_horas_trabalhadas = (horas_trabalhadas * 100) / (horas_trabalhar + saldo_mes_anterior);
+			var porcentagem_contabilizadas = (contabilizadas * 100) / (horas_trabalhar + saldo_mes_anterior);
 			var porcentagem_horas_abonadas = (horas_abonadas * 100) / (horas_trabalhar + saldo_mes_anterior);			
 
-			porcentagem_horas_trabalhadas = Math.floor(porcentagem_horas_trabalhadas);
+			porcentagem_contabilizadas = Math.floor(porcentagem_contabilizadas);
 			porcentagem_horas_abonadas = Math.floor(porcentagem_horas_abonadas);
 
-			$('#horasTrabalhadas').css('width', porcentagem_horas_trabalhadas + '%');
-			$('#horasAbonadas').css('width', porcentagem_horas_abonadas + '%');
+			$('#horas-contabilizadas').css('width', porcentagem_contabilizadas + '%');
+			$('#horas-abonadas').css('width', porcentagem_horas_abonadas + '%');
 
 			if(window.location.hash) {				
 		        $(window.location.hash).addClass("table-info").delay(2000).queue(function(next){
