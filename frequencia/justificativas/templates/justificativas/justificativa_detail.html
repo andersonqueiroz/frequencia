@@ -20,9 +20,14 @@
     <div class="card-body">     
         <div class="row">
             
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
                 <label>Período</label>
-                <p>{{object.inicio|date:"d/m/Y"}} a {{object.termino|date:"d/m/Y"}} ({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</p>
+                <p class="font-weight-bold">{{object.inicio|date:"d/m/Y"}} a {{object.termino|date:"d/m/Y"}} ({{numero_dias_falta}} dia{{numero_dias_falta|pluralize}})</p>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Tipo</label>
+                <p class="font-weight-bold">{{ object.tipo }}</p>
             </div>
         
             <div class="col-md-6">

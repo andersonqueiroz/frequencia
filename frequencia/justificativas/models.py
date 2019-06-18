@@ -64,12 +64,12 @@ class JustificativaFalta(basemodel):
 			return timedelta()
 
 		horas_sugeridas = timedelta(hours=horas_sugeridas)
-		from frequencia.relatorios.calculos import get_total_horas_trabalhadas
+		from frequencia.relatorios.calculos import get_total_horas_registradas_contabilizadas
 		registros = self.vinculo.registros.filter(created_at__date__gte=self.inicio, 
 												  created_at__date__lte=self.termino)
-		horas_trabalhadas = get_total_horas_trabalhadas(registros)
+		horas_registradas, horas_contabilizadas = get_total_horas_registradas_contabilizadas(registros)
 
-		horas_sugeridas = horas_sugeridas - horas_trabalhadas
+		horas_sugeridas = horas_sugeridas - horas_registradas
 		return horas_sugeridas if horas_sugeridas.days >= 0 else timedelta()
 
 	def __str__(self):

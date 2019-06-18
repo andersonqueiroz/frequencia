@@ -59,7 +59,7 @@ def get_total_horas_registradas_contabilizadas(registros):
 
 """
 Retorna o cálculo:
-Total de horas a trabalhar - horas registradas - horas abonadas
+Total de horas a trabalhar - horas contabilizadas - horas abonadas
 """
 def get_balanco_mes(vinculo, mes, ano, detalhado=False):
 	calendario = FeriadosRioGrandeDoNorte()
