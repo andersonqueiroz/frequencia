@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 from datetime import datetime
 from decouple import config, Csv
 from dj_database_url import parse as dburl
@@ -192,3 +194,13 @@ STATICFILES_FINDERS = (
 #BCZM
 CH_MAXIMA_DIARIA = config('CH_MAXIMA_DIARIA', default=6, cast=int)
 DATA_INICIAL_LIMITACAO_CH_MAXIMA = config('DATA_INICIAL_LIMITACAO_CH_MAXIMA', default=datetime(2100,1,1))
+
+
+#Sentry
+if not DEBUG:
+    sentry_sdk.init(
+        dsn="https://a1c304f077314c40a6911bfd6455a179@sentry.io/1497308",
+        integrations=[
+            DjangoIntegration()
+        ]
+    )

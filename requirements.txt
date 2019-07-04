@@ -8,7 +8,6 @@ django-widget-tweaks==1.4.3
 ephem==3.7.6.0
 icalendar==4.0.3
 lunardate==0.2.0
-pkg-resources==0.0.0
 psycopg2-binary==2.7.6.1
 pyCalverter==1.6.1
 python-dateutil==2.7.5
@@ -20,3 +19,4 @@ rules==2.0.1
 six==1.12.0
 sqlparse==0.3.0
 workalendar==3.2.1
+sentry-sdk==0.9.5
