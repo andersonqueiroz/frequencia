@@ -67,28 +67,25 @@ class BuscaRelatorioSetorTemplateView(PermissionRequiredMixin, FormView):
 		url = reverse('relatorios:relatorio_setor', kwargs={'pk': self.setor.pk})
 		return url + '?mes={0}&ano={1}'.format(self.mes, self.ano)
 
-class RelatorioMensalDetailView(PermissionRequiredMixin, DetailView):
+class RelatorioMensalDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
 
 	model = Vinculo
 	template_name = 'relatorios/relatorio_mensal.html'
 	permission_required = 'relatorio.can_view'
 
-	def dispatch(self, *args, **kwargs):
-		try:
-			mes = int(self.request.GET.get('mes', datetime.now().month))
-			ano = int(self.request.GET.get('ano', datetime.now().year))
+	def get_object(self):
+		now = datetime.now()
+		mes = int(self.request.GET.get('mes', now.month))
+		ano = int(self.request.GET.get('ano', now.year))
+		try:			
 			self.periodo = date(day=1, month=mes, year=ano)
 		except ValueError:
-			messages.error(self.request, 'Data informada é inválida!')
-			return redirect(reverse('relatorios:busca_relatorio'))
+			self.periodo = date(day=1, month=now.month, year=now.year)
 
-		return super(RelatorioMensalDetailView, self).dispatch(*args, **kwargs)
-
-	def get_object(self):
 		if 'pk' in self.kwargs:
 			return super(RelatorioMensalDetailView, self).get_object()
 
-		return self.request.user.vinculos.filter(group__name='Bolsista', ativo=True).first()	
+		return self.request.user.vinculos.filter(group__name='Bolsista', ativo=True).first()
 	
 	def get_context_data(self, **kwargs):
 		context = super(RelatorioMensalDetailView, self).get_context_data(**kwargs)	
@@ -127,21 +124,18 @@ class RelatorioSetorDetailView(PermissionRequiredMixin, DetailView):
 
 	model = Setor
 	template_name = 'relatorios/relatorio_setor.html'
-	permission_required = 'relatorio.can_view_setor'
-
-	def dispatch(self, *args, **kwargs):
-		try:
-			mes = int(self.request.GET.get('mes', datetime.now().month))
-			ano = int(self.request.GET.get('ano', datetime.now().year))
-			self.periodo = date(ano, mes, 1)
-		except ValueError:
-			messages.error(self.request, 'Data informada é inválida!')
-			return redirect(reverse('relatorios:busca_setor'))
-
-		return super(RelatorioSetorDetailView, self).dispatch(*args, **kwargs)	
+	permission_required = 'relatorio.can_view_setor'	
 
 	def get_context_data(self, **kwargs):
-		context = super(RelatorioSetorDetailView, self).get_context_data(**kwargs)	
+		now = datetime.now()
+		ano = int(self.request.GET.get('ano', now.year))
+		mes = int(self.request.GET.get('mes', now.month))
+		try:
+			self.periodo = date(ano, mes, 1)
+		except ValueError:
+			self.periodo = date(now.year, now.month, 1)
+
+		context = super(RelatorioSetorDetailView, self).get_context_data(**kwargs)
 		context['relatorio'] = get_relatorio_mensal_setor(self.object, self.periodo.month, self.periodo.year)
 		context['periodo'] = self.periodo
 		return context

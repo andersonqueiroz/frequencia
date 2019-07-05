@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 BASE_URL_SERVER = config('BASE_URL_SERVER', default='http://localhost')
 
-VERSION = '2.1.1'
+VERSION = '2.1.3'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -193,13 +193,13 @@ STATICFILES_FINDERS = (
 
 #BCZM
 CH_MAXIMA_DIARIA = config('CH_MAXIMA_DIARIA', default=6, cast=int)
-DATA_INICIAL_LIMITACAO_CH_MAXIMA = config('DATA_INICIAL_LIMITACAO_CH_MAXIMA', default=datetime(2100,1,1))
+DATA_INICIAL_LIMITACAO_CH_MAXIMA = config('DATA_INICIAL_LIMITACAO_CH_MAXIMA', default='2100-1-1')
 
 
 #Sentry
 if not DEBUG:
     sentry_sdk.init(
-        dsn="https://a1c304f077314c40a6911bfd6455a179@sentry.io/1497308",
+        dsn=config('SENTRY_DSN'),
         integrations=[
             DjangoIntegration()
         ]
