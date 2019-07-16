@@ -12,17 +12,3 @@ consulta de relatório mensal e de calendário da unidade.</p>
   <li>Apache (mod_wsgi) / Nginx</li>
   <li>PostgreSQL / MySQL / Oracle</li>
 </ul>
-
-<h2>Instalação</h2>
-
-<p>Para a realização do deploy no ambiente desejado, será necessária a instalação dos pacotes por meio do pip:</p>
-
-<code>
-pip install -r requirements.txt
-</code>
-<br>
-<p>A criação dos grupos de usuários se dá via manager do Django, dentro do ambiente virtual (venv):</p>
-
-<code>
-  python ./manage.py instalacao
-</code>
