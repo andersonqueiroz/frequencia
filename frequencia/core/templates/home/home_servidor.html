@@ -170,7 +170,7 @@
                           <tr>
                               <th>Bolsista</th>
                               <th>Email</th>
-                              <th class="text-center">Vigência da bolsa</th>
+                              <th class="text-center">Início da bolsa</th>
                               <th>Turno</th>
                           </tr>
                       </thead>
@@ -182,8 +182,8 @@
                                   <td class="text-center">{{ bolsista.inicio_vigencia|date:"d/m/Y" }} <br> {{ bolsista.termino_vigencia|date:"d/m/Y" }}</td>
                                   <td>{{ bolsista.get_turno_display }}</td>
                               </tr>   
-                          {% endfor %}                        
-                      </tbody>                    
+                          {% endfor %}
+                      </tbody>
                   </table>
               </div>
           </div>        
