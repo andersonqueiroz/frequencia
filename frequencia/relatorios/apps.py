@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class RelatoriosConfig(AppConfig):
-    name = 'relatorios'
+    name = 'frequencia.relatorios'

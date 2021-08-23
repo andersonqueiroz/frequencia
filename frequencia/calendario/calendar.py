@@ -12,12 +12,11 @@ class FeriadosRioGrandeDoNorte(Brazil):
 	include_corpus_christi = True
 	include_christmas = False
 	include_sao_joao = True
+	fat_tuesday_label = 'Terça de carnaval'
 
 	FIXED_HOLIDAYS = (
-		(1, 1, "Confraternização universal"),
 		(1, 6, "Santos Reis"),
 		(4, 21, "Tiradentes"),
-        (5, 1, "Dia do trabalhador"),
         (9, 7, "Independência do Brasil"),
         (10, 3, "Mártires de Cunhau e Uruaçu"),
         (10, 12, "Padroeira do Brasil"),
@@ -32,7 +31,7 @@ class FeriadosRioGrandeDoNorte(Brazil):
 	def get_calendar_holidays(self, year, with_id=False):
 		holidays = super(FeriadosRioGrandeDoNorte, self).get_calendar_holidays(year)
 
-		carnaval_terca = self.get_carnaval(year)
+		carnaval_terca = self.get_fat_tuesday(year)
 		carnaval_segunda = carnaval_terca - timedelta(days=1)
 		cinzas = carnaval_terca + timedelta(days=1)
 
@@ -43,7 +42,6 @@ class FeriadosRioGrandeDoNorte(Brazil):
 		holidays.append((self.get_holy_thursday(year), "Quinta-feira Santa"))
 		holidays.append((self.get_good_friday(year), "Sexta-feira da Paixão"))
 		holidays.append((self.get_easter_saturday(year), "Sábado de Aleluia"))
-		holidays.append((self.get_easter_sunday(year), "Páscoa"))
 
 		if with_id:
 			db_holidays = FeriadoCalendarioAcademico.objects.filter(data__year=year).values_list('data', 'nome', 'id')
