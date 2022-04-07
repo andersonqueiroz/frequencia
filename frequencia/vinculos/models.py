@@ -38,7 +38,7 @@ class Vinculo(basemodel):
 	TURNO_CHOICES = (
 		(None, ''),
 		(0, 'Matutino'),
-		(1, 'Verpertino'),
+		(1, 'Vespertino'),
 		(2, 'Noturno')
 	)
 
