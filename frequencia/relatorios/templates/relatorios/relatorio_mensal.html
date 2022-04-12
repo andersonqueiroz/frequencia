@@ -47,9 +47,7 @@
 								  		{{registro.created_at|date:"H:i:s"}}
 									  		{% if registro.observacao %}
 											<a href="#" data-toggle="tooltip" title="{{ registro.observacao }}"><i class="fa fa-exclamation-circle hidden-print"></i></a>
-											<span class="only-print">{{ registro.observacao }}</span>{% if not registro.tipo %}<br class="only-print">{% endif %}
-											{% elif not registro.tipo %}
-											<span class="only-print">-</span>
+											<span class="only-print">{{ registro.observacao }}</span>{% if not registro.tipo %}<br class="only-print">{% endif %}											
 											{% endif %}
 								  		{% if registro.tipo %}<br>{% else %} <span class="hidden-print"> - </span> {% endif %}
 								  	{% endfor %}
