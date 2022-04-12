@@ -38,17 +38,20 @@
 						</tr>
                     </thead>
                     <tbody>
-                    {% for dia in lista_dias %}	                    	
+                    {% for dia in lista_dias %}
 						<tr class="{% if not dia.is_util %} text-warning {% endif %}" id="{{dia.dia|date:'d-m-Y'}}">
 						  	<td>{{dia.dia|date:"d-m-Y | l"}}</td>	  
 						  	{% if dia.registros %}
 						  		<td>
-								  	{% for registro in dia.registros %}	  		
+								  	{% for registro in dia.registros %}
 								  		{{registro.created_at|date:"H:i:s"}}
 									  		{% if registro.observacao %}
 											<a href="#" data-toggle="tooltip" title="{{ registro.observacao }}"><i class="fa fa-exclamation-circle hidden-print"></i></a>
+											<span class="only-print">{{ registro.observacao }}</span>{% if not registro.tipo %}<br class="only-print">{% endif %}
+											{% elif not registro.tipo %}
+											<span class="only-print">-</span>
 											{% endif %}
-								  		{% if registro.tipo %}<br>{% else %} - {% endif %}		
+								  		{% if registro.tipo %}<br>{% else %} <span class="hidden-print"> - </span> {% endif %}
 								  	{% endfor %}
 							  	</td>
 							{% else %}
