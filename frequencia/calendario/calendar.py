@@ -2,7 +2,6 @@ import calendar, datetime
 from datetime import timedelta
 
 from workalendar.america import Brazil
-from workalendar.core import ChristianMixin
 
 from .models import FeriadoCalendarioAcademico
 
@@ -11,7 +10,7 @@ class FeriadosRioGrandeDoNorte(Brazil):
 	include_servidor_publico = True
 	include_corpus_christi = True
 	include_christmas = False
-	include_sao_joao = True
+	include_sao_joao = False
 	fat_tuesday_label = 'Terça de carnaval'
 
 	FIXED_HOLIDAYS = (
