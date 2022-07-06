@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 BASE_URL_SERVER = config('BASE_URL_SERVER', default='http://localhost')
 
-VERSION = '2.1.3'
+VERSION = '2.1.5'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
