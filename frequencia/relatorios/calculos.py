@@ -52,7 +52,7 @@ def get_total_horas_registradas_contabilizadas(registros):
 			_horas_registradas_dia += saida.created_at - entradas[i].created_at
 		
 		horas_registradas += _horas_registradas_dia
-		if datetime.datetime.strptime(dia["data"], "%Y-%m-%d").date() > data_inicial_limitacao_ch:
+		if dia["data"] > data_inicial_limitacao_ch:
 			horas_contabilizadas += _horas_registradas_dia if _horas_registradas_dia <= ch_maxima_dia else ch_maxima_dia
 		else:
 			horas_contabilizadas += _horas_registradas_dia
