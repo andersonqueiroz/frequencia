@@ -1,11 +1,15 @@
 from rules.contrib.views import PermissionRequiredMixin, permission_required, objectgetter
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 from django.urls import reverse
 from django.contrib import messages
 from django.views.generic import ListView
 from django.db.models import ProtectedError
 from django.http import HttpResponseRedirect
-from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, CreateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, get_object_or_404, redirect
@@ -98,8 +102,27 @@ def registros_dia(request, **kwargs):
 	context = {'bolsista':bolsista}
 	return render(request, 'registro/registros_dia.html', context)
 
+class RegistroApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):        
+        maquina = Maquina.objects.filter(ip=request.META.get('REMOTE_ADDR')).first()
+        if not maquina:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        bolsista = Vinculo.objects.filter(user=request.user, ativo=True).order_by('created_at').last()
+        if not bolsista:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        tipo = 0 if not bolsista.registros_dia() else not bolsista.registros_dia().last().tipo
+        frequencia = Frequencia(bolsista=bolsista, maquina=maquina, tipo=tipo)
+        frequencia.save()
+        return Response(status=status.HTTP_201_CREATED)
 
 #Máquinas
 maquinas = MaquinaListView.as_view()
 maquina_create = MaquinaCreateView.as_view()
 maquina_edit = MaquinaUpdateView.as_view()
+
+#API
+registro_api = RegistroApi.as_view()

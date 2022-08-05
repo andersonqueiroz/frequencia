@@ -13,4 +13,5 @@ urlpatterns = [
 	#Registro
 	path('', views.registro, name='registro'),
 	path('registros_dia/', views.registros_dia, {'Bolsista': None}, name='registros_dia'),
+    path('api/', views.registro_api, name='registro_api')
 ]
