@@ -5,6 +5,7 @@ django-appconf==1.0.4
 django-compressor==2.4.1
 django-timedeltatemplatefilter==0.1.2
 django-widget-tweaks==1.4.8
+djangorestframework==3.13.1
 ephem==4.0.0.2
 icalendar==4.0.7
 lunardate==0.2.0
