@@ -1,7 +1,7 @@
 import datetime, calendar
 from datetime import timedelta
 
-from django.db.models import Q
+from django.db.models import Q, F
 from django.conf import settings
 
 from frequencia.registro.models import Frequencia
