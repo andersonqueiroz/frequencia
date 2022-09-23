@@ -103,6 +103,7 @@ venv-frequencia/
 
 #Database
 db.frequencia
+*.dump
 
 # database
 db.sqlite3
