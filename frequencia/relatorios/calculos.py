@@ -8,7 +8,7 @@ from frequencia.registro.models import Frequencia
 from frequencia.justificativas.models import JustificativaFalta
 from frequencia.calendario.calendar import FeriadosRioGrandeDoNorte
 
-def get_primeiro_dia_trabalho(vinculo):
+def get_primeiro_dia_bolsa(vinculo):
 	primeira_frequencia = Frequencia.objects.filter(bolsista=vinculo).order_by('created_at').first()
 	primeira_justificativa = JustificativaFalta.objects.filter(vinculo=vinculo).order_by('created_at').first()
 	return primeira_frequencia.created_at if primeira_frequencia.created_at.date() <= primeira_justificativa.inicio else primeira_justificativa.inicio
@@ -41,7 +41,9 @@ def get_total_horas_registradas_contabilizadas(registros):
 	horas_registradas = timedelta()
 	horas_contabilizadas = timedelta()
 
-	dias = registros.extra({'data': "date(created_at)"}).values('data').distinct()
+	dias = registros.annotate(
+		data=F('created_at__date')
+	).values('data').distinct()
 
 	for dia in dias:
 		entradas = registros.filter(tipo=0, created_at__date=dia['data'])
@@ -96,14 +98,15 @@ def get_balanco_mes(vinculo, mes, ano, detalhado=False):
 def get_balanco_mes_anterior(vinculo, mes_atual, ano_atual):
 	saldo_mes_anterior = timedelta()
 
-	#Retornará zero se for o primeiro mês de trabalho do bolsista
 	try:
-		primeiro_dia_trabalho = get_primeiro_dia_trabalho(vinculo)
-		if primeiro_dia_trabalho.month is not mes_atual and primeiro_dia_trabalho.year is not ano_atual:
+		primeiro_dia_bolsa = get_primeiro_dia_bolsa(vinculo)
+		primeiro_dia_calculo = datetime.date(primeiro_dia_bolsa.year, primeiro_dia_bolsa.month, 1)
+
+		if primeiro_dia_calculo != datetime.date(ano_atual, mes_atual, 1):
 			mes_ano_anterior = datetime.date(ano_atual, mes_atual, 1) - timedelta(days=1)
 			saldo_mes_anterior = get_balanco_mes(vinculo, mes_ano_anterior.month, mes_ano_anterior.year)
-	except:
-		pass
+	except Exception as e:
+		print(e)
 	finally:
 		if saldo_mes_anterior.days < 0:
 			saldo_mes_anterior = timedelta()

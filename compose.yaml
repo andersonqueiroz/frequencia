@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:12
+    network_mode: bridge
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+      - "./docker_compose/postgres/volumemap:/var/lib/postgresql/volumemap"
+    networks:
+      - frequencia
+  web:
+    build: .
+    env_file: .env
+    network_mode: bridge
+    entrypoint: /code/entrypoint.sh
+    volumes:
+      - .:/code:z
+      - static_data:/code/staticfiles
+      - media_data:/code/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - frequencia
+
+networks:
+  frequencia:
+
+volumes:
+  static_data:
+  media_data:
+  pgdata:
