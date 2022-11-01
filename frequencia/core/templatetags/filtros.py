@@ -11,7 +11,3 @@ def inverso(value):
 @register.filter
 def filename(value):
 	return os.path.basename(value.file.name)
-
-@register.filter
-def translate_boolean(value):
-	return "Sim" if value else "Não"

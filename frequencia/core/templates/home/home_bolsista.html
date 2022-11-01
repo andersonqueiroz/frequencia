@@ -49,11 +49,11 @@
             <i class="fa fa-fw fa-users"></i>
           </div>
           <div class="mr-5">
-            Saldo do mês atual: 
-            {% if balanco_mes.days > 0 %}
-              -{{balanco_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
+            Saldo do mês atual:
+            {% if balanco_mes.total_seconds > 0 %}
+            -{{balanco_mes|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
             {% else %}
-               {{balanco_mes|inverso|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
+            {{balanco_mes|inverso|timedelta:"{hours_total}:{minutes2}:{seconds2}"}}
             {% endif %}
           </div>
         </div>
