@@ -54,7 +54,7 @@
                 <h5>{% now "D, d M Y" %}</h5>                                
             </div>
           </div>
-         <form action="{% url 'registro:registro' %}" method="POST">
+         <form action="{% url 'registro:registro' %}" id="form-registro" method="POST">
             {% csrf_token %}
             <div class="card-body">
                 {% if form.errors %}
@@ -85,7 +85,7 @@
                 </div>                                    
             </div>
             <div class="text-center card-registro">
-                <button type="submit" class="btn btn-info">Registrar</button>
+                <button type="submit" id="botao-submit" class="btn btn-info">Registrar</button>
             </div>
          </form>     
       </div>
@@ -123,6 +123,10 @@
             $(this).toggle();
             $('#observacao').toggle();
             clearTimeout(refreshTime);
+        });
+
+        $('#form-registro').on('submit', function () {
+            $('#botao-submit').prop('disabled', true).text('Registrando...');
         });
     });
     
