@@ -7,7 +7,6 @@ from .models import FeriadoCalendarioAcademico
 
 class FeriadosRioGrandeDoNorte(Brazil):
 
-	include_servidor_publico = True
 	include_corpus_christi = True
 	include_christmas = False
 	include_sao_joao = False
